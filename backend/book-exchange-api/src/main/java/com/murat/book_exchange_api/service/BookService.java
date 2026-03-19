@@ -1,25 +1,34 @@
 package com.murat.book_exchange_api.service;
 
+import java.time.Instant;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.murat.book_exchange_api.controller.request.CreateBookRequest;
+import com.murat.book_exchange_api.controller.request.ReserveBookRequest;
+import com.murat.book_exchange_api.controller.response.BookDetailResponse;
 import com.murat.book_exchange_api.controller.response.BookResponse;
+import com.murat.book_exchange_api.controller.response.BookTransactionResponse;
 import com.murat.book_exchange_api.domain.book.Book;
 import com.murat.book_exchange_api.domain.book.BookHolding;
 import com.murat.book_exchange_api.domain.book.BookOwnership;
+import com.murat.book_exchange_api.domain.book.BookTransaction;
 import com.murat.book_exchange_api.domain.community.Community;
 import com.murat.book_exchange_api.domain.enums.BookStatus;
 import com.murat.book_exchange_api.domain.enums.OwnershipType;
+import com.murat.book_exchange_api.domain.enums.TransactionType;
 import com.murat.book_exchange_api.domain.user.User;
 import com.murat.book_exchange_api.repository.BookHoldingRepository;
 import com.murat.book_exchange_api.repository.BookOwnershipRepository;
 import com.murat.book_exchange_api.repository.BookRepository;
+import com.murat.book_exchange_api.repository.BookTransactionRepository;
 import com.murat.book_exchange_api.repository.CommunityRepository;
 import com.murat.book_exchange_api.repository.UserRepository;
+
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +37,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookOwnershipRepository bookOwnershipRepository;
     private final BookHoldingRepository bookHoldingRepository;
+    private final BookTransactionRepository bookTransactionRepository;
     private final UserRepository userRepository;
     private final CommunityRepository communityRepository;
 
@@ -49,7 +59,8 @@ public class BookService {
                 throw new IllegalArgumentException("ownerCommunityId is required when ownershipType is COMMUNITY");
             }
             ownerCommunity = communityRepository.findById(request.getOwnerCommunityId())
-                    .orElseThrow(() -> new EntityNotFoundException("Community not found: " + request.getOwnerCommunityId()));
+                    .orElseThrow(
+                            () -> new EntityNotFoundException("Community not found: " + request.getOwnerCommunityId()));
         }
 
         Book book = Book.builder()
@@ -77,6 +88,7 @@ public class BookService {
         BookHolding holding = BookHolding.builder()
                 .book(savedBook)
                 .currentHolderUser(ownerUser)
+                .reservedForUser(null)
                 .currentShelf(null)
                 .status(BookStatus.AVAILABLE)
                 .loanStartAt(null)
@@ -86,17 +98,129 @@ public class BookService {
 
         bookHoldingRepository.save(holding);
 
-        return BookResponse.builder()
-                .bookId(savedBook.getId())
-                .title(savedBook.getTitle())
-                .author(savedBook.getAuthor())
-                .isbn(savedBook.getIsbn())
+        return mapToBookResponse(savedBook, ownership, holding);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BookResponse> getAllBooks() {
+        return bookRepository.findAll()
+                .stream()
+                .map(book -> {
+                    BookOwnership ownership = bookOwnershipRepository.findByBook(book)
+                            .orElseThrow(
+                                    () -> new EntityNotFoundException("Ownership not found for book: " + book.getId()));
+
+                    BookHolding holding = bookHoldingRepository.findByBook(book)
+                            .orElseThrow(
+                                    () -> new EntityNotFoundException("Holding not found for book: " + book.getId()));
+
+                    return mapToBookResponse(book, ownership, holding);
+                })
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public BookDetailResponse getBookById(Long id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found: " + id));
+
+        BookOwnership ownership = bookOwnershipRepository.findByBook(book)
+                .orElseThrow(() -> new EntityNotFoundException("Ownership not found for book: " + book.getId()));
+
+        BookHolding holding = bookHoldingRepository.findByBook(book)
+                .orElseThrow(() -> new EntityNotFoundException("Holding not found for book: " + book.getId()));
+
+        List<BookTransactionResponse> transactions = bookTransactionRepository.findByBookOrderByIdDesc(book)
+                .stream()
+                .map(this::mapToTransactionResponse)
+                .toList();
+
+        return BookDetailResponse.builder()
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .isbn(book.getIsbn())
+                .language(book.getLanguage())
+                .category(book.getCategory())
+                .condition(book.getCondition())
+                .notes(book.getNotes())
                 .ownershipType(ownership.getOwnershipType())
-                .ownerUserId(ownerUser != null ? ownerUser.getId() : null)
-                .ownerCommunityId(ownerCommunity != null ? ownerCommunity.getId() : null)
-                .currentHolderUserId(holding.getCurrentHolderUser() != null ? holding.getCurrentHolderUser().getId() : null)
-                .currentShelfId(null)
+                .ownerUserId(ownership.getOwnerUser() != null ? ownership.getOwnerUser().getId() : null)
+                .ownerCommunityId(ownership.getOwnerCommunity() != null ? ownership.getOwnerCommunity().getId() : null)
+                .currentHolderUserId(
+                        holding.getCurrentHolderUser() != null ? holding.getCurrentHolderUser().getId() : null)
+                .currentShelfId(holding.getCurrentShelf() != null ? holding.getCurrentShelf().getId() : null)
+                .reservedForUserId(holding.getReservedForUser() != null ? holding.getReservedForUser().getId() : null)
+                .status(holding.getStatus())
+                .reservedUntil(holding.getReservedUntil())
+                .loanStartAt(holding.getLoanStartAt())
+                .dueAt(holding.getDueAt())
+                .transactions(transactions)
+                .build();
+    }
+
+    private BookResponse mapToBookResponse(Book book, BookOwnership ownership, BookHolding holding) {
+        return BookResponse.builder()
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .isbn(book.getIsbn())
+                .ownershipType(ownership.getOwnershipType())
+                .ownerUserId(ownership.getOwnerUser() != null ? ownership.getOwnerUser().getId() : null)
+                .ownerCommunityId(ownership.getOwnerCommunity() != null ? ownership.getOwnerCommunity().getId() : null)
+                .currentHolderUserId(
+                        holding.getCurrentHolderUser() != null ? holding.getCurrentHolderUser().getId() : null)
+                .currentShelfId(holding.getCurrentShelf() != null ? holding.getCurrentShelf().getId() : null)
+                .reservedForUserId(holding.getReservedForUser() != null ? holding.getReservedForUser().getId() : null)
                 .status(holding.getStatus())
                 .build();
+    }
+
+    private BookTransactionResponse mapToTransactionResponse(BookTransaction transaction) {
+        return BookTransactionResponse.builder()
+                .id(transaction.getId())
+                .type(transaction.getType())
+                .fromUserId(transaction.getFromUser() != null ? transaction.getFromUser().getId() : null)
+                .toUserId(transaction.getToUser() != null ? transaction.getToUser().getId() : null)
+                .startDate(transaction.getStartDate())
+                .endDate(transaction.getEndDate())
+                .note(transaction.getNote())
+                .build();
+    }
+
+    @Transactional
+    public BookDetailResponse reserveBook(Long bookId, ReserveBookRequest request) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found: " + bookId));
+
+        BookHolding holding = bookHoldingRepository.findByBook(book)
+                .orElseThrow(() -> new EntityNotFoundException("Holding not found for book: " + book.getId()));
+
+        if (holding.getStatus() != BookStatus.AVAILABLE) {
+            throw new IllegalStateException("Book is not available for reservation");
+        }
+
+        User reservedForUser = userRepository.findById(request.getReservedForUserId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found: " + request.getReservedForUserId()));
+
+        holding.setStatus(BookStatus.RESERVED);
+        holding.setReservedForUser(reservedForUser);
+        holding.setReservedUntil(Instant.now().plusSeconds(request.getReservedDays() * 24L * 60L * 60L));
+
+        bookHoldingRepository.save(holding);
+
+        BookTransaction transaction = BookTransaction.builder()
+                .book(book)
+                .type(TransactionType.RESERVATION)
+                .fromUser(null)
+                .toUser(reservedForUser)
+                .startDate(Instant.now())
+                .endDate(holding.getReservedUntil())
+                .note(request.getNote())
+                .build();
+
+        bookTransactionRepository.save(transaction);
+
+        return getBookById(bookId);
     }
 }

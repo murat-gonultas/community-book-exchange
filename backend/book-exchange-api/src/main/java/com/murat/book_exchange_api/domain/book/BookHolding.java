@@ -32,6 +32,10 @@ public class BookHolding {
     @JoinColumn(name = "current_shelf_id")
     private CommunityShelf currentShelf;
 
+    @ManyToOne
+    @JoinColumn(name = "reserved_for_user_id")
+    private User reservedForUser;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BookStatus status;
