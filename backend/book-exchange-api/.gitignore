@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Local database files
+*.db
+*.sqlite
+*.sqlite3
+backend/book-exchange-api/data/
+backend/book-exchange-api/target/
