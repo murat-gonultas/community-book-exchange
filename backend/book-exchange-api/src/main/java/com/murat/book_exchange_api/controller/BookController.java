@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.murat.book_exchange_api.controller.request.CreateBookRequest;
+import com.murat.book_exchange_api.controller.request.DonateBookRequest;
 import com.murat.book_exchange_api.controller.request.GiftBookRequest;
 import com.murat.book_exchange_api.controller.request.LoanBookRequest;
 import com.murat.book_exchange_api.controller.request.ReserveBookRequest;
@@ -51,6 +52,11 @@ public class BookController {
     @PostMapping("/{id}/gift")
     public BookDetailResponse giftBook(@PathVariable Long id, @Valid @RequestBody GiftBookRequest request) {
         return bookService.giftBook(id, request);
+    }
+
+    @PostMapping("/{id}/donate")
+    public BookDetailResponse donateBook(@PathVariable Long id, @Valid @RequestBody DonateBookRequest request) {
+        return bookService.donateBook(id, request);
     }
 
     @GetMapping

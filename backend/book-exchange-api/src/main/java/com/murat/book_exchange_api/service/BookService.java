@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.murat.book_exchange_api.controller.request.CreateBookRequest;
+import com.murat.book_exchange_api.controller.request.DonateBookRequest;
 import com.murat.book_exchange_api.controller.request.GiftBookRequest;
 import com.murat.book_exchange_api.controller.request.LoanBookRequest;
 import com.murat.book_exchange_api.controller.request.ReserveBookRequest;
@@ -415,6 +416,69 @@ public class BookService {
                                 .type(TransactionType.GIFT)
                                 .fromUser(previousOwnerUser)
                                 .toUser(newOwnerUser)
+                                .startDate(Instant.now())
+                                .endDate(null)
+                                .note(request.getNote())
+                                .build();
+
+                bookTransactionRepository.save(transaction);
+
+                return getBookById(bookId);
+        }
+
+        @Transactional
+        public BookDetailResponse donateBook(Long bookId, DonateBookRequest request) {
+                Book book = bookRepository.findById(bookId)
+                                .orElseThrow(() -> new EntityNotFoundException("Book not found: " + bookId));
+
+                BookOwnership ownership = bookOwnershipRepository.findByBook(book)
+                                .orElseThrow(() -> new EntityNotFoundException(
+                                                "Ownership not found for book: " + book.getId()));
+
+                BookHolding holding = bookHoldingRepository.findByBook(book)
+                                .orElseThrow(() -> new EntityNotFoundException(
+                                                "Holding not found for book: " + book.getId()));
+
+                if (holding.getStatus() != BookStatus.AVAILABLE) {
+                        throw new IllegalStateException("Only available books can be donated");
+                }
+
+                if (ownership.getOwnershipType() != OwnershipType.USER) {
+                        throw new IllegalStateException("Only user-owned books can be donated");
+                }
+
+                if (ownership.getOwnerUser() == null) {
+                        throw new IllegalStateException("Book owner user is missing");
+                }
+
+                Community community = communityRepository.findById(request.getCommunityId())
+                                .orElseThrow(() -> new EntityNotFoundException(
+                                                "Community not found: " + request.getCommunityId()));
+
+                User previousOwnerUser = ownership.getOwnerUser();
+
+                ownership.setOwnerUser(null);
+                ownership.setOwnerCommunity(community);
+                ownership.setOwnershipType(OwnershipType.COMMUNITY);
+                ownership.setOwnershipAcquiredAt(Instant.now());
+
+                bookOwnershipRepository.save(ownership);
+
+                holding.setCurrentHolderUser(null);
+                holding.setCurrentShelf(null);
+                holding.setStatus(BookStatus.AVAILABLE);
+                holding.setReservedForUser(null);
+                holding.setReservedUntil(null);
+                holding.setLoanStartAt(null);
+                holding.setDueAt(null);
+
+                bookHoldingRepository.save(holding);
+
+                BookTransaction transaction = BookTransaction.builder()
+                                .book(book)
+                                .type(TransactionType.DONATION)
+                                .fromUser(previousOwnerUser)
+                                .toUser(null)
                                 .startDate(Instant.now())
                                 .endDate(null)
                                 .note(request.getNote())
