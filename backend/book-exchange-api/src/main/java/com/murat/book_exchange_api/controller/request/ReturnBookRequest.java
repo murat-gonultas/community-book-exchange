@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class ReturnBookRequest {
 
-    @NotNull
+    @NotNull(message = "returnedByUserId is required")
     private Long returnedByUserId;
 
     private String note;

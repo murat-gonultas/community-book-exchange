@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class DonateBookRequest {
 
-    @NotNull
+    @NotNull(message = "communityId is required")
     private Long communityId;
 
     private String note;

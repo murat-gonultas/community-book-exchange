@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class GiftBookRequest {
 
-    @NotNull
+    @NotNull(message = "newOwnerUserId is required")
     private Long newOwnerUserId;
 
     private String note;

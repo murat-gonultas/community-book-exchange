@@ -1,6 +1,7 @@
 package com.murat.book_exchange_api.controller.request;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,10 +9,11 @@ import lombok.Setter;
 @Setter
 public class LoanBookRequest {
 
-    @NotNull
+    @NotNull(message = "loanedToUserId is required")
     private Long loanedToUserId;
 
-    @NotNull
+    @NotNull(message = "loanDays is required")
+    @Positive(message = "loanDays must be greater than 0")
     private Integer loanDays;
 
     private String note;
