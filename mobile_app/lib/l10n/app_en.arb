@@ -26,6 +26,16 @@
       }
     }
   },
+
+  "failedToLoadBooks": "Failed to load books.\n{error}",
+  "@failedToLoadBooks": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
   "actionFailed": "Action failed: {error}",
   "@actionFailed": {
     "placeholders": {
@@ -94,5 +104,14 @@
   "fromUser": "From User",
   "toUser": "To User",
   "start": "Start",
-  "end": "End"
+  "end": "End",
+
+  "books": "Books",
+  "noBooksFound": "No books found",
+  "unknownAuthor": "Unknown",
+
+  "systemLanguage": "System language",
+  "german": "Deutsch",
+  "english": "English",
+  "turkish": "Türkçe"
 }

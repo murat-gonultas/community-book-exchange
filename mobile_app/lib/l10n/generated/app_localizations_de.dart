@@ -43,6 +43,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String failedToLoadBooks(String error) {
+    return 'Bücher konnten nicht geladen werden.\n$error';
+  }
+
+  @override
   String actionFailed(String error) {
     return 'Aktion fehlgeschlagen: $error';
   }
@@ -159,7 +164,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ownerCommunityId => 'Eigentümer Community-ID';
 
   @override
-  String get currentHolderUserId => 'Aktueller Benutzer-ID';
+  String get currentHolderUserId => 'Aktuelle Benutzer-ID';
 
   @override
   String get reservedForUserIdLabel => 'Reserviert für Benutzer-ID';
@@ -215,4 +220,25 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get end => 'Ende';
+
+  @override
+  String get books => 'Bücher';
+
+  @override
+  String get noBooksFound => 'Keine Bücher gefunden';
+
+  @override
+  String get unknownAuthor => 'Unbekannt';
+
+  @override
+  String get systemLanguage => 'Systemsprache';
+
+  @override
+  String get german => 'Deutsch';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get turkish => 'Türkçe';
 }

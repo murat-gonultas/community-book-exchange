@@ -160,6 +160,12 @@ abstract class AppLocalizations {
   /// **'Failed to load book detail.\n{error}'**
   String failedToLoadBookDetail(String error);
 
+  /// No description provided for @failedToLoadBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load books.\n{error}'**
+  String failedToLoadBooks(String error);
+
   /// No description provided for @actionFailed.
   ///
   /// In en, this message translates to:
@@ -483,6 +489,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'End'**
   String get end;
+
+  /// No description provided for @books.
+  ///
+  /// In en, this message translates to:
+  /// **'Books'**
+  String get books;
+
+  /// No description provided for @noBooksFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No books found'**
+  String get noBooksFound;
+
+  /// No description provided for @unknownAuthor.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknownAuthor;
+
+  /// No description provided for @systemLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'System language'**
+  String get systemLanguage;
+
+  /// No description provided for @german.
+  ///
+  /// In en, this message translates to:
+  /// **'Deutsch'**
+  String get german;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @turkish.
+  ///
+  /// In en, this message translates to:
+  /// **'Türkçe'**
+  String get turkish;
 }
 
 class _AppLocalizationsDelegate

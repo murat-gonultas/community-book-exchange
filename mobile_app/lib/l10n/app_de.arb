@@ -26,6 +26,16 @@
       }
     }
   },
+
+  "failedToLoadBooks": "Bücher konnten nicht geladen werden.\n{error}",
+  "@failedToLoadBooks": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
   "actionFailed": "Aktion fehlgeschlagen: {error}",
   "@actionFailed": {
     "placeholders": {
@@ -76,7 +86,7 @@
   "ownershipType": "Eigentumstyp",
   "ownerUserId": "Eigentümer Benutzer-ID",
   "ownerCommunityId": "Eigentümer Community-ID",
-  "currentHolderUserId": "Aktueller Benutzer-ID",
+  "currentHolderUserId": "Aktuelle Benutzer-ID",
   "reservedForUserIdLabel": "Reserviert für Benutzer-ID",
   "reservedUntil": "Reserviert bis",
   "loanStart": "Leihbeginn",
@@ -94,5 +104,14 @@
   "fromUser": "Von Benutzer",
   "toUser": "An Benutzer",
   "start": "Beginn",
-  "end": "Ende"
+  "end": "Ende",
+
+  "books": "Bücher",
+  "noBooksFound": "Keine Bücher gefunden",
+  "unknownAuthor": "Unbekannt",
+
+  "systemLanguage": "Systemsprache",
+  "german": "Deutsch",
+  "english": "English",
+  "turkish": "Türkçe"
 }

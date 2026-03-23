@@ -43,6 +43,11 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String failedToLoadBooks(String error) {
+    return 'Kitaplar yüklenemedi.\n$error';
+  }
+
+  @override
   String actionFailed(String error) {
     return 'İşlem başarısız oldu: $error';
   }
@@ -212,4 +217,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get end => 'Bitiş';
+
+  @override
+  String get books => 'Kitaplar';
+
+  @override
+  String get noBooksFound => 'Kitap bulunamadı';
+
+  @override
+  String get unknownAuthor => 'Bilinmiyor';
+
+  @override
+  String get systemLanguage => 'Sistem Dili';
+
+  @override
+  String get german => 'Deutsch';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get turkish => 'Türkçe';
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
+import '../../../main.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
 import 'book_detail_screen.dart';
@@ -21,6 +23,27 @@ class _BooksListScreenState extends State<BooksListScreen> {
     _booksFuture = _apiService.fetchBooks();
   }
 
+  void _changeLanguage(String value) {
+    final appState = CommunityBookExchangeApp.of(context);
+
+    if (appState == null) return;
+
+    switch (value) {
+      case 'system':
+        appState.setLocale(null);
+        break;
+      case 'de':
+        appState.setLocale(const Locale('de'));
+        break;
+      case 'en':
+        appState.setLocale(const Locale('en'));
+        break;
+      case 'tr':
+        appState.setLocale(const Locale('tr'));
+        break;
+    }
+  }
+
   Future<void> _reloadBooks() async {
     setState(() {
       _booksFuture = _apiService.fetchBooks();
@@ -29,8 +52,25 @@ class _BooksListScreenState extends State<BooksListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Books')),
+      appBar: AppBar(
+        title: Text(l10n.books),
+        actions: [
+          PopupMenuButton<String>(
+            tooltip: l10n.language,
+            onSelected: _changeLanguage,
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'system', child: Text(l10n.systemLanguage)),
+              PopupMenuItem(value: 'de', child: Text(l10n.german)),
+              PopupMenuItem(value: 'en', child: Text(l10n.english)),
+              PopupMenuItem(value: 'tr', child: Text(l10n.turkish)),
+            ],
+            icon: const Icon(Icons.language),
+          ),
+        ],
+      ),
       body: FutureBuilder<List<Book>>(
         future: _booksFuture,
         builder: (context, snapshot) {
@@ -46,13 +86,13 @@ class _BooksListScreenState extends State<BooksListScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Failed to load books.\n${snapshot.error}',
+                      l10n.failedToLoadBooks(snapshot.error.toString()),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: _reloadBooks,
-                      child: const Text('Retry'),
+                      child: Text(l10n.retry),
                     ),
                   ],
                 ),
@@ -66,9 +106,9 @@ class _BooksListScreenState extends State<BooksListScreen> {
             return RefreshIndicator(
               onRefresh: _reloadBooks,
               child: ListView(
-                children: const [
-                  SizedBox(height: 200),
-                  Center(child: Text('No books found')),
+                children: [
+                  const SizedBox(height: 200),
+                  Center(child: Text(l10n.noBooksFound)),
                 ],
               ),
             );
@@ -86,7 +126,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
                   leading: CircleAvatar(child: Text(book.bookId.toString())),
                   title: Text(book.title),
                   subtitle: Text(
-                    '${book.author ?? 'Unknown'} • ${book.status} • ${book.ownershipType}',
+                    '${book.author ?? l10n.unknownAuthor} • ${book.status} • ${book.ownershipType}',
                   ),
                   onTap: () {
                     Navigator.of(context).push(

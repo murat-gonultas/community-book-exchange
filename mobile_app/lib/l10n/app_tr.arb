@@ -26,6 +26,16 @@
       }
     }
   },
+
+  "failedToLoadBooks": "Kitaplar yüklenemedi.\n{error}",
+  "@failedToLoadBooks": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
   "actionFailed": "İşlem başarısız oldu: {error}",
   "@actionFailed": {
     "placeholders": {
@@ -94,5 +104,14 @@
   "fromUser": "Gönderen Kullanıcı",
   "toUser": "Alan Kullanıcı",
   "start": "Başlangıç",
-  "end": "Bitiş"
+  "end": "Bitiş",
+
+  "books": "Kitaplar",
+  "noBooksFound": "Kitap bulunamadı",
+  "unknownAuthor": "Bilinmiyor",
+
+  "systemLanguage": "Sistem Dili",
+  "german": "Deutsch",
+  "english": "English",
+  "turkish": "Türkçe"
 }

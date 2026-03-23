@@ -43,6 +43,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String failedToLoadBooks(String error) {
+    return 'Failed to load books.\n$error';
+  }
+
+  @override
   String actionFailed(String error) {
     return 'Action failed: $error';
   }
@@ -211,4 +216,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get end => 'End';
+
+  @override
+  String get books => 'Books';
+
+  @override
+  String get noBooksFound => 'No books found';
+
+  @override
+  String get unknownAuthor => 'Unknown';
+
+  @override
+  String get systemLanguage => 'System language';
+
+  @override
+  String get german => 'Deutsch';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get turkish => 'Türkçe';
 }
