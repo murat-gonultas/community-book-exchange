@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
@@ -32,6 +33,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     Future<void> Function() action,
     String successMessage,
   ) async {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
       await action();
 
@@ -47,7 +50,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Action failed: $e')));
+      ).showSnackBar(SnackBar(content: Text(l10n.actionFailed(e.toString()))));
     }
   }
 
@@ -87,7 +90,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -96,7 +99,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                     entry.key: entry.value.text.trim(),
                 });
               },
-              child: const Text('Submit'),
+              child: Text(AppLocalizations.of(context)!.submit),
             ),
           ],
         );
@@ -111,20 +114,22 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   }
 
   Future<void> _reserveBook() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final values = await _showActionDialog(
-      title: 'Reserve Book',
-      fields: const [
+      title: l10n.reserveBook,
+      fields: [
         _DialogFieldConfig(
           key: 'reservedForUserId',
-          label: 'Reserved For User ID',
+          label: l10n.reservedForUserId,
           isNumber: true,
         ),
         _DialogFieldConfig(
           key: 'reservedDays',
-          label: 'Reserved Days',
+          label: l10n.reservedDays,
           isNumber: true,
         ),
-        _DialogFieldConfig(key: 'note', label: 'Note'),
+        _DialogFieldConfig(key: 'note', label: l10n.note),
       ],
     );
 
@@ -134,9 +139,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     final reservedDays = int.tryParse(values['reservedDays'] ?? '');
 
     if (reservedForUserId == null || reservedDays == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter valid numbers')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidNumbers)));
       return;
     }
 
@@ -147,21 +152,27 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         reservedDays: reservedDays,
         note: values['note'],
       ),
-      'Book reserved successfully',
+      l10n.bookReservedSuccessfully,
     );
   }
 
   Future<void> _loanBook() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final values = await _showActionDialog(
-      title: 'Loan Book',
-      fields: const [
+      title: l10n.loanBook,
+      fields: [
         _DialogFieldConfig(
           key: 'loanedToUserId',
-          label: 'Loaned To User ID',
+          label: l10n.loanedToUserId,
           isNumber: true,
         ),
-        _DialogFieldConfig(key: 'loanDays', label: 'Loan Days', isNumber: true),
-        _DialogFieldConfig(key: 'note', label: 'Note'),
+        _DialogFieldConfig(
+          key: 'loanDays',
+          label: l10n.loanDays,
+          isNumber: true,
+        ),
+        _DialogFieldConfig(key: 'note', label: l10n.note),
       ],
     );
 
@@ -171,9 +182,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     final loanDays = int.tryParse(values['loanDays'] ?? '');
 
     if (loanedToUserId == null || loanDays == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter valid numbers')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidNumbers)));
       return;
     }
 
@@ -184,20 +195,22 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         loanDays: loanDays,
         note: values['note'],
       ),
-      'Book loaned successfully',
+      l10n.bookLoanedSuccessfully,
     );
   }
 
   Future<void> _returnBook() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final values = await _showActionDialog(
-      title: 'Return Book',
-      fields: const [
+      title: l10n.returnBook,
+      fields: [
         _DialogFieldConfig(
           key: 'returnedByUserId',
-          label: 'Returned By User ID',
+          label: l10n.returnedByUserId,
           isNumber: true,
         ),
-        _DialogFieldConfig(key: 'note', label: 'Note'),
+        _DialogFieldConfig(key: 'note', label: l10n.note),
       ],
     );
 
@@ -206,9 +219,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     final returnedByUserId = int.tryParse(values['returnedByUserId'] ?? '');
 
     if (returnedByUserId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid user ID')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidUserId)));
       return;
     }
 
@@ -218,20 +231,22 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         returnedByUserId: returnedByUserId,
         note: values['note'],
       ),
-      'Book returned successfully',
+      l10n.bookReturnedSuccessfully,
     );
   }
 
   Future<void> _giftBook() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final values = await _showActionDialog(
-      title: 'Gift Book',
-      fields: const [
+      title: l10n.giftBook,
+      fields: [
         _DialogFieldConfig(
           key: 'newOwnerUserId',
-          label: 'New Owner User ID',
+          label: l10n.newOwnerUserId,
           isNumber: true,
         ),
-        _DialogFieldConfig(key: 'note', label: 'Note'),
+        _DialogFieldConfig(key: 'note', label: l10n.note),
       ],
     );
 
@@ -240,9 +255,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     final newOwnerUserId = int.tryParse(values['newOwnerUserId'] ?? '');
 
     if (newOwnerUserId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid user ID')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidUserId)));
       return;
     }
 
@@ -252,20 +267,22 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         newOwnerUserId: newOwnerUserId,
         note: values['note'],
       ),
-      'Book gifted successfully',
+      l10n.bookGiftedSuccessfully,
     );
   }
 
   Future<void> _donateBook() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final values = await _showActionDialog(
-      title: 'Donate Book',
-      fields: const [
+      title: l10n.donateBook,
+      fields: [
         _DialogFieldConfig(
           key: 'communityId',
-          label: 'Community ID',
+          label: l10n.communityId,
           isNumber: true,
         ),
-        _DialogFieldConfig(key: 'note', label: 'Note'),
+        _DialogFieldConfig(key: 'note', label: l10n.note),
       ],
     );
 
@@ -274,9 +291,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     final communityId = int.tryParse(values['communityId'] ?? '');
 
     if (communityId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid community ID')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidCommunityId)));
       return;
     }
 
@@ -286,7 +303,76 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         communityId: communityId,
         note: values['note'],
       ),
-      'Book donated successfully',
+      l10n.bookDonatedSuccessfully,
+    );
+  }
+
+  List<String> _getActionHints(BookDetail book, AppLocalizations l10n) {
+    final hints = <String>[];
+
+    if (!BookActionRules.canReserve(book)) {
+      hints.add(l10n.hintReserveUnavailable);
+    }
+
+    if (!BookActionRules.canLoan(book)) {
+      hints.add(l10n.hintLoanUnavailable);
+    }
+
+    if (!BookActionRules.canReturn(book)) {
+      hints.add(l10n.hintReturnUnavailable);
+    }
+
+    if (!BookActionRules.canGift(book)) {
+      hints.add(l10n.hintGiftUnavailable);
+    }
+
+    if (!BookActionRules.canDonate(book)) {
+      hints.add(l10n.hintDonateUnavailable);
+    }
+
+    if (book.status == 'RESERVED') {
+      hints.add(l10n.hintReservedLoanRule);
+    }
+
+    return hints;
+  }
+
+  Widget _buildActionHints(BookDetail book, AppLocalizations l10n) {
+    final hints = _getActionHints(book, l10n);
+
+    if (hints.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return Container(
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.whyActionsUnavailable,
+            style: Theme.of(
+              context,
+            ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 8),
+          ...hints.map(
+            (hint) => Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: Text(
+                '• $hint',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -309,7 +395,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
-  Widget _buildTransactionCard(BookTransaction tx) {
+  Widget _buildTransactionCard(BookTransaction tx, AppLocalizations l10n) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 6),
       child: Padding(
@@ -319,22 +405,39 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           children: [
             Text(tx.type, style: const TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 6),
-            Text('ID: ${tx.id}'),
-            Text('From User: ${tx.fromUserId?.toString() ?? '-'}'),
-            Text('To User: ${tx.toUserId?.toString() ?? '-'}'),
-            Text('Start: ${tx.startDate ?? '-'}'),
-            Text('End: ${tx.endDate ?? '-'}'),
-            Text('Note: ${tx.note ?? '-'}'),
+            Text('${l10n.idLabel}: ${tx.id}'),
+            Text(
+              '${l10n.fromUser}: ${tx.fromUserId?.toString() ?? l10n.notAvailable}',
+            ),
+            Text(
+              '${l10n.toUser}: ${tx.toUserId?.toString() ?? l10n.notAvailable}',
+            ),
+            Text('${l10n.start}: ${tx.startDate ?? l10n.notAvailable}'),
+            Text('${l10n.end}: ${tx.endDate ?? l10n.notAvailable}'),
+            Text('${l10n.note}: ${tx.note ?? l10n.notAvailable}'),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildActionButton({
+    required String label,
+    required bool enabled,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: enabled ? onPressed : null,
+      child: Text(label),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
-      appBar: AppBar(title: Text('Book #${widget.bookId}')),
+      appBar: AppBar(title: Text(l10n.bookTitleWithId(widget.bookId))),
       body: FutureBuilder<BookDetail>(
         future: _bookDetailFuture,
         builder: (context, snapshot) {
@@ -350,14 +453,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Failed to load book detail.\n${snapshot.error}',
+                      l10n.failedToLoadBookDetail(snapshot.error.toString()),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: _reload,
-                      child: const Text('Retry'),
-                    ),
+                    ElevatedButton(onPressed: _reload, child: Text(l10n.retry)),
                   ],
                 ),
               ),
@@ -376,69 +476,86 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 const SizedBox(height: 12),
-                _infoRow('Author', book.author ?? '-'),
-                _infoRow('ISBN', book.isbn ?? '-'),
-                _infoRow('Language', book.language ?? '-'),
-                _infoRow('Category', book.category ?? '-'),
-                _infoRow('Condition', book.condition ?? '-'),
-                _infoRow('Notes', book.notes ?? '-'),
-                _infoRow('Status', book.status),
-                _infoRow('Ownership Type', book.ownershipType),
-                _infoRow('Owner User ID', book.ownerUserId?.toString() ?? '-'),
+                _infoRow(l10n.author, book.author ?? l10n.notAvailable),
+                _infoRow(l10n.isbn, book.isbn ?? l10n.notAvailable),
+                _infoRow(l10n.language, book.language ?? l10n.notAvailable),
+                _infoRow(l10n.category, book.category ?? l10n.notAvailable),
+                _infoRow(l10n.condition, book.condition ?? l10n.notAvailable),
+                _infoRow(l10n.notes, book.notes ?? l10n.notAvailable),
+                _infoRow(l10n.status, book.status),
+                _infoRow(l10n.ownershipType, book.ownershipType),
                 _infoRow(
-                  'Owner Community ID',
-                  book.ownerCommunityId?.toString() ?? '-',
+                  l10n.ownerUserId,
+                  book.ownerUserId?.toString() ?? l10n.notAvailable,
                 ),
                 _infoRow(
-                  'Current Holder User ID',
-                  book.currentHolderUserId?.toString() ?? '-',
+                  l10n.ownerCommunityId,
+                  book.ownerCommunityId?.toString() ?? l10n.notAvailable,
                 ),
                 _infoRow(
-                  'Reserved For User ID',
-                  book.reservedForUserId?.toString() ?? '-',
+                  l10n.currentHolderUserId,
+                  book.currentHolderUserId?.toString() ?? l10n.notAvailable,
                 ),
-                _infoRow('Reserved Until', book.reservedUntil ?? '-'),
-                _infoRow('Loan Start', book.loanStartAt ?? '-'),
-                _infoRow('Due At', book.dueAt ?? '-'),
+                _infoRow(
+                  l10n.reservedForUserIdLabel,
+                  book.reservedForUserId?.toString() ?? l10n.notAvailable,
+                ),
+                _infoRow(
+                  l10n.reservedUntil,
+                  book.reservedUntil ?? l10n.notAvailable,
+                ),
+                _infoRow(l10n.loanStart, book.loanStartAt ?? l10n.notAvailable),
+                _infoRow(l10n.dueAt, book.dueAt ?? l10n.notAvailable),
                 const SizedBox(height: 24),
-                Text('Actions', style: Theme.of(context).textTheme.titleLarge),
+                Text(
+                  l10n.actions,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
                 const SizedBox(height: 12),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    ElevatedButton(
+                    _buildActionButton(
+                      label: l10n.reserve,
+                      enabled: BookActionRules.canReserve(book),
                       onPressed: _reserveBook,
-                      child: const Text('Reserve'),
                     ),
-                    ElevatedButton(
+                    _buildActionButton(
+                      label: l10n.loan,
+                      enabled: BookActionRules.canLoan(book),
                       onPressed: _loanBook,
-                      child: const Text('Loan'),
                     ),
-                    ElevatedButton(
+                    _buildActionButton(
+                      label: l10n.returnAction,
+                      enabled: BookActionRules.canReturn(book),
                       onPressed: _returnBook,
-                      child: const Text('Return'),
                     ),
-                    ElevatedButton(
+                    _buildActionButton(
+                      label: l10n.gift,
+                      enabled: BookActionRules.canGift(book),
                       onPressed: _giftBook,
-                      child: const Text('Gift'),
                     ),
-                    ElevatedButton(
+                    _buildActionButton(
+                      label: l10n.donate,
+                      enabled: BookActionRules.canDonate(book),
                       onPressed: _donateBook,
-                      child: const Text('Donate'),
                     ),
                   ],
                 ),
+                _buildActionHints(book, l10n),
                 const SizedBox(height: 24),
                 Text(
-                  'Transactions',
+                  l10n.transactions,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const SizedBox(height: 8),
                 if (book.transactions.isEmpty)
-                  const Text('No transactions')
+                  Text(l10n.noTransactions)
                 else
-                  ...book.transactions.map(_buildTransactionCard),
+                  ...book.transactions.map(
+                    (tx) => _buildTransactionCard(tx, l10n),
+                  ),
               ],
             ),
           );
@@ -458,4 +575,26 @@ class _DialogFieldConfig {
     required this.label,
     this.isNumber = false,
   });
+}
+
+class BookActionRules {
+  static bool canReserve(BookDetail book) {
+    return book.status == 'AVAILABLE';
+  }
+
+  static bool canLoan(BookDetail book) {
+    return book.status == 'AVAILABLE' || book.status == 'RESERVED';
+  }
+
+  static bool canReturn(BookDetail book) {
+    return book.status == 'ON_LOAN';
+  }
+
+  static bool canGift(BookDetail book) {
+    return book.status == 'AVAILABLE' && book.ownershipType == 'USER';
+  }
+
+  static bool canDonate(BookDetail book) {
+    return book.status == 'AVAILABLE' && book.ownershipType == 'USER';
+  }
 }

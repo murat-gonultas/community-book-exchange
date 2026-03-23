@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'features/books/presentation/books_list_screen.dart';
+import 'l10n/generated/app_localizations.dart';
 
 void main() {
   runApp(const CommunityBookExchangeApp());
@@ -12,10 +14,8 @@ class CommunityBookExchangeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Community Book Exchange',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: const BooksListScreen(),
     );
   }

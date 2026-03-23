@@ -1,0 +1,98 @@
+{
+  "@@locale": "de",
+  "appTitle": "Community Book Exchange",
+  "bookTitleWithId": "Buch #{bookId}",
+  "@bookTitleWithId": {
+    "placeholders": {
+      "bookId": {
+        "type": "int"
+      }
+    }
+  },
+
+  "actions": "Aktionen",
+  "transactions": "Vorgänge",
+  "retry": "Erneut versuchen",
+  "cancel": "Abbrechen",
+  "submit": "Senden",
+  "noTransactions": "Keine Vorgänge",
+  "notAvailable": "-",
+
+  "failedToLoadBookDetail": "Buchdetails konnten nicht geladen werden.\n{error}",
+  "@failedToLoadBookDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "actionFailed": "Aktion fehlgeschlagen: {error}",
+  "@actionFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "bookReservedSuccessfully": "Buch erfolgreich reserviert",
+  "bookLoanedSuccessfully": "Buch erfolgreich verliehen",
+  "bookReturnedSuccessfully": "Buch erfolgreich zurückgenommen",
+  "bookGiftedSuccessfully": "Buch erfolgreich übertragen",
+  "bookDonatedSuccessfully": "Buch erfolgreich an die Community gespendet",
+
+  "pleaseEnterValidNumbers": "Bitte gültige Zahlen eingeben",
+  "pleaseEnterValidUserId": "Bitte eine gültige Benutzer-ID eingeben",
+  "pleaseEnterValidCommunityId": "Bitte eine gültige Community-ID eingeben",
+
+  "reserve": "Reservieren",
+  "loan": "Verleihen",
+  "returnAction": "Zurücknehmen",
+  "gift": "Übertragen",
+  "donate": "Spenden",
+
+  "reserveBook": "Buch reservieren",
+  "loanBook": "Buch verleihen",
+  "returnBook": "Buch zurücknehmen",
+  "giftBook": "Buch übertragen",
+  "donateBook": "Buch spenden",
+
+  "reservedForUserId": "Reserviert für Benutzer-ID",
+  "reservedDays": "Reservierungstage",
+  "note": "Notiz",
+  "loanedToUserId": "Verliehen an Benutzer-ID",
+  "loanDays": "Leihdauer in Tagen",
+  "returnedByUserId": "Zurückgegeben von Benutzer-ID",
+  "newOwnerUserId": "Neue Eigentümer-Benutzer-ID",
+  "communityId": "Community-ID",
+
+  "author": "Autor",
+  "isbn": "ISBN",
+  "language": "Sprache",
+  "category": "Kategorie",
+  "condition": "Zustand",
+  "notes": "Notizen",
+  "status": "Status",
+  "ownershipType": "Eigentumstyp",
+  "ownerUserId": "Eigentümer Benutzer-ID",
+  "ownerCommunityId": "Eigentümer Community-ID",
+  "currentHolderUserId": "Aktueller Benutzer-ID",
+  "reservedForUserIdLabel": "Reserviert für Benutzer-ID",
+  "reservedUntil": "Reserviert bis",
+  "loanStart": "Leihbeginn",
+  "dueAt": "Fällig am",
+
+  "whyActionsUnavailable": "Warum sind einige Aktionen nicht verfügbar?",
+  "hintReserveUnavailable": "Reservieren ist nur möglich, wenn das Buch den Status AVAILABLE hat.",
+  "hintLoanUnavailable": "Verleihen ist nur möglich, wenn das Buch den Status AVAILABLE oder RESERVED hat.",
+  "hintReturnUnavailable": "Zurücknehmen ist nur möglich, wenn das Buch den Status ON_LOAN hat.",
+  "hintGiftUnavailable": "Übertragen ist nur für USER-eigene Bücher im Status AVAILABLE möglich.",
+  "hintDonateUnavailable": "Spenden ist nur für USER-eigene Bücher im Status AVAILABLE möglich.",
+  "hintReservedLoanRule": "Bei RESERVED-Büchern ist Verleihen aktiviert, aber das Backend erlaubt das Verleihen nur an den reservierten Benutzer.",
+
+  "idLabel": "ID",
+  "fromUser": "Von Benutzer",
+  "toUser": "An Benutzer",
+  "start": "Beginn",
+  "end": "Ende"
+}

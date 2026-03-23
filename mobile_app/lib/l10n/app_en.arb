@@ -1,0 +1,98 @@
+{
+  "@@locale": "en",
+  "appTitle": "Community Book Exchange",
+  "bookTitleWithId": "Book #{bookId}",
+  "@bookTitleWithId": {
+    "placeholders": {
+      "bookId": {
+        "type": "int"
+      }
+    }
+  },
+
+  "actions": "Actions",
+  "transactions": "Transactions",
+  "retry": "Retry",
+  "cancel": "Cancel",
+  "submit": "Submit",
+  "noTransactions": "No transactions",
+  "notAvailable": "-",
+
+  "failedToLoadBookDetail": "Failed to load book detail.\n{error}",
+  "@failedToLoadBookDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "actionFailed": "Action failed: {error}",
+  "@actionFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+
+  "bookReservedSuccessfully": "Book reserved successfully",
+  "bookLoanedSuccessfully": "Book loaned successfully",
+  "bookReturnedSuccessfully": "Book returned successfully",
+  "bookGiftedSuccessfully": "Book gifted successfully",
+  "bookDonatedSuccessfully": "Book donated successfully",
+
+  "pleaseEnterValidNumbers": "Please enter valid numbers",
+  "pleaseEnterValidUserId": "Please enter a valid user ID",
+  "pleaseEnterValidCommunityId": "Please enter a valid community ID",
+
+  "reserve": "Reserve",
+  "loan": "Loan",
+  "returnAction": "Return",
+  "gift": "Gift",
+  "donate": "Donate",
+
+  "reserveBook": "Reserve Book",
+  "loanBook": "Loan Book",
+  "returnBook": "Return Book",
+  "giftBook": "Gift Book",
+  "donateBook": "Donate Book",
+
+  "reservedForUserId": "Reserved For User ID",
+  "reservedDays": "Reserved Days",
+  "note": "Note",
+  "loanedToUserId": "Loaned To User ID",
+  "loanDays": "Loan Days",
+  "returnedByUserId": "Returned By User ID",
+  "newOwnerUserId": "New Owner User ID",
+  "communityId": "Community ID",
+
+  "author": "Author",
+  "isbn": "ISBN",
+  "language": "Language",
+  "category": "Category",
+  "condition": "Condition",
+  "notes": "Notes",
+  "status": "Status",
+  "ownershipType": "Ownership Type",
+  "ownerUserId": "Owner User ID",
+  "ownerCommunityId": "Owner Community ID",
+  "currentHolderUserId": "Current Holder User ID",
+  "reservedForUserIdLabel": "Reserved For User ID",
+  "reservedUntil": "Reserved Until",
+  "loanStart": "Loan Start",
+  "dueAt": "Due At",
+
+  "whyActionsUnavailable": "Why are some actions unavailable?",
+  "hintReserveUnavailable": "Reserve is only available when the book is AVAILABLE.",
+  "hintLoanUnavailable": "Loan is only available when the book is AVAILABLE or RESERVED.",
+  "hintReturnUnavailable": "Return is only available when the book is ON_LOAN.",
+  "hintGiftUnavailable": "Gift is only available for USER-owned books that are AVAILABLE.",
+  "hintDonateUnavailable": "Donate is only available for USER-owned books that are AVAILABLE.",
+  "hintReservedLoanRule": "Loan is enabled for RESERVED books, but the backend only allows lending to the reserved user.",
+
+  "idLabel": "ID",
+  "fromUser": "From User",
+  "toUser": "To User",
+  "start": "Start",
+  "end": "End"
+}
