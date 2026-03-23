@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
+import '../../../main.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
 
@@ -27,6 +28,27 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     setState(() {
       _bookDetailFuture = _apiService.fetchBookDetail(widget.bookId);
     });
+  }
+
+  void _changeLanguage(String value) {
+    final appState = CommunityBookExchangeApp.of(context);
+
+    if (appState == null) return;
+
+    switch (value) {
+      case 'system':
+        appState.setLocale(null);
+        break;
+      case 'de':
+        appState.setLocale(const Locale('de'));
+        break;
+      case 'en':
+        appState.setLocale(const Locale('en'));
+        break;
+      case 'tr':
+        appState.setLocale(const Locale('tr'));
+        break;
+    }
   }
 
   Future<void> _runAction(
@@ -437,7 +459,22 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.bookTitleWithId(widget.bookId))),
+      appBar: AppBar(
+        title: Text(l10n.bookTitleWithId(widget.bookId)),
+        actions: [
+          PopupMenuButton<String>(
+            tooltip: l10n.language,
+            onSelected: _changeLanguage,
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'system', child: Text(l10n.systemLanguage)),
+              PopupMenuItem(value: 'de', child: Text(l10n.german)),
+              PopupMenuItem(value: 'en', child: Text(l10n.english)),
+              PopupMenuItem(value: 'tr', child: Text(l10n.turkish)),
+            ],
+            icon: const Icon(Icons.language),
+          ),
+        ],
+      ),
       body: FutureBuilder<BookDetail>(
         future: _bookDetailFuture,
         builder: (context, snapshot) {
