@@ -427,38 +427,38 @@ abstract class AppLocalizations {
   /// No description provided for @hintReserveUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Reserve is only available when the book is AVAILABLE.'**
-  String get hintReserveUnavailable;
+  /// **'Reserve is only available when the book is {status}.'**
+  String hintReserveUnavailable(String status);
 
   /// No description provided for @hintLoanUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Loan is only available when the book is AVAILABLE or RESERVED.'**
-  String get hintLoanUnavailable;
+  /// **'Loan is only available when the book is {availableStatus} or {reservedStatus}.'**
+  String hintLoanUnavailable(String availableStatus, String reservedStatus);
 
   /// No description provided for @hintReturnUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Return is only available when the book is ON_LOAN.'**
-  String get hintReturnUnavailable;
+  /// **'Return is only available when the book is {status}.'**
+  String hintReturnUnavailable(String status);
 
   /// No description provided for @hintGiftUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Gift is only available for USER-owned books that are AVAILABLE.'**
-  String get hintGiftUnavailable;
+  /// **'Gift is only available for {ownership} books that are {status}.'**
+  String hintGiftUnavailable(String status, String ownership);
 
   /// No description provided for @hintDonateUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Donate is only available for USER-owned books that are AVAILABLE.'**
-  String get hintDonateUnavailable;
+  /// **'Donate is only available for {ownership} books that are {status}.'**
+  String hintDonateUnavailable(String status, String ownership);
 
   /// No description provided for @hintReservedLoanRule.
   ///
   /// In en, this message translates to:
-  /// **'Loan is enabled for RESERVED books, but the backend only allows lending to the reserved user.'**
-  String get hintReservedLoanRule;
+  /// **'Loan is enabled for {reservedStatus} books, but the backend only allows lending to the reserved user.'**
+  String hintReservedLoanRule(String reservedStatus);
 
   /// No description provided for @idLabel.
   ///

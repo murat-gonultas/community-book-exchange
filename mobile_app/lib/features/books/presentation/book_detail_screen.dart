@@ -18,11 +18,15 @@ class BookDetailScreen extends StatefulWidget {
 class _BookDetailScreenState extends State<BookDetailScreen> {
   final BookApiService _apiService = BookApiService();
   late Future<BookDetail> _bookDetailFuture;
+  late Future<List<UserSummary>> _usersFuture;
+  late Future<List<CommunitySummary>> _communitiesFuture;
 
   @override
   void initState() {
     super.initState();
     _bookDetailFuture = _apiService.fetchBookDetail(widget.bookId);
+    _usersFuture = _apiService.fetchUsers();
+    _communitiesFuture = _apiService.fetchCommunities();
   }
 
   Future<void> _reload() async {
@@ -77,54 +81,191 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     }
   }
 
-  Future<Map<String, String>?> _showActionDialog({
+  Future<Map<String, String>?> _showUserActionDialog({
     required String title,
-    required List<_DialogFieldConfig> fields,
+    required String userFieldKey,
+    required String userFieldLabel,
+    required List<_DialogFieldConfig> extraFields,
   }) async {
+    final users = await _usersFuture;
+
+    if (!mounted) return null;
+
     final controllers = {
-      for (final field in fields) field.key: TextEditingController(),
+      for (final field in extraFields) field.key: TextEditingController(),
     };
+
+    int? selectedUserId = users.isNotEmpty ? users.first.id : null;
 
     final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: fields.map((field) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: TextField(
-                    controller: controllers[field.key],
-                    keyboardType: field.isNumber
-                        ? TextInputType.number
-                        : TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: field.label,
-                      border: const OutlineInputBorder(),
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(title),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<int>(
+                      initialValue: selectedUserId,
+                      decoration: InputDecoration(
+                        labelText: userFieldLabel,
+                        border: const OutlineInputBorder(),
+                      ),
+                      items: users
+                          .map(
+                            (user) => DropdownMenuItem<int>(
+                              value: user.id,
+                              child: Text(user.displayLabel()),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setDialogState(() {
+                          selectedUserId = value;
+                        });
+                      },
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(AppLocalizations.of(context)!.cancel),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop({
-                  for (final entry in controllers.entries)
-                    entry.key: entry.value.text.trim(),
-                });
-              },
-              child: Text(AppLocalizations.of(context)!.submit),
-            ),
-          ],
+                    const SizedBox(height: 12),
+                    ...extraFields.map((field) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: TextField(
+                          controller: controllers[field.key],
+                          keyboardType: field.isNumber
+                              ? TextInputType.number
+                              : TextInputType.text,
+                          decoration: InputDecoration(
+                            labelText: field.label,
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                ),
+                ElevatedButton(
+                  onPressed: selectedUserId == null
+                      ? null
+                      : () {
+                          Navigator.of(context).pop({
+                            userFieldKey: selectedUserId.toString(),
+                            for (final entry in controllers.entries)
+                              entry.key: entry.value.text.trim(),
+                          });
+                        },
+                  child: Text(AppLocalizations.of(context)!.submit),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    for (final controller in controllers.values) {
+      controller.dispose();
+    }
+
+    return result;
+  }
+
+  Future<Map<String, String>?> _showCommunityActionDialog({
+    required String title,
+    required String communityFieldKey,
+    required String communityFieldLabel,
+    required List<_DialogFieldConfig> extraFields,
+  }) async {
+    final communities = await _communitiesFuture;
+
+    if (!mounted) return null;
+
+    final controllers = {
+      for (final field in extraFields) field.key: TextEditingController(),
+    };
+
+    int? selectedCommunityId = communities.isNotEmpty
+        ? communities.first.id
+        : null;
+
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(title),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    DropdownButtonFormField<int>(
+                      initialValue: selectedCommunityId,
+                      decoration: InputDecoration(
+                        labelText: communityFieldLabel,
+                        border: const OutlineInputBorder(),
+                      ),
+                      items: communities
+                          .map(
+                            (community) => DropdownMenuItem<int>(
+                              value: community.id,
+                              child: Text(community.displayLabel()),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setDialogState(() {
+                          selectedCommunityId = value;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 12),
+                    ...extraFields.map((field) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: TextField(
+                          controller: controllers[field.key],
+                          keyboardType: field.isNumber
+                              ? TextInputType.number
+                              : TextInputType.text,
+                          decoration: InputDecoration(
+                            labelText: field.label,
+                            border: const OutlineInputBorder(),
+                          ),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                ),
+                ElevatedButton(
+                  onPressed: selectedCommunityId == null
+                      ? null
+                      : () {
+                          Navigator.of(context).pop({
+                            communityFieldKey: selectedCommunityId.toString(),
+                            for (final entry in controllers.entries)
+                              entry.key: entry.value.text.trim(),
+                          });
+                        },
+                  child: Text(AppLocalizations.of(context)!.submit),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -139,14 +280,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Future<void> _reserveBook() async {
     final l10n = AppLocalizations.of(context)!;
 
-    final values = await _showActionDialog(
+    final values = await _showUserActionDialog(
       title: l10n.reserveBook,
-      fields: [
-        _DialogFieldConfig(
-          key: 'reservedForUserId',
-          label: l10n.reservedForUserId,
-          isNumber: true,
-        ),
+      userFieldKey: 'reservedForUserId',
+      userFieldLabel: l10n.reservedForUserId,
+      extraFields: [
         _DialogFieldConfig(
           key: 'reservedDays',
           label: l10n.reservedDays,
@@ -182,14 +320,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Future<void> _loanBook() async {
     final l10n = AppLocalizations.of(context)!;
 
-    final values = await _showActionDialog(
+    final values = await _showUserActionDialog(
       title: l10n.loanBook,
-      fields: [
-        _DialogFieldConfig(
-          key: 'loanedToUserId',
-          label: l10n.loanedToUserId,
-          isNumber: true,
-        ),
+      userFieldKey: 'loanedToUserId',
+      userFieldLabel: l10n.loanedToUserId,
+      extraFields: [
         _DialogFieldConfig(
           key: 'loanDays',
           label: l10n.loanDays,
@@ -225,16 +360,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Future<void> _returnBook() async {
     final l10n = AppLocalizations.of(context)!;
 
-    final values = await _showActionDialog(
+    final values = await _showUserActionDialog(
       title: l10n.returnBook,
-      fields: [
-        _DialogFieldConfig(
-          key: 'returnedByUserId',
-          label: l10n.returnedByUserId,
-          isNumber: true,
-        ),
-        _DialogFieldConfig(key: 'note', label: l10n.note),
-      ],
+      userFieldKey: 'returnedByUserId',
+      userFieldLabel: l10n.returnedByUserId,
+      extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
     if (values == null) return;
@@ -261,16 +391,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Future<void> _giftBook() async {
     final l10n = AppLocalizations.of(context)!;
 
-    final values = await _showActionDialog(
+    final values = await _showUserActionDialog(
       title: l10n.giftBook,
-      fields: [
-        _DialogFieldConfig(
-          key: 'newOwnerUserId',
-          label: l10n.newOwnerUserId,
-          isNumber: true,
-        ),
-        _DialogFieldConfig(key: 'note', label: l10n.note),
-      ],
+      userFieldKey: 'newOwnerUserId',
+      userFieldLabel: l10n.newOwnerUserId,
+      extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
     if (values == null) return;
@@ -297,16 +422,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Future<void> _donateBook() async {
     final l10n = AppLocalizations.of(context)!;
 
-    final values = await _showActionDialog(
+    final values = await _showCommunityActionDialog(
       title: l10n.donateBook,
-      fields: [
-        _DialogFieldConfig(
-          key: 'communityId',
-          label: l10n.communityId,
-          isNumber: true,
-        ),
-        _DialogFieldConfig(key: 'note', label: l10n.note),
-      ],
+      communityFieldKey: 'communityId',
+      communityFieldLabel: l10n.communityId,
+      extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
     if (values == null) return;
@@ -333,28 +453,33 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   List<String> _getActionHints(BookDetail book, AppLocalizations l10n) {
     final hints = <String>[];
 
+    final availableStatus = BookUiLabels.status('AVAILABLE', l10n);
+    final reservedStatus = BookUiLabels.status('RESERVED', l10n);
+    final onLoanStatus = BookUiLabels.status('ON_LOAN', l10n);
+    final userOwnership = BookUiLabels.ownershipType('USER', l10n);
+
     if (!BookActionRules.canReserve(book)) {
-      hints.add(l10n.hintReserveUnavailable);
+      hints.add(l10n.hintReserveUnavailable(availableStatus));
     }
 
     if (!BookActionRules.canLoan(book)) {
-      hints.add(l10n.hintLoanUnavailable);
+      hints.add(l10n.hintLoanUnavailable(availableStatus, reservedStatus));
     }
 
     if (!BookActionRules.canReturn(book)) {
-      hints.add(l10n.hintReturnUnavailable);
+      hints.add(l10n.hintReturnUnavailable(onLoanStatus));
     }
 
     if (!BookActionRules.canGift(book)) {
-      hints.add(l10n.hintGiftUnavailable);
+      hints.add(l10n.hintGiftUnavailable(availableStatus, userOwnership));
     }
 
     if (!BookActionRules.canDonate(book)) {
-      hints.add(l10n.hintDonateUnavailable);
+      hints.add(l10n.hintDonateUnavailable(availableStatus, userOwnership));
     }
 
     if (book.status == 'RESERVED') {
-      hints.add(l10n.hintReservedLoanRule);
+      hints.add(l10n.hintReservedLoanRule(reservedStatus));
     }
 
     return hints;

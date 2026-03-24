@@ -183,28 +183,34 @@ class AppLocalizationsDe extends AppLocalizations {
       'Warum sind einige Aktionen nicht verfügbar?';
 
   @override
-  String get hintReserveUnavailable =>
-      'Reservieren ist nur möglich, wenn das Buch den Status AVAILABLE hat.';
+  String hintReserveUnavailable(String status) {
+    return 'Reservieren ist nur möglich, wenn das Buch den Status $status hat.';
+  }
 
   @override
-  String get hintLoanUnavailable =>
-      'Verleihen ist nur möglich, wenn das Buch den Status AVAILABLE oder RESERVED hat.';
+  String hintLoanUnavailable(String availableStatus, String reservedStatus) {
+    return 'Verleihen ist nur möglich, wenn das Buch den Status $availableStatus oder $reservedStatus hat.';
+  }
 
   @override
-  String get hintReturnUnavailable =>
-      'Zurücknehmen ist nur möglich, wenn das Buch den Status ON_LOAN hat.';
+  String hintReturnUnavailable(String status) {
+    return 'Zurücknehmen ist nur möglich, wenn das Buch den Status $status hat.';
+  }
 
   @override
-  String get hintGiftUnavailable =>
-      'Übertragen ist nur für USER-eigene Bücher im Status AVAILABLE möglich.';
+  String hintGiftUnavailable(String status, String ownership) {
+    return 'Übertragen ist nur für $ownership Bücher im Status $status möglich.';
+  }
 
   @override
-  String get hintDonateUnavailable =>
-      'Spenden ist nur für USER-eigene Bücher im Status AVAILABLE möglich.';
+  String hintDonateUnavailable(String status, String ownership) {
+    return 'Spenden ist nur für $ownership Bücher im Status $status möglich.';
+  }
 
   @override
-  String get hintReservedLoanRule =>
-      'Bei RESERVED-Büchern ist Verleihen aktiviert, aber das Backend erlaubt das Verleihen nur an den reservierten Benutzer.';
+  String hintReservedLoanRule(String reservedStatus) {
+    return 'Bei Büchern mit Status $reservedStatus ist Verleihen aktiviert, aber das Backend erlaubt das Verleihen nur an den reservierten Benutzer.';
+  }
 
   @override
   String get idLabel => 'ID';

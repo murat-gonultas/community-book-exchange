@@ -93,12 +93,68 @@
   "dueAt": "Son Tarih",
 
   "whyActionsUnavailable": "Bazı işlemler neden kullanılamıyor?",
-  "hintReserveUnavailable": "Rezerve etme yalnızca kitap AVAILABLE durumundayken mümkündür.",
-  "hintLoanUnavailable": "Ödünç verme yalnızca kitap AVAILABLE veya RESERVED durumundayken mümkündür.",
-  "hintReturnUnavailable": "İade alma yalnızca kitap ON_LOAN durumundayken mümkündür.",
-  "hintGiftUnavailable": "Devretme yalnızca AVAILABLE durumundaki USER sahipli kitaplar için mümkündür.",
-  "hintDonateUnavailable": "Bağışlama yalnızca AVAILABLE durumundaki USER sahipli kitaplar için mümkündür.",
-  "hintReservedLoanRule": "RESERVED durumundaki kitaplarda ödünç verme butonu açıktır, ancak backend sadece rezervasyonu olan kullanıcıya ödünç vermeye izin verir.",
+  "hintReserveUnavailable": "Rezerve etme yalnızca kitap {status} durumundayken mümkündür.",
+  "@hintReserveUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintLoanUnavailable": "Ödünç verme yalnızca kitap {availableStatus} veya {reservedStatus} durumundayken mümkündür.",
+  "@hintLoanUnavailable": {
+    "placeholders": {
+      "availableStatus": {
+        "type": "String"
+      },
+      "reservedStatus": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintReturnUnavailable": "İade alma yalnızca kitap {status} durumundayken mümkündür.",
+  "@hintReturnUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintGiftUnavailable": "Devretme yalnızca {status} durumundaki {ownership} kitaplar için mümkündür.",
+  "@hintGiftUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "ownership": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintDonateUnavailable": "Bağışlama yalnızca {status} durumundaki {ownership} kitaplar için mümkündür.",
+  "@hintDonateUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "ownership": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintReservedLoanRule": "{reservedStatus} durumundaki kitaplarda ödünç verme butonu açıktır, ancak backend sadece rezervasyonu olan kullanıcıya ödünç vermeye izin verir.",
+  "@hintReservedLoanRule": {
+    "placeholders": {
+      "reservedStatus": {
+        "type": "String"
+      }
+    }
+  },
 
   "idLabel": "ID",
   "fromUser": "Gönderen Kullanıcı",

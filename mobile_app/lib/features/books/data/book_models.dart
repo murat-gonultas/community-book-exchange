@@ -127,3 +127,51 @@ class BookDetail {
     );
   }
 }
+
+class UserSummary {
+  final int id;
+  final String name;
+  final String? city;
+  final String? email;
+
+  UserSummary({required this.id, required this.name, this.city, this.email});
+
+  factory UserSummary.fromJson(Map<String, dynamic> json) {
+    return UserSummary(
+      id: json['id'] as int,
+      name: (json['name'] ?? '') as String,
+      city: json['city'] as String?,
+      email: json['email'] as String?,
+    );
+  }
+
+  String displayLabel() {
+    final parts = <String>[name, '#$id'];
+
+    if (city != null && city!.trim().isNotEmpty) {
+      parts.add(city!.trim());
+    }
+
+    return parts.join(' • ');
+  }
+}
+
+class CommunitySummary {
+  final int id;
+  final String name;
+  final String? description;
+
+  CommunitySummary({required this.id, required this.name, this.description});
+
+  factory CommunitySummary.fromJson(Map<String, dynamic> json) {
+    return CommunitySummary(
+      id: json['id'] as int,
+      name: (json['name'] ?? '') as String,
+      description: json['description'] as String?,
+    );
+  }
+
+  String displayLabel() {
+    return '$name • #$id';
+  }
+}

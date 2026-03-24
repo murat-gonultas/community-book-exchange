@@ -93,12 +93,68 @@
   "dueAt": "Fällig am",
 
   "whyActionsUnavailable": "Warum sind einige Aktionen nicht verfügbar?",
-  "hintReserveUnavailable": "Reservieren ist nur möglich, wenn das Buch den Status AVAILABLE hat.",
-  "hintLoanUnavailable": "Verleihen ist nur möglich, wenn das Buch den Status AVAILABLE oder RESERVED hat.",
-  "hintReturnUnavailable": "Zurücknehmen ist nur möglich, wenn das Buch den Status ON_LOAN hat.",
-  "hintGiftUnavailable": "Übertragen ist nur für USER-eigene Bücher im Status AVAILABLE möglich.",
-  "hintDonateUnavailable": "Spenden ist nur für USER-eigene Bücher im Status AVAILABLE möglich.",
-  "hintReservedLoanRule": "Bei RESERVED-Büchern ist Verleihen aktiviert, aber das Backend erlaubt das Verleihen nur an den reservierten Benutzer.",
+  "hintReserveUnavailable": "Reservieren ist nur möglich, wenn das Buch den Status {status} hat.",
+  "@hintReserveUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintLoanUnavailable": "Verleihen ist nur möglich, wenn das Buch den Status {availableStatus} oder {reservedStatus} hat.",
+  "@hintLoanUnavailable": {
+    "placeholders": {
+      "availableStatus": {
+        "type": "String"
+      },
+      "reservedStatus": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintReturnUnavailable": "Zurücknehmen ist nur möglich, wenn das Buch den Status {status} hat.",
+  "@hintReturnUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintGiftUnavailable": "Übertragen ist nur für {ownership} Bücher im Status {status} möglich.",
+  "@hintGiftUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "ownership": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintDonateUnavailable": "Spenden ist nur für {ownership} Bücher im Status {status} möglich.",
+  "@hintDonateUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "ownership": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintReservedLoanRule": "Bei Büchern mit Status {reservedStatus} ist Verleihen aktiviert, aber das Backend erlaubt das Verleihen nur an den reservierten Benutzer.",
+  "@hintReservedLoanRule": {
+    "placeholders": {
+      "reservedStatus": {
+        "type": "String"
+      }
+    }
+  },
 
   "idLabel": "ID",
   "fromUser": "Von Benutzer",

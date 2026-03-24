@@ -179,28 +179,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whyActionsUnavailable => 'Why are some actions unavailable?';
 
   @override
-  String get hintReserveUnavailable =>
-      'Reserve is only available when the book is AVAILABLE.';
+  String hintReserveUnavailable(String status) {
+    return 'Reserve is only available when the book is $status.';
+  }
 
   @override
-  String get hintLoanUnavailable =>
-      'Loan is only available when the book is AVAILABLE or RESERVED.';
+  String hintLoanUnavailable(String availableStatus, String reservedStatus) {
+    return 'Loan is only available when the book is $availableStatus or $reservedStatus.';
+  }
 
   @override
-  String get hintReturnUnavailable =>
-      'Return is only available when the book is ON_LOAN.';
+  String hintReturnUnavailable(String status) {
+    return 'Return is only available when the book is $status.';
+  }
 
   @override
-  String get hintGiftUnavailable =>
-      'Gift is only available for USER-owned books that are AVAILABLE.';
+  String hintGiftUnavailable(String status, String ownership) {
+    return 'Gift is only available for $ownership books that are $status.';
+  }
 
   @override
-  String get hintDonateUnavailable =>
-      'Donate is only available for USER-owned books that are AVAILABLE.';
+  String hintDonateUnavailable(String status, String ownership) {
+    return 'Donate is only available for $ownership books that are $status.';
+  }
 
   @override
-  String get hintReservedLoanRule =>
-      'Loan is enabled for RESERVED books, but the backend only allows lending to the reserved user.';
+  String hintReservedLoanRule(String reservedStatus) {
+    return 'Loan is enabled for $reservedStatus books, but the backend only allows lending to the reserved user.';
+  }
 
   @override
   String get idLabel => 'ID';

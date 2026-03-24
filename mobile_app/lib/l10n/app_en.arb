@@ -93,12 +93,68 @@
   "dueAt": "Due At",
 
   "whyActionsUnavailable": "Why are some actions unavailable?",
-  "hintReserveUnavailable": "Reserve is only available when the book is AVAILABLE.",
-  "hintLoanUnavailable": "Loan is only available when the book is AVAILABLE or RESERVED.",
-  "hintReturnUnavailable": "Return is only available when the book is ON_LOAN.",
-  "hintGiftUnavailable": "Gift is only available for USER-owned books that are AVAILABLE.",
-  "hintDonateUnavailable": "Donate is only available for USER-owned books that are AVAILABLE.",
-  "hintReservedLoanRule": "Loan is enabled for RESERVED books, but the backend only allows lending to the reserved user.",
+  "hintReserveUnavailable": "Reserve is only available when the book is {status}.",
+  "@hintReserveUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintLoanUnavailable": "Loan is only available when the book is {availableStatus} or {reservedStatus}.",
+  "@hintLoanUnavailable": {
+    "placeholders": {
+      "availableStatus": {
+        "type": "String"
+      },
+      "reservedStatus": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintReturnUnavailable": "Return is only available when the book is {status}.",
+  "@hintReturnUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintGiftUnavailable": "Gift is only available for {ownership} books that are {status}.",
+  "@hintGiftUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "ownership": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintDonateUnavailable": "Donate is only available for {ownership} books that are {status}.",
+  "@hintDonateUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      },
+      "ownership": {
+        "type": "String"
+      }
+    }
+  },
+
+  "hintReservedLoanRule": "Loan is enabled for {reservedStatus} books, but the backend only allows lending to the reserved user.",
+  "@hintReservedLoanRule": {
+    "placeholders": {
+      "reservedStatus": {
+        "type": "String"
+      }
+    }
+  },
 
   "idLabel": "ID",
   "fromUser": "From User",

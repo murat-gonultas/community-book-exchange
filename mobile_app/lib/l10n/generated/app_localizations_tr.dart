@@ -180,28 +180,34 @@ class AppLocalizationsTr extends AppLocalizations {
   String get whyActionsUnavailable => 'Bazı işlemler neden kullanılamıyor?';
 
   @override
-  String get hintReserveUnavailable =>
-      'Rezerve etme yalnızca kitap AVAILABLE durumundayken mümkündür.';
+  String hintReserveUnavailable(String status) {
+    return 'Rezerve etme yalnızca kitap $status durumundayken mümkündür.';
+  }
 
   @override
-  String get hintLoanUnavailable =>
-      'Ödünç verme yalnızca kitap AVAILABLE veya RESERVED durumundayken mümkündür.';
+  String hintLoanUnavailable(String availableStatus, String reservedStatus) {
+    return 'Ödünç verme yalnızca kitap $availableStatus veya $reservedStatus durumundayken mümkündür.';
+  }
 
   @override
-  String get hintReturnUnavailable =>
-      'İade alma yalnızca kitap ON_LOAN durumundayken mümkündür.';
+  String hintReturnUnavailable(String status) {
+    return 'İade alma yalnızca kitap $status durumundayken mümkündür.';
+  }
 
   @override
-  String get hintGiftUnavailable =>
-      'Devretme yalnızca AVAILABLE durumundaki USER sahipli kitaplar için mümkündür.';
+  String hintGiftUnavailable(String status, String ownership) {
+    return 'Devretme yalnızca $status durumundaki $ownership kitaplar için mümkündür.';
+  }
 
   @override
-  String get hintDonateUnavailable =>
-      'Bağışlama yalnızca AVAILABLE durumundaki USER sahipli kitaplar için mümkündür.';
+  String hintDonateUnavailable(String status, String ownership) {
+    return 'Bağışlama yalnızca $status durumundaki $ownership kitaplar için mümkündür.';
+  }
 
   @override
-  String get hintReservedLoanRule =>
-      'RESERVED durumundaki kitaplarda ödünç verme butonu açıktır, ancak backend sadece rezervasyonu olan kullanıcıya ödünç vermeye izin verir.';
+  String hintReservedLoanRule(String reservedStatus) {
+    return '$reservedStatus durumundaki kitaplarda ödünç verme butonu açıktır, ancak backend sadece rezervasyonu olan kullanıcıya ödünç vermeye izin verir.';
+  }
 
   @override
   String get idLabel => 'ID';
