@@ -241,4 +241,34 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get turkish => 'Türkçe';
+
+  @override
+  String get statusAvailable => 'Verfügbar';
+
+  @override
+  String get statusReserved => 'Reserviert';
+
+  @override
+  String get statusOnLoan => 'Verliehen';
+
+  @override
+  String get ownershipUser => 'Privatbesitz';
+
+  @override
+  String get ownershipCommunity => 'Gemeinschaftseigentum';
+
+  @override
+  String get transactionReservation => 'Reservierung';
+
+  @override
+  String get transactionLoan => 'Ausleihe';
+
+  @override
+  String get transactionReturn => 'Rückgabe';
+
+  @override
+  String get transactionGift => 'Übergabe';
+
+  @override
+  String get transactionDonation => 'Spende';
 }

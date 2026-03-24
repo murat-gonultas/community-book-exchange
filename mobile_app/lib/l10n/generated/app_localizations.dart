@@ -531,6 +531,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Türkçe'**
   String get turkish;
+
+  /// No description provided for @statusAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get statusAvailable;
+
+  /// No description provided for @statusReserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserved'**
+  String get statusReserved;
+
+  /// No description provided for @statusOnLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'On loan'**
+  String get statusOnLoan;
+
+  /// No description provided for @ownershipUser.
+  ///
+  /// In en, this message translates to:
+  /// **'User-owned'**
+  String get ownershipUser;
+
+  /// No description provided for @ownershipCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Community-owned'**
+  String get ownershipCommunity;
+
+  /// No description provided for @transactionReservation.
+  ///
+  /// In en, this message translates to:
+  /// **'Reservation'**
+  String get transactionReservation;
+
+  /// No description provided for @transactionLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan'**
+  String get transactionLoan;
+
+  /// No description provided for @transactionReturn.
+  ///
+  /// In en, this message translates to:
+  /// **'Return'**
+  String get transactionReturn;
+
+  /// No description provided for @transactionGift.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift'**
+  String get transactionGift;
+
+  /// No description provided for @transactionDonation.
+  ///
+  /// In en, this message translates to:
+  /// **'Donation'**
+  String get transactionDonation;
 }
 
 class _AppLocalizationsDelegate

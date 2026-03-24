@@ -113,5 +113,18 @@
   "systemLanguage": "Sistem Dili",
   "german": "Deutsch",
   "english": "English",
-  "turkish": "Türkçe"
+  "turkish": "Türkçe",
+
+  "statusAvailable": "Uygun",
+  "statusReserved": "Rezerve",
+  "statusOnLoan": "Ödünçte",
+  
+  "ownershipUser": "Kullanıcıya ait",
+  "ownershipCommunity": "Topluluğa ait",
+  
+  "transactionReservation": "Rezervasyon",
+  "transactionLoan": "Ödünç verme",
+  "transactionReturn": "İade",
+  "transactionGift": "Devir",
+  "transactionDonation": "Bağış"
 }

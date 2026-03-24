@@ -238,4 +238,34 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get turkish => 'Türkçe';
+
+  @override
+  String get statusAvailable => 'Uygun';
+
+  @override
+  String get statusReserved => 'Rezerve';
+
+  @override
+  String get statusOnLoan => 'Ödünçte';
+
+  @override
+  String get ownershipUser => 'Kullanıcıya ait';
+
+  @override
+  String get ownershipCommunity => 'Topluluğa ait';
+
+  @override
+  String get transactionReservation => 'Rezervasyon';
+
+  @override
+  String get transactionLoan => 'Ödünç verme';
+
+  @override
+  String get transactionReturn => 'İade';
+
+  @override
+  String get transactionGift => 'Devir';
+
+  @override
+  String get transactionDonation => 'Bağış';
 }

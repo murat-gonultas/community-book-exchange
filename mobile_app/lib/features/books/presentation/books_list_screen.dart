@@ -5,6 +5,7 @@ import '../../../main.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
 import 'book_detail_screen.dart';
+import 'book_ui_labels.dart';
 
 class BooksListScreen extends StatefulWidget {
   const BooksListScreen({super.key});
@@ -126,7 +127,9 @@ class _BooksListScreenState extends State<BooksListScreen> {
                   leading: CircleAvatar(child: Text(book.bookId.toString())),
                   title: Text(book.title),
                   subtitle: Text(
-                    '${book.author ?? l10n.unknownAuthor} • ${book.status} • ${book.ownershipType}',
+                    '${book.author ?? l10n.unknownAuthor} • '
+                    '${BookUiLabels.status(book.status, l10n)} • '
+                    '${BookUiLabels.ownershipType(book.ownershipType, l10n)}',
                   ),
                   onTap: () {
                     Navigator.of(context).push(

@@ -113,5 +113,18 @@
   "systemLanguage": "Systemsprache",
   "german": "Deutsch",
   "english": "English",
-  "turkish": "Türkçe"
+  "turkish": "Türkçe",
+
+  "statusAvailable": "Verfügbar",
+  "statusReserved": "Reserviert",
+  "statusOnLoan": "Verliehen",
+  
+  "ownershipUser": "Privatbesitz",
+  "ownershipCommunity": "Gemeinschaftseigentum",
+  
+  "transactionReservation": "Reservierung",
+  "transactionLoan": "Ausleihe",
+  "transactionReturn": "Rückgabe",
+  "transactionGift": "Übergabe",
+  "transactionDonation": "Spende"
 }

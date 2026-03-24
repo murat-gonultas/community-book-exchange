@@ -237,4 +237,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get turkish => 'Türkçe';
+
+  @override
+  String get statusAvailable => 'Available';
+
+  @override
+  String get statusReserved => 'Reserved';
+
+  @override
+  String get statusOnLoan => 'On loan';
+
+  @override
+  String get ownershipUser => 'User-owned';
+
+  @override
+  String get ownershipCommunity => 'Community-owned';
+
+  @override
+  String get transactionReservation => 'Reservation';
+
+  @override
+  String get transactionLoan => 'Loan';
+
+  @override
+  String get transactionReturn => 'Return';
+
+  @override
+  String get transactionGift => 'Gift';
+
+  @override
+  String get transactionDonation => 'Donation';
 }

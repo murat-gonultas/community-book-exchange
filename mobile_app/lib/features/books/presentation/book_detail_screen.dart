@@ -4,6 +4,7 @@ import 'package:mobile_app/l10n/generated/app_localizations.dart';
 import '../../../main.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
+import 'book_ui_labels.dart';
 
 class BookDetailScreen extends StatefulWidget {
   final int bookId;
@@ -425,7 +426,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(tx.type, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              BookUiLabels.transactionType(tx.type, l10n),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 6),
             Text('${l10n.idLabel}: ${tx.id}'),
             Text(
@@ -519,8 +523,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 _infoRow(l10n.category, book.category ?? l10n.notAvailable),
                 _infoRow(l10n.condition, book.condition ?? l10n.notAvailable),
                 _infoRow(l10n.notes, book.notes ?? l10n.notAvailable),
-                _infoRow(l10n.status, book.status),
-                _infoRow(l10n.ownershipType, book.ownershipType),
+                _infoRow(l10n.status, BookUiLabels.status(book.status, l10n)),
+                _infoRow(
+                  l10n.ownershipType,
+                  BookUiLabels.ownershipType(book.ownershipType, l10n),
+                ),
                 _infoRow(
                   l10n.ownerUserId,
                   book.ownerUserId?.toString() ?? l10n.notAvailable,
