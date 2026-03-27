@@ -182,5 +182,16 @@
   "transactionLoan": "Ödünç verme",
   "transactionReturn": "İade",
   "transactionGift": "Devir",
-  "transactionDonation": "Bağış"
+  "transactionDonation": "Bağış",
+
+  "booksSearchHint": "Başlık veya yazara göre ara",
+  "filterStatus": "Durum",
+  "filterOwnership": "Sahiplik",
+  "allStatuses": "Tüm durumlar",
+  "allOwnershipTypes": "Tüm sahiplik türleri",
+  "clearFilters": "Filtreleri temizle",
+  "noBooksFound": "Mevcut filtrelere uygun kitap bulunamadı.",
+  "retry": "Tekrar dene",
+  "unknownAuthor": "Yazar bilinmiyor",
+  "bookListTitle": "Kitaplar"
 }

@@ -182,5 +182,16 @@
   "transactionLoan": "Loan",
   "transactionReturn": "Return",
   "transactionGift": "Gift",
-  "transactionDonation": "Donation"
+  "transactionDonation": "Donation",
+
+  "booksSearchHint": "Search by title or author",
+  "filterStatus": "Status",
+  "filterOwnership": "Ownership",
+  "allStatuses": "All statuses",
+  "allOwnershipTypes": "All ownership types",
+  "clearFilters": "Clear filters",
+  "noBooksFound": "No books match your current filters.",
+  "retry": "Retry",
+  "unknownAuthor": "Unknown author",
+  "bookListTitle": "Books"
 }

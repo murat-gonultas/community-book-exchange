@@ -23,7 +23,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get transactions => 'Hareketler';
 
   @override
-  String get retry => 'Tekrar Dene';
+  String get retry => 'Tekrar dene';
 
   @override
   String get cancel => 'İptal';
@@ -228,10 +228,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get books => 'Kitaplar';
 
   @override
-  String get noBooksFound => 'Kitap bulunamadı';
+  String get noBooksFound => 'Mevcut filtrelere uygun kitap bulunamadı.';
 
   @override
-  String get unknownAuthor => 'Bilinmiyor';
+  String get unknownAuthor => 'Yazar bilinmiyor';
 
   @override
   String get systemLanguage => 'Sistem Dili';
@@ -274,4 +274,25 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get transactionDonation => 'Bağış';
+
+  @override
+  String get booksSearchHint => 'Başlık veya yazara göre ara';
+
+  @override
+  String get filterStatus => 'Durum';
+
+  @override
+  String get filterOwnership => 'Sahiplik';
+
+  @override
+  String get allStatuses => 'Tüm durumlar';
+
+  @override
+  String get allOwnershipTypes => 'Tüm sahiplik türleri';
+
+  @override
+  String get clearFilters => 'Filtreleri temizle';
+
+  @override
+  String get bookListTitle => 'Kitaplar';
 }

@@ -294,6 +294,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       ],
     );
 
+    if (!mounted) return;
     if (values == null) return;
 
     final reservedForUserId = int.tryParse(values['reservedForUserId'] ?? '');
@@ -334,6 +335,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       ],
     );
 
+    if (!mounted) return;
     if (values == null) return;
 
     final loanedToUserId = int.tryParse(values['loanedToUserId'] ?? '');
@@ -367,6 +369,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
+    if (!mounted) return;
     if (values == null) return;
 
     final returnedByUserId = int.tryParse(values['returnedByUserId'] ?? '');
@@ -398,6 +401,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
+    if (!mounted) return;
     if (values == null) return;
 
     final newOwnerUserId = int.tryParse(values['newOwnerUserId'] ?? '');
@@ -429,6 +433,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
+    if (!mounted) return;
     if (values == null) return;
 
     final communityId = int.tryParse(values['communityId'] ?? '');
@@ -494,10 +499,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
     return Container(
       margin: const EdgeInsets.only(top: 12),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: Column(
@@ -526,15 +531,15 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
   Widget _infoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 140,
+            width: 150,
             child: Text(
               '$label:',
-              style: const TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.w600),
             ),
           ),
           Expanded(child: Text(value)),
@@ -543,11 +548,113 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
+  Widget _buildSectionCard({required Widget child}) {
+    return Card(
+      margin: EdgeInsets.zero,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(padding: const EdgeInsets.all(16), child: child),
+    );
+  }
+
+  Widget _buildBadge({
+    required BuildContext context,
+    required IconData icon,
+    required String label,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [Icon(icon, size: 16), const SizedBox(width: 6), Text(label)],
+      ),
+    );
+  }
+
+  Widget _buildHeaderCard(BookDetail book, AppLocalizations l10n) {
+    return _buildSectionCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(book.title, style: Theme.of(context).textTheme.headlineSmall),
+          const SizedBox(height: 8),
+          Text(
+            book.author ?? l10n.notAvailable,
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(color: Colors.grey.shade700),
+          ),
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildBadge(
+                context: context,
+                icon: Icons.info_outline,
+                label: BookUiLabels.status(book.status, l10n),
+              ),
+              _buildBadge(
+                context: context,
+                icon: Icons.person_outline,
+                label: BookUiLabels.ownershipType(book.ownershipType, l10n),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailsCard(BookDetail book, AppLocalizations l10n) {
+    return _buildSectionCard(
+      child: Column(
+        children: [
+          _infoRow(l10n.author, book.author ?? l10n.notAvailable),
+          _infoRow(l10n.isbn, book.isbn ?? l10n.notAvailable),
+          _infoRow(l10n.language, book.language ?? l10n.notAvailable),
+          _infoRow(l10n.category, book.category ?? l10n.notAvailable),
+          _infoRow(l10n.condition, book.condition ?? l10n.notAvailable),
+          _infoRow(l10n.notes, book.notes ?? l10n.notAvailable),
+          _infoRow(l10n.status, BookUiLabels.status(book.status, l10n)),
+          _infoRow(
+            l10n.ownershipType,
+            BookUiLabels.ownershipType(book.ownershipType, l10n),
+          ),
+          _infoRow(
+            l10n.ownerUserId,
+            book.ownerUserId?.toString() ?? l10n.notAvailable,
+          ),
+          _infoRow(
+            l10n.ownerCommunityId,
+            book.ownerCommunityId?.toString() ?? l10n.notAvailable,
+          ),
+          _infoRow(
+            l10n.currentHolderUserId,
+            book.currentHolderUserId?.toString() ?? l10n.notAvailable,
+          ),
+          _infoRow(
+            l10n.reservedForUserIdLabel,
+            book.reservedForUserId?.toString() ?? l10n.notAvailable,
+          ),
+          _infoRow(l10n.reservedUntil, book.reservedUntil ?? l10n.notAvailable),
+          _infoRow(l10n.loanStart, book.loanStartAt ?? l10n.notAvailable),
+          _infoRow(l10n.dueAt, book.dueAt ?? l10n.notAvailable),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTransactionCard(BookTransaction tx, AppLocalizations l10n) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 6),
+      margin: const EdgeInsets.only(bottom: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -555,17 +662,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               BookUiLabels.transactionType(tx.type, l10n),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 6),
-            Text('${l10n.idLabel}: ${tx.id}'),
-            Text(
-              '${l10n.fromUser}: ${tx.fromUserId?.toString() ?? l10n.notAvailable}',
+            const SizedBox(height: 10),
+            _infoRow(l10n.idLabel, tx.id.toString()),
+            _infoRow(
+              l10n.fromUser,
+              tx.fromUserId?.toString() ?? l10n.notAvailable,
             ),
-            Text(
-              '${l10n.toUser}: ${tx.toUserId?.toString() ?? l10n.notAvailable}',
-            ),
-            Text('${l10n.start}: ${tx.startDate ?? l10n.notAvailable}'),
-            Text('${l10n.end}: ${tx.endDate ?? l10n.notAvailable}'),
-            Text('${l10n.note}: ${tx.note ?? l10n.notAvailable}'),
+            _infoRow(l10n.toUser, tx.toUserId?.toString() ?? l10n.notAvailable),
+            _infoRow(l10n.start, tx.startDate ?? l10n.notAvailable),
+            _infoRow(l10n.end, tx.endDate ?? l10n.notAvailable),
+            _infoRow(l10n.note, tx.note ?? l10n.notAvailable),
           ],
         ),
       ),
@@ -576,10 +682,80 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     required String label,
     required bool enabled,
     required VoidCallback onPressed,
+    required IconData icon,
   }) {
-    return ElevatedButton(
+    return ElevatedButton.icon(
       onPressed: enabled ? onPressed : null,
-      child: Text(label),
+      icon: Icon(icon),
+      label: Text(label),
+    );
+  }
+
+  Widget _buildActionsCard(BookDetail book, AppLocalizations l10n) {
+    return _buildSectionCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(l10n.actions, style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              _buildActionButton(
+                label: l10n.reserve,
+                enabled: BookActionRules.canReserve(book),
+                onPressed: _reserveBook,
+                icon: Icons.bookmark_add_outlined,
+              ),
+              _buildActionButton(
+                label: l10n.loan,
+                enabled: BookActionRules.canLoan(book),
+                onPressed: _loanBook,
+                icon: Icons.swap_horiz,
+              ),
+              _buildActionButton(
+                label: l10n.returnAction,
+                enabled: BookActionRules.canReturn(book),
+                onPressed: _returnBook,
+                icon: Icons.assignment_return_outlined,
+              ),
+              _buildActionButton(
+                label: l10n.gift,
+                enabled: BookActionRules.canGift(book),
+                onPressed: _giftBook,
+                icon: Icons.redeem_outlined,
+              ),
+              _buildActionButton(
+                label: l10n.donate,
+                enabled: BookActionRules.canDonate(book),
+                onPressed: _donateBook,
+                icon: Icons.volunteer_activism_outlined,
+              ),
+            ],
+          ),
+          _buildActionHints(book, l10n),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTransactionsSection(BookDetail book, AppLocalizations l10n) {
+    return _buildSectionCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.transactions,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 12),
+          if (book.transactions.isEmpty)
+            Text(l10n.noTransactions)
+          else
+            ...book.transactions.map((tx) => _buildTransactionCard(tx, l10n)),
+        ],
+      ),
     );
   }
 
@@ -637,94 +813,13 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
-                Text(
-                  book.title,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                const SizedBox(height: 12),
-                _infoRow(l10n.author, book.author ?? l10n.notAvailable),
-                _infoRow(l10n.isbn, book.isbn ?? l10n.notAvailable),
-                _infoRow(l10n.language, book.language ?? l10n.notAvailable),
-                _infoRow(l10n.category, book.category ?? l10n.notAvailable),
-                _infoRow(l10n.condition, book.condition ?? l10n.notAvailable),
-                _infoRow(l10n.notes, book.notes ?? l10n.notAvailable),
-                _infoRow(l10n.status, BookUiLabels.status(book.status, l10n)),
-                _infoRow(
-                  l10n.ownershipType,
-                  BookUiLabels.ownershipType(book.ownershipType, l10n),
-                ),
-                _infoRow(
-                  l10n.ownerUserId,
-                  book.ownerUserId?.toString() ?? l10n.notAvailable,
-                ),
-                _infoRow(
-                  l10n.ownerCommunityId,
-                  book.ownerCommunityId?.toString() ?? l10n.notAvailable,
-                ),
-                _infoRow(
-                  l10n.currentHolderUserId,
-                  book.currentHolderUserId?.toString() ?? l10n.notAvailable,
-                ),
-                _infoRow(
-                  l10n.reservedForUserIdLabel,
-                  book.reservedForUserId?.toString() ?? l10n.notAvailable,
-                ),
-                _infoRow(
-                  l10n.reservedUntil,
-                  book.reservedUntil ?? l10n.notAvailable,
-                ),
-                _infoRow(l10n.loanStart, book.loanStartAt ?? l10n.notAvailable),
-                _infoRow(l10n.dueAt, book.dueAt ?? l10n.notAvailable),
-                const SizedBox(height: 24),
-                Text(
-                  l10n.actions,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _buildActionButton(
-                      label: l10n.reserve,
-                      enabled: BookActionRules.canReserve(book),
-                      onPressed: _reserveBook,
-                    ),
-                    _buildActionButton(
-                      label: l10n.loan,
-                      enabled: BookActionRules.canLoan(book),
-                      onPressed: _loanBook,
-                    ),
-                    _buildActionButton(
-                      label: l10n.returnAction,
-                      enabled: BookActionRules.canReturn(book),
-                      onPressed: _returnBook,
-                    ),
-                    _buildActionButton(
-                      label: l10n.gift,
-                      enabled: BookActionRules.canGift(book),
-                      onPressed: _giftBook,
-                    ),
-                    _buildActionButton(
-                      label: l10n.donate,
-                      enabled: BookActionRules.canDonate(book),
-                      onPressed: _donateBook,
-                    ),
-                  ],
-                ),
-                _buildActionHints(book, l10n),
-                const SizedBox(height: 24),
-                Text(
-                  l10n.transactions,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 8),
-                if (book.transactions.isEmpty)
-                  Text(l10n.noTransactions)
-                else
-                  ...book.transactions.map(
-                    (tx) => _buildTransactionCard(tx, l10n),
-                  ),
+                _buildHeaderCard(book, l10n),
+                const SizedBox(height: 16),
+                _buildDetailsCard(book, l10n),
+                const SizedBox(height: 16),
+                _buildActionsCard(book, l10n),
+                const SizedBox(height: 16),
+                _buildTransactionsSection(book, l10n),
               ],
             ),
           );

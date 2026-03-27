@@ -499,13 +499,13 @@ abstract class AppLocalizations {
   /// No description provided for @noBooksFound.
   ///
   /// In en, this message translates to:
-  /// **'No books found'**
+  /// **'No books match your current filters.'**
   String get noBooksFound;
 
   /// No description provided for @unknownAuthor.
   ///
   /// In en, this message translates to:
-  /// **'Unknown'**
+  /// **'Unknown author'**
   String get unknownAuthor;
 
   /// No description provided for @systemLanguage.
@@ -591,6 +591,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Donation'**
   String get transactionDonation;
+
+  /// No description provided for @booksSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by title or author'**
+  String get booksSearchHint;
+
+  /// No description provided for @filterStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get filterStatus;
+
+  /// No description provided for @filterOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership'**
+  String get filterOwnership;
+
+  /// No description provided for @allStatuses.
+  ///
+  /// In en, this message translates to:
+  /// **'All statuses'**
+  String get allStatuses;
+
+  /// No description provided for @allOwnershipTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'All ownership types'**
+  String get allOwnershipTypes;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get clearFilters;
+
+  /// No description provided for @bookListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Books'**
+  String get bookListTitle;
 }
 
 class _AppLocalizationsDelegate

@@ -11,16 +11,16 @@ void main() {
 class CommunityBookExchangeApp extends StatefulWidget {
   const CommunityBookExchangeApp({super.key});
 
-  static _CommunityBookExchangeAppState? of(BuildContext context) {
-    return context.findAncestorStateOfType<_CommunityBookExchangeAppState>();
+  static CommunityBookExchangeAppState? of(BuildContext context) {
+    return context.findAncestorStateOfType<CommunityBookExchangeAppState>();
   }
 
   @override
   State<CommunityBookExchangeApp> createState() =>
-      _CommunityBookExchangeAppState();
+      CommunityBookExchangeAppState();
 }
 
-class _CommunityBookExchangeAppState extends State<CommunityBookExchangeApp> {
+class CommunityBookExchangeAppState extends State<CommunityBookExchangeApp> {
   static const String _localeKey = 'selected_locale_code';
 
   Locale? _locale;

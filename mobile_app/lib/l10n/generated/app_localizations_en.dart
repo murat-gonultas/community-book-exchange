@@ -227,10 +227,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get books => 'Books';
 
   @override
-  String get noBooksFound => 'No books found';
+  String get noBooksFound => 'No books match your current filters.';
 
   @override
-  String get unknownAuthor => 'Unknown';
+  String get unknownAuthor => 'Unknown author';
 
   @override
   String get systemLanguage => 'System language';
@@ -273,4 +273,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get transactionDonation => 'Donation';
+
+  @override
+  String get booksSearchHint => 'Search by title or author';
+
+  @override
+  String get filterStatus => 'Status';
+
+  @override
+  String get filterOwnership => 'Ownership';
+
+  @override
+  String get allStatuses => 'All statuses';
+
+  @override
+  String get allOwnershipTypes => 'All ownership types';
+
+  @override
+  String get clearFilters => 'Clear filters';
+
+  @override
+  String get bookListTitle => 'Books';
 }

@@ -182,5 +182,16 @@
   "transactionLoan": "Ausleihe",
   "transactionReturn": "Rückgabe",
   "transactionGift": "Übergabe",
-  "transactionDonation": "Spende"
+  "transactionDonation": "Spende",
+
+  "booksSearchHint": "Nach Titel oder Autor suchen",
+  "filterStatus": "Status",
+  "filterOwnership": "Besitz",
+  "allStatuses": "Alle Status",
+  "allOwnershipTypes": "Alle Besitzarten",
+  "clearFilters": "Filter zurücksetzen",
+  "noBooksFound": "Keine Bücher passen zu den aktuellen Filtern.",
+  "retry": "Erneut versuchen",
+  "unknownAuthor": "Unbekannter Autor",
+  "bookListTitle": "Bücher"
 }

@@ -231,10 +231,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get books => 'Bücher';
 
   @override
-  String get noBooksFound => 'Keine Bücher gefunden';
+  String get noBooksFound => 'Keine Bücher passen zu den aktuellen Filtern.';
 
   @override
-  String get unknownAuthor => 'Unbekannt';
+  String get unknownAuthor => 'Unbekannter Autor';
 
   @override
   String get systemLanguage => 'Systemsprache';
@@ -277,4 +277,25 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get transactionDonation => 'Spende';
+
+  @override
+  String get booksSearchHint => 'Nach Titel oder Autor suchen';
+
+  @override
+  String get filterStatus => 'Status';
+
+  @override
+  String get filterOwnership => 'Besitz';
+
+  @override
+  String get allStatuses => 'Alle Status';
+
+  @override
+  String get allOwnershipTypes => 'Alle Besitzarten';
+
+  @override
+  String get clearFilters => 'Filter zurücksetzen';
+
+  @override
+  String get bookListTitle => 'Bücher';
 }
