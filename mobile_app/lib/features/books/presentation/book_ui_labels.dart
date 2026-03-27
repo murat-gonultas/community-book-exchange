@@ -5,8 +5,6 @@ class BookUiLabels {
     switch (rawStatus) {
       case 'AVAILABLE':
         return l10n.statusAvailable;
-      case 'RESERVED':
-        return l10n.statusReserved;
       case 'ON_LOAN':
         return l10n.statusOnLoan;
       default:
@@ -30,8 +28,6 @@ class BookUiLabels {
     AppLocalizations l10n,
   ) {
     switch (rawTransactionType) {
-      case 'RESERVATION':
-        return l10n.transactionReservation;
       case 'LOAN':
         return l10n.transactionLoan;
       case 'RETURN':

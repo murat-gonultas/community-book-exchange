@@ -45,7 +45,6 @@
     }
   },
 
-  "bookReservedSuccessfully": "Book reserved successfully",
   "bookLoanedSuccessfully": "Book loaned successfully",
   "bookReturnedSuccessfully": "Book returned successfully",
   "bookGiftedSuccessfully": "Book gifted successfully",
@@ -55,20 +54,16 @@
   "pleaseEnterValidUserId": "Please enter a valid user ID",
   "pleaseEnterValidCommunityId": "Please enter a valid community ID",
 
-  "reserve": "Reserve",
   "loan": "Loan",
   "returnAction": "Return",
   "gift": "Gift",
   "donate": "Donate",
 
-  "reserveBook": "Reserve Book",
   "loanBook": "Loan Book",
   "returnBook": "Return Book",
   "giftBook": "Gift Book",
   "donateBook": "Donate Book",
 
-  "reservedForUserId": "Reserved For User ID",
-  "reservedDays": "Reserved Days",
   "note": "Note",
   "loanedToUserId": "Loaned To User ID",
   "loanDays": "Loan Days",
@@ -87,28 +82,14 @@
   "ownerUserId": "Owner User ID",
   "ownerCommunityId": "Owner Community ID",
   "currentHolderUserId": "Current Holder User ID",
-  "reservedForUserIdLabel": "Reserved For User ID",
-  "reservedUntil": "Reserved Until",
   "loanStart": "Loan Start",
   "dueAt": "Due At",
 
   "whyActionsUnavailable": "Why are some actions unavailable?",
-  "hintReserveUnavailable": "Reserve is only available when the book is {status}.",
-  "@hintReserveUnavailable": {
-    "placeholders": {
-      "status": {
-        "type": "String"
-      }
-    }
-  },
-
-  "hintLoanUnavailable": "Loan is only available when the book is {availableStatus} or {reservedStatus}.",
+  "hintLoanUnavailable": "Loan is only available when the book is {availableStatus}.",
   "@hintLoanUnavailable": {
     "placeholders": {
       "availableStatus": {
-        "type": "String"
-      },
-      "reservedStatus": {
         "type": "String"
       }
     }
@@ -123,34 +104,19 @@
     }
   },
 
-  "hintGiftUnavailable": "Gift is only available for {ownership} books that are {status}.",
+  "hintGiftUnavailable": "Gift is only available for {ownership} books.",
   "@hintGiftUnavailable": {
     "placeholders": {
-      "status": {
-        "type": "String"
-      },
       "ownership": {
         "type": "String"
       }
     }
   },
 
-  "hintDonateUnavailable": "Donate is only available for {ownership} books that are {status}.",
+  "hintDonateUnavailable": "Donate is only available for {ownership} books.",
   "@hintDonateUnavailable": {
     "placeholders": {
-      "status": {
-        "type": "String"
-      },
       "ownership": {
-        "type": "String"
-      }
-    }
-  },
-
-  "hintReservedLoanRule": "Loan is enabled for {reservedStatus} books, but the backend only allows lending to the reserved user.",
-  "@hintReservedLoanRule": {
-    "placeholders": {
-      "reservedStatus": {
         "type": "String"
       }
     }
@@ -163,8 +129,8 @@
   "end": "End",
 
   "books": "Books",
-  "noBooksFound": "No books found",
-  "unknownAuthor": "Unknown",
+  "noBooksFound": "No books match your current filters.",
+  "unknownAuthor": "Unknown author",
 
   "systemLanguage": "System language",
   "german": "Deutsch",
@@ -172,13 +138,11 @@
   "turkish": "Türkçe",
 
   "statusAvailable": "Available",
-  "statusReserved": "Reserved",
   "statusOnLoan": "On loan",
-  
+
   "ownershipUser": "User-owned",
   "ownershipCommunity": "Community-owned",
-  
-  "transactionReservation": "Reservation",
+
   "transactionLoan": "Loan",
   "transactionReturn": "Return",
   "transactionGift": "Gift",
@@ -190,8 +154,5 @@
   "allStatuses": "All statuses",
   "allOwnershipTypes": "All ownership types",
   "clearFilters": "Clear filters",
-  "noBooksFound": "No books match your current filters.",
-  "retry": "Retry",
-  "unknownAuthor": "Unknown author",
   "bookListTitle": "Books"
 }

@@ -1,6 +1,6 @@
 {
   "@@locale": "tr",
-  "appTitle": "Topluluk Kitap Değişimi",
+  "appTitle": "Community Book Exchange",
   "bookTitleWithId": "Kitap #{bookId}",
   "@bookTitleWithId": {
     "placeholders": {
@@ -11,11 +11,11 @@
   },
 
   "actions": "İşlemler",
-  "transactions": "Hareketler",
-  "retry": "Tekrar Dene",
+  "transactions": "İşlem geçmişi",
+  "retry": "Tekrar dene",
   "cancel": "İptal",
-  "submit": "Gönder",
-  "noTransactions": "Henüz işlem yok",
+  "submit": "Onayla",
+  "noTransactions": "İşlem yok",
   "notAvailable": "-",
 
   "failedToLoadBookDetail": "Kitap detayı yüklenemedi.\n{error}",
@@ -45,35 +45,30 @@
     }
   },
 
-  "bookReservedSuccessfully": "Kitap başarıyla rezerve edildi",
   "bookLoanedSuccessfully": "Kitap başarıyla ödünç verildi",
-  "bookReturnedSuccessfully": "Kitap başarıyla iade edildi",
+  "bookReturnedSuccessfully": "Kitap başarıyla iade alındı",
   "bookGiftedSuccessfully": "Kitap başarıyla devredildi",
-  "bookDonatedSuccessfully": "Kitap başarıyla topluluğa bağışlandı",
+  "bookDonatedSuccessfully": "Kitap başarıyla bağışlandı",
 
   "pleaseEnterValidNumbers": "Lütfen geçerli sayılar girin",
   "pleaseEnterValidUserId": "Lütfen geçerli bir kullanıcı ID girin",
   "pleaseEnterValidCommunityId": "Lütfen geçerli bir topluluk ID girin",
 
-  "reserve": "Rezerve Et",
-  "loan": "Ödünç Ver",
-  "returnAction": "İade Al",
+  "loan": "Ödünç ver",
+  "returnAction": "İade al",
   "gift": "Devret",
   "donate": "Bağışla",
 
-  "reserveBook": "Kitabı Rezerve Et",
-  "loanBook": "Kitabı Ödünç Ver",
-  "returnBook": "Kitabı İade Al",
-  "giftBook": "Kitabı Devret",
-  "donateBook": "Kitabı Bağışla",
+  "loanBook": "Kitabı ödünç ver",
+  "returnBook": "Kitabı iade al",
+  "giftBook": "Kitabı devret",
+  "donateBook": "Kitabı bağışla",
 
-  "reservedForUserId": "Rezerve Edilen Kullanıcı ID",
-  "reservedDays": "Rezervasyon Günü",
   "note": "Not",
-  "loanedToUserId": "Ödünç Verilen Kullanıcı ID",
-  "loanDays": "Ödünç Gün Sayısı",
-  "returnedByUserId": "İade Eden Kullanıcı ID",
-  "newOwnerUserId": "Yeni Sahip Kullanıcı ID",
+  "loanedToUserId": "Ödünç verilen kullanıcı ID",
+  "loanDays": "Ödünç gün sayısı",
+  "returnedByUserId": "İade eden kullanıcı ID",
+  "newOwnerUserId": "Yeni sahip kullanıcı ID",
   "communityId": "Topluluk ID",
 
   "author": "Yazar",
@@ -83,32 +78,18 @@
   "condition": "Durum",
   "notes": "Notlar",
   "status": "Statü",
-  "ownershipType": "Sahiplik Türü",
-  "ownerUserId": "Sahip Kullanıcı ID",
-  "ownerCommunityId": "Sahip Topluluk ID",
-  "currentHolderUserId": "Şu Anki Kullanıcı ID",
-  "reservedForUserIdLabel": "Rezerve Edilen Kullanıcı ID",
-  "reservedUntil": "Rezervasyon Bitişi",
-  "loanStart": "Ödünç Başlangıcı",
-  "dueAt": "Son Tarih",
+  "ownershipType": "Sahiplik türü",
+  "ownerUserId": "Sahip kullanıcı ID",
+  "ownerCommunityId": "Sahip topluluk ID",
+  "currentHolderUserId": "Şu an elinde tutan kullanıcı ID",
+  "loanStart": "Ödünç başlangıcı",
+  "dueAt": "Son teslim tarihi",
 
   "whyActionsUnavailable": "Bazı işlemler neden kullanılamıyor?",
-  "hintReserveUnavailable": "Rezerve etme yalnızca kitap {status} durumundayken mümkündür.",
-  "@hintReserveUnavailable": {
-    "placeholders": {
-      "status": {
-        "type": "String"
-      }
-    }
-  },
-
-  "hintLoanUnavailable": "Ödünç verme yalnızca kitap {availableStatus} veya {reservedStatus} durumundayken mümkündür.",
+  "hintLoanUnavailable": "Ödünç verme yalnızca kitap {availableStatus} durumundayken mümkündür.",
   "@hintLoanUnavailable": {
     "placeholders": {
       "availableStatus": {
-        "type": "String"
-      },
-      "reservedStatus": {
         "type": "String"
       }
     }
@@ -123,62 +104,45 @@
     }
   },
 
-  "hintGiftUnavailable": "Devretme yalnızca {status} durumundaki {ownership} kitaplar için mümkündür.",
+  "hintGiftUnavailable": "Devretme yalnızca {ownership} kitaplar için mümkündür.",
   "@hintGiftUnavailable": {
     "placeholders": {
-      "status": {
-        "type": "String"
-      },
       "ownership": {
         "type": "String"
       }
     }
   },
 
-  "hintDonateUnavailable": "Bağışlama yalnızca {status} durumundaki {ownership} kitaplar için mümkündür.",
+  "hintDonateUnavailable": "Bağışlama yalnızca {ownership} kitaplar için mümkündür.",
   "@hintDonateUnavailable": {
     "placeholders": {
-      "status": {
-        "type": "String"
-      },
       "ownership": {
-        "type": "String"
-      }
-    }
-  },
-
-  "hintReservedLoanRule": "{reservedStatus} durumundaki kitaplarda ödünç verme butonu açıktır, ancak backend sadece rezervasyonu olan kullanıcıya ödünç vermeye izin verir.",
-  "@hintReservedLoanRule": {
-    "placeholders": {
-      "reservedStatus": {
         "type": "String"
       }
     }
   },
 
   "idLabel": "ID",
-  "fromUser": "Gönderen Kullanıcı",
-  "toUser": "Alan Kullanıcı",
+  "fromUser": "Gönderen kullanıcı",
+  "toUser": "Alan kullanıcı",
   "start": "Başlangıç",
   "end": "Bitiş",
 
   "books": "Kitaplar",
-  "noBooksFound": "Kitap bulunamadı",
-  "unknownAuthor": "Bilinmiyor",
+  "noBooksFound": "Mevcut filtrelere uygun kitap bulunamadı.",
+  "unknownAuthor": "Yazar bilinmiyor",
 
-  "systemLanguage": "Sistem Dili",
+  "systemLanguage": "Sistem dili",
   "german": "Deutsch",
   "english": "English",
   "turkish": "Türkçe",
 
   "statusAvailable": "Uygun",
-  "statusReserved": "Rezerve",
   "statusOnLoan": "Ödünçte",
-  
+
   "ownershipUser": "Kullanıcıya ait",
   "ownershipCommunity": "Topluluğa ait",
-  
-  "transactionReservation": "Rezervasyon",
+
   "transactionLoan": "Ödünç verme",
   "transactionReturn": "İade",
   "transactionGift": "Devir",
@@ -190,8 +154,5 @@
   "allStatuses": "Tüm durumlar",
   "allOwnershipTypes": "Tüm sahiplik türleri",
   "clearFilters": "Filtreleri temizle",
-  "noBooksFound": "Mevcut filtrelere uygun kitap bulunamadı.",
-  "retry": "Tekrar dene",
-  "unknownAuthor": "Yazar bilinmiyor",
   "bookListTitle": "Kitaplar"
 }

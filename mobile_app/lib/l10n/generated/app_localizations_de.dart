@@ -20,7 +20,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get actions => 'Aktionen';
 
   @override
-  String get transactions => 'Vorgänge';
+  String get transactions => 'Transaktionen';
 
   @override
   String get retry => 'Erneut versuchen';
@@ -29,10 +29,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get cancel => 'Abbrechen';
 
   @override
-  String get submit => 'Senden';
+  String get submit => 'Bestätigen';
 
   @override
-  String get noTransactions => 'Keine Vorgänge';
+  String get noTransactions => 'Keine Transaktionen';
 
   @override
   String get notAvailable => '-';
@@ -53,9 +53,6 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String get bookReservedSuccessfully => 'Buch erfolgreich reserviert';
-
-  @override
   String get bookLoanedSuccessfully => 'Buch erfolgreich verliehen';
 
   @override
@@ -65,8 +62,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get bookGiftedSuccessfully => 'Buch erfolgreich übertragen';
 
   @override
-  String get bookDonatedSuccessfully =>
-      'Buch erfolgreich an die Community gespendet';
+  String get bookDonatedSuccessfully => 'Buch erfolgreich gespendet';
 
   @override
   String get pleaseEnterValidNumbers => 'Bitte gültige Zahlen eingeben';
@@ -78,9 +74,6 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get pleaseEnterValidCommunityId =>
       'Bitte eine gültige Community-ID eingeben';
-
-  @override
-  String get reserve => 'Reservieren';
 
   @override
   String get loan => 'Verleihen';
@@ -95,9 +88,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get donate => 'Spenden';
 
   @override
-  String get reserveBook => 'Buch reservieren';
-
-  @override
   String get loanBook => 'Buch verleihen';
 
   @override
@@ -108,12 +98,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get donateBook => 'Buch spenden';
-
-  @override
-  String get reservedForUserId => 'Reserviert für Benutzer-ID';
-
-  @override
-  String get reservedDays => 'Reservierungstage';
 
   @override
   String get note => 'Notiz';
@@ -155,22 +139,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get status => 'Status';
 
   @override
-  String get ownershipType => 'Eigentumstyp';
+  String get ownershipType => 'Besitzart';
 
   @override
-  String get ownerUserId => 'Eigentümer Benutzer-ID';
+  String get ownerUserId => 'Eigentümer-Benutzer-ID';
 
   @override
-  String get ownerCommunityId => 'Eigentümer Community-ID';
+  String get ownerCommunityId => 'Eigentümer-Community-ID';
 
   @override
-  String get currentHolderUserId => 'Aktuelle Benutzer-ID';
-
-  @override
-  String get reservedForUserIdLabel => 'Reserviert für Benutzer-ID';
-
-  @override
-  String get reservedUntil => 'Reserviert bis';
+  String get currentHolderUserId => 'Aktueller Besitzer-Benutzer-ID';
 
   @override
   String get loanStart => 'Leihbeginn';
@@ -183,13 +161,8 @@ class AppLocalizationsDe extends AppLocalizations {
       'Warum sind einige Aktionen nicht verfügbar?';
 
   @override
-  String hintReserveUnavailable(String status) {
-    return 'Reservieren ist nur möglich, wenn das Buch den Status $status hat.';
-  }
-
-  @override
-  String hintLoanUnavailable(String availableStatus, String reservedStatus) {
-    return 'Verleihen ist nur möglich, wenn das Buch den Status $availableStatus oder $reservedStatus hat.';
+  String hintLoanUnavailable(String availableStatus) {
+    return 'Verleihen ist nur möglich, wenn das Buch den Status $availableStatus hat.';
   }
 
   @override
@@ -198,18 +171,13 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String hintGiftUnavailable(String status, String ownership) {
-    return 'Übertragen ist nur für $ownership Bücher im Status $status möglich.';
+  String hintGiftUnavailable(String ownership) {
+    return 'Übertragen ist nur für $ownership Bücher möglich.';
   }
 
   @override
-  String hintDonateUnavailable(String status, String ownership) {
-    return 'Spenden ist nur für $ownership Bücher im Status $status möglich.';
-  }
-
-  @override
-  String hintReservedLoanRule(String reservedStatus) {
-    return 'Bei Büchern mit Status $reservedStatus ist Verleihen aktiviert, aber das Backend erlaubt das Verleihen nur an den reservierten Benutzer.';
+  String hintDonateUnavailable(String ownership) {
+    return 'Spenden ist nur für $ownership Bücher möglich.';
   }
 
   @override
@@ -252,19 +220,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get statusAvailable => 'Verfügbar';
 
   @override
-  String get statusReserved => 'Reserviert';
-
-  @override
   String get statusOnLoan => 'Verliehen';
 
   @override
-  String get ownershipUser => 'Privatbesitz';
+  String get ownershipUser => 'In Benutzerbesitz';
 
   @override
-  String get ownershipCommunity => 'Gemeinschaftseigentum';
-
-  @override
-  String get transactionReservation => 'Reservierung';
+  String get ownershipCommunity => 'In Gemeinschaftsbesitz';
 
   @override
   String get transactionLoan => 'Ausleihe';
@@ -273,7 +235,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get transactionReturn => 'Rückgabe';
 
   @override
-  String get transactionGift => 'Übergabe';
+  String get transactionGift => 'Übertragung';
 
   @override
   String get transactionDonation => 'Spende';

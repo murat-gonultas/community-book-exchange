@@ -53,9 +53,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get bookReservedSuccessfully => 'Book reserved successfully';
-
-  @override
   String get bookLoanedSuccessfully => 'Book loaned successfully';
 
   @override
@@ -77,9 +74,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseEnterValidCommunityId => 'Please enter a valid community ID';
 
   @override
-  String get reserve => 'Reserve';
-
-  @override
   String get loan => 'Loan';
 
   @override
@@ -92,9 +86,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get donate => 'Donate';
 
   @override
-  String get reserveBook => 'Reserve Book';
-
-  @override
   String get loanBook => 'Loan Book';
 
   @override
@@ -105,12 +96,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get donateBook => 'Donate Book';
-
-  @override
-  String get reservedForUserId => 'Reserved For User ID';
-
-  @override
-  String get reservedDays => 'Reserved Days';
 
   @override
   String get note => 'Note';
@@ -164,12 +149,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get currentHolderUserId => 'Current Holder User ID';
 
   @override
-  String get reservedForUserIdLabel => 'Reserved For User ID';
-
-  @override
-  String get reservedUntil => 'Reserved Until';
-
-  @override
   String get loanStart => 'Loan Start';
 
   @override
@@ -179,13 +158,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get whyActionsUnavailable => 'Why are some actions unavailable?';
 
   @override
-  String hintReserveUnavailable(String status) {
-    return 'Reserve is only available when the book is $status.';
-  }
-
-  @override
-  String hintLoanUnavailable(String availableStatus, String reservedStatus) {
-    return 'Loan is only available when the book is $availableStatus or $reservedStatus.';
+  String hintLoanUnavailable(String availableStatus) {
+    return 'Loan is only available when the book is $availableStatus.';
   }
 
   @override
@@ -194,18 +168,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String hintGiftUnavailable(String status, String ownership) {
-    return 'Gift is only available for $ownership books that are $status.';
+  String hintGiftUnavailable(String ownership) {
+    return 'Gift is only available for $ownership books.';
   }
 
   @override
-  String hintDonateUnavailable(String status, String ownership) {
-    return 'Donate is only available for $ownership books that are $status.';
-  }
-
-  @override
-  String hintReservedLoanRule(String reservedStatus) {
-    return 'Loan is enabled for $reservedStatus books, but the backend only allows lending to the reserved user.';
+  String hintDonateUnavailable(String ownership) {
+    return 'Donate is only available for $ownership books.';
   }
 
   @override
@@ -248,9 +217,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusAvailable => 'Available';
 
   @override
-  String get statusReserved => 'Reserved';
-
-  @override
   String get statusOnLoan => 'On loan';
 
   @override
@@ -258,9 +224,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ownershipCommunity => 'Community-owned';
-
-  @override
-  String get transactionReservation => 'Reservation';
 
   @override
   String get transactionLoan => 'Loan';

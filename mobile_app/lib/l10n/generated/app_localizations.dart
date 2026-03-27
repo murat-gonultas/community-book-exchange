@@ -172,12 +172,6 @@ abstract class AppLocalizations {
   /// **'Action failed: {error}'**
   String actionFailed(String error);
 
-  /// No description provided for @bookReservedSuccessfully.
-  ///
-  /// In en, this message translates to:
-  /// **'Book reserved successfully'**
-  String get bookReservedSuccessfully;
-
   /// No description provided for @bookLoanedSuccessfully.
   ///
   /// In en, this message translates to:
@@ -220,12 +214,6 @@ abstract class AppLocalizations {
   /// **'Please enter a valid community ID'**
   String get pleaseEnterValidCommunityId;
 
-  /// No description provided for @reserve.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserve'**
-  String get reserve;
-
   /// No description provided for @loan.
   ///
   /// In en, this message translates to:
@@ -250,12 +238,6 @@ abstract class AppLocalizations {
   /// **'Donate'**
   String get donate;
 
-  /// No description provided for @reserveBook.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserve Book'**
-  String get reserveBook;
-
   /// No description provided for @loanBook.
   ///
   /// In en, this message translates to:
@@ -279,18 +261,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Donate Book'**
   String get donateBook;
-
-  /// No description provided for @reservedForUserId.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserved For User ID'**
-  String get reservedForUserId;
-
-  /// No description provided for @reservedDays.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserved Days'**
-  String get reservedDays;
 
   /// No description provided for @note.
   ///
@@ -394,18 +364,6 @@ abstract class AppLocalizations {
   /// **'Current Holder User ID'**
   String get currentHolderUserId;
 
-  /// No description provided for @reservedForUserIdLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserved For User ID'**
-  String get reservedForUserIdLabel;
-
-  /// No description provided for @reservedUntil.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserved Until'**
-  String get reservedUntil;
-
   /// No description provided for @loanStart.
   ///
   /// In en, this message translates to:
@@ -424,17 +382,11 @@ abstract class AppLocalizations {
   /// **'Why are some actions unavailable?'**
   String get whyActionsUnavailable;
 
-  /// No description provided for @hintReserveUnavailable.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserve is only available when the book is {status}.'**
-  String hintReserveUnavailable(String status);
-
   /// No description provided for @hintLoanUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Loan is only available when the book is {availableStatus} or {reservedStatus}.'**
-  String hintLoanUnavailable(String availableStatus, String reservedStatus);
+  /// **'Loan is only available when the book is {availableStatus}.'**
+  String hintLoanUnavailable(String availableStatus);
 
   /// No description provided for @hintReturnUnavailable.
   ///
@@ -445,20 +397,14 @@ abstract class AppLocalizations {
   /// No description provided for @hintGiftUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Gift is only available for {ownership} books that are {status}.'**
-  String hintGiftUnavailable(String status, String ownership);
+  /// **'Gift is only available for {ownership} books.'**
+  String hintGiftUnavailable(String ownership);
 
   /// No description provided for @hintDonateUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Donate is only available for {ownership} books that are {status}.'**
-  String hintDonateUnavailable(String status, String ownership);
-
-  /// No description provided for @hintReservedLoanRule.
-  ///
-  /// In en, this message translates to:
-  /// **'Loan is enabled for {reservedStatus} books, but the backend only allows lending to the reserved user.'**
-  String hintReservedLoanRule(String reservedStatus);
+  /// **'Donate is only available for {ownership} books.'**
+  String hintDonateUnavailable(String ownership);
 
   /// No description provided for @idLabel.
   ///
@@ -538,12 +484,6 @@ abstract class AppLocalizations {
   /// **'Available'**
   String get statusAvailable;
 
-  /// No description provided for @statusReserved.
-  ///
-  /// In en, this message translates to:
-  /// **'Reserved'**
-  String get statusReserved;
-
   /// No description provided for @statusOnLoan.
   ///
   /// In en, this message translates to:
@@ -561,12 +501,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Community-owned'**
   String get ownershipCommunity;
-
-  /// No description provided for @transactionReservation.
-  ///
-  /// In en, this message translates to:
-  /// **'Reservation'**
-  String get transactionReservation;
 
   /// No description provided for @transactionLoan.
   ///

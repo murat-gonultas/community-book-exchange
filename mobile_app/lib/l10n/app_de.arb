@@ -11,11 +11,11 @@
   },
 
   "actions": "Aktionen",
-  "transactions": "Vorgänge",
+  "transactions": "Transaktionen",
   "retry": "Erneut versuchen",
   "cancel": "Abbrechen",
-  "submit": "Senden",
-  "noTransactions": "Keine Vorgänge",
+  "submit": "Bestätigen",
+  "noTransactions": "Keine Transaktionen",
   "notAvailable": "-",
 
   "failedToLoadBookDetail": "Buchdetails konnten nicht geladen werden.\n{error}",
@@ -45,30 +45,25 @@
     }
   },
 
-  "bookReservedSuccessfully": "Buch erfolgreich reserviert",
   "bookLoanedSuccessfully": "Buch erfolgreich verliehen",
   "bookReturnedSuccessfully": "Buch erfolgreich zurückgenommen",
   "bookGiftedSuccessfully": "Buch erfolgreich übertragen",
-  "bookDonatedSuccessfully": "Buch erfolgreich an die Community gespendet",
+  "bookDonatedSuccessfully": "Buch erfolgreich gespendet",
 
   "pleaseEnterValidNumbers": "Bitte gültige Zahlen eingeben",
   "pleaseEnterValidUserId": "Bitte eine gültige Benutzer-ID eingeben",
   "pleaseEnterValidCommunityId": "Bitte eine gültige Community-ID eingeben",
 
-  "reserve": "Reservieren",
   "loan": "Verleihen",
   "returnAction": "Zurücknehmen",
   "gift": "Übertragen",
   "donate": "Spenden",
 
-  "reserveBook": "Buch reservieren",
   "loanBook": "Buch verleihen",
   "returnBook": "Buch zurücknehmen",
   "giftBook": "Buch übertragen",
   "donateBook": "Buch spenden",
 
-  "reservedForUserId": "Reserviert für Benutzer-ID",
-  "reservedDays": "Reservierungstage",
   "note": "Notiz",
   "loanedToUserId": "Verliehen an Benutzer-ID",
   "loanDays": "Leihdauer in Tagen",
@@ -83,32 +78,18 @@
   "condition": "Zustand",
   "notes": "Notizen",
   "status": "Status",
-  "ownershipType": "Eigentumstyp",
-  "ownerUserId": "Eigentümer Benutzer-ID",
-  "ownerCommunityId": "Eigentümer Community-ID",
-  "currentHolderUserId": "Aktuelle Benutzer-ID",
-  "reservedForUserIdLabel": "Reserviert für Benutzer-ID",
-  "reservedUntil": "Reserviert bis",
+  "ownershipType": "Besitzart",
+  "ownerUserId": "Eigentümer-Benutzer-ID",
+  "ownerCommunityId": "Eigentümer-Community-ID",
+  "currentHolderUserId": "Aktueller Besitzer-Benutzer-ID",
   "loanStart": "Leihbeginn",
   "dueAt": "Fällig am",
 
   "whyActionsUnavailable": "Warum sind einige Aktionen nicht verfügbar?",
-  "hintReserveUnavailable": "Reservieren ist nur möglich, wenn das Buch den Status {status} hat.",
-  "@hintReserveUnavailable": {
-    "placeholders": {
-      "status": {
-        "type": "String"
-      }
-    }
-  },
-
-  "hintLoanUnavailable": "Verleihen ist nur möglich, wenn das Buch den Status {availableStatus} oder {reservedStatus} hat.",
+  "hintLoanUnavailable": "Verleihen ist nur möglich, wenn das Buch den Status {availableStatus} hat.",
   "@hintLoanUnavailable": {
     "placeholders": {
       "availableStatus": {
-        "type": "String"
-      },
-      "reservedStatus": {
         "type": "String"
       }
     }
@@ -123,34 +104,19 @@
     }
   },
 
-  "hintGiftUnavailable": "Übertragen ist nur für {ownership} Bücher im Status {status} möglich.",
+  "hintGiftUnavailable": "Übertragen ist nur für {ownership} Bücher möglich.",
   "@hintGiftUnavailable": {
     "placeholders": {
-      "status": {
-        "type": "String"
-      },
       "ownership": {
         "type": "String"
       }
     }
   },
 
-  "hintDonateUnavailable": "Spenden ist nur für {ownership} Bücher im Status {status} möglich.",
+  "hintDonateUnavailable": "Spenden ist nur für {ownership} Bücher möglich.",
   "@hintDonateUnavailable": {
     "placeholders": {
-      "status": {
-        "type": "String"
-      },
       "ownership": {
-        "type": "String"
-      }
-    }
-  },
-
-  "hintReservedLoanRule": "Bei Büchern mit Status {reservedStatus} ist Verleihen aktiviert, aber das Backend erlaubt das Verleihen nur an den reservierten Benutzer.",
-  "@hintReservedLoanRule": {
-    "placeholders": {
-      "reservedStatus": {
         "type": "String"
       }
     }
@@ -163,8 +129,8 @@
   "end": "Ende",
 
   "books": "Bücher",
-  "noBooksFound": "Keine Bücher gefunden",
-  "unknownAuthor": "Unbekannt",
+  "noBooksFound": "Keine Bücher passen zu den aktuellen Filtern.",
+  "unknownAuthor": "Unbekannter Autor",
 
   "systemLanguage": "Systemsprache",
   "german": "Deutsch",
@@ -172,16 +138,14 @@
   "turkish": "Türkçe",
 
   "statusAvailable": "Verfügbar",
-  "statusReserved": "Reserviert",
   "statusOnLoan": "Verliehen",
-  
-  "ownershipUser": "Privatbesitz",
-  "ownershipCommunity": "Gemeinschaftseigentum",
-  
-  "transactionReservation": "Reservierung",
+
+  "ownershipUser": "In Benutzerbesitz",
+  "ownershipCommunity": "In Gemeinschaftsbesitz",
+
   "transactionLoan": "Ausleihe",
   "transactionReturn": "Rückgabe",
-  "transactionGift": "Übergabe",
+  "transactionGift": "Übertragung",
   "transactionDonation": "Spende",
 
   "booksSearchHint": "Nach Titel oder Autor suchen",
@@ -190,8 +154,5 @@
   "allStatuses": "Alle Status",
   "allOwnershipTypes": "Alle Besitzarten",
   "clearFilters": "Filter zurücksetzen",
-  "noBooksFound": "Keine Bücher passen zu den aktuellen Filtern.",
-  "retry": "Erneut versuchen",
-  "unknownAuthor": "Unbekannter Autor",
   "bookListTitle": "Bücher"
 }

@@ -1,12 +1,26 @@
 package com.murat.book_exchange_api.domain.book;
 
+import java.time.Instant;
+
 import com.murat.book_exchange_api.domain.community.CommunityShelf;
 import com.murat.book_exchange_api.domain.enums.BookStatus;
 import com.murat.book_exchange_api.domain.user.User;
-import jakarta.persistence.*;
-import lombok.*;
 
-import java.time.Instant;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -32,10 +46,6 @@ public class BookHolding {
     @JoinColumn(name = "current_shelf_id")
     private CommunityShelf currentShelf;
 
-    @ManyToOne
-    @JoinColumn(name = "reserved_for_user_id")
-    private User reservedForUser;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private BookStatus status;
@@ -43,6 +53,4 @@ public class BookHolding {
     private Instant loanStartAt;
 
     private Instant dueAt;
-
-    private Instant reservedUntil;
 }

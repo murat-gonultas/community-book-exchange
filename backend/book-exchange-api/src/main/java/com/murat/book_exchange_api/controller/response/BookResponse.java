@@ -2,6 +2,7 @@ package com.murat.book_exchange_api.controller.response;
 
 import com.murat.book_exchange_api.domain.enums.BookStatus;
 import com.murat.book_exchange_api.domain.enums.OwnershipType;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,6 +21,5 @@ public class BookResponse {
 
     private Long currentHolderUserId;
     private Long currentShelfId;
-    private Long reservedForUserId;
     private BookStatus status;
 }

@@ -9,7 +9,7 @@ class AppLocalizationsTr extends AppLocalizations {
   AppLocalizationsTr([String locale = 'tr']) : super(locale);
 
   @override
-  String get appTitle => 'Topluluk Kitap Değişimi';
+  String get appTitle => 'Community Book Exchange';
 
   @override
   String bookTitleWithId(int bookId) {
@@ -20,7 +20,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get actions => 'İşlemler';
 
   @override
-  String get transactions => 'Hareketler';
+  String get transactions => 'İşlem geçmişi';
 
   @override
   String get retry => 'Tekrar dene';
@@ -29,10 +29,10 @@ class AppLocalizationsTr extends AppLocalizations {
   String get cancel => 'İptal';
 
   @override
-  String get submit => 'Gönder';
+  String get submit => 'Onayla';
 
   @override
-  String get noTransactions => 'Henüz işlem yok';
+  String get noTransactions => 'İşlem yok';
 
   @override
   String get notAvailable => '-';
@@ -53,19 +53,16 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String get bookReservedSuccessfully => 'Kitap başarıyla rezerve edildi';
-
-  @override
   String get bookLoanedSuccessfully => 'Kitap başarıyla ödünç verildi';
 
   @override
-  String get bookReturnedSuccessfully => 'Kitap başarıyla iade edildi';
+  String get bookReturnedSuccessfully => 'Kitap başarıyla iade alındı';
 
   @override
   String get bookGiftedSuccessfully => 'Kitap başarıyla devredildi';
 
   @override
-  String get bookDonatedSuccessfully => 'Kitap başarıyla topluluğa bağışlandı';
+  String get bookDonatedSuccessfully => 'Kitap başarıyla bağışlandı';
 
   @override
   String get pleaseEnterValidNumbers => 'Lütfen geçerli sayılar girin';
@@ -78,13 +75,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Lütfen geçerli bir topluluk ID girin';
 
   @override
-  String get reserve => 'Rezerve Et';
+  String get loan => 'Ödünç ver';
 
   @override
-  String get loan => 'Ödünç Ver';
-
-  @override
-  String get returnAction => 'İade Al';
+  String get returnAction => 'İade al';
 
   @override
   String get gift => 'Devret';
@@ -93,40 +87,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get donate => 'Bağışla';
 
   @override
-  String get reserveBook => 'Kitabı Rezerve Et';
+  String get loanBook => 'Kitabı ödünç ver';
 
   @override
-  String get loanBook => 'Kitabı Ödünç Ver';
+  String get returnBook => 'Kitabı iade al';
 
   @override
-  String get returnBook => 'Kitabı İade Al';
+  String get giftBook => 'Kitabı devret';
 
   @override
-  String get giftBook => 'Kitabı Devret';
-
-  @override
-  String get donateBook => 'Kitabı Bağışla';
-
-  @override
-  String get reservedForUserId => 'Rezerve Edilen Kullanıcı ID';
-
-  @override
-  String get reservedDays => 'Rezervasyon Günü';
+  String get donateBook => 'Kitabı bağışla';
 
   @override
   String get note => 'Not';
 
   @override
-  String get loanedToUserId => 'Ödünç Verilen Kullanıcı ID';
+  String get loanedToUserId => 'Ödünç verilen kullanıcı ID';
 
   @override
-  String get loanDays => 'Ödünç Gün Sayısı';
+  String get loanDays => 'Ödünç gün sayısı';
 
   @override
-  String get returnedByUserId => 'İade Eden Kullanıcı ID';
+  String get returnedByUserId => 'İade eden kullanıcı ID';
 
   @override
-  String get newOwnerUserId => 'Yeni Sahip Kullanıcı ID';
+  String get newOwnerUserId => 'Yeni sahip kullanıcı ID';
 
   @override
   String get communityId => 'Topluluk ID';
@@ -153,40 +138,29 @@ class AppLocalizationsTr extends AppLocalizations {
   String get status => 'Statü';
 
   @override
-  String get ownershipType => 'Sahiplik Türü';
+  String get ownershipType => 'Sahiplik türü';
 
   @override
-  String get ownerUserId => 'Sahip Kullanıcı ID';
+  String get ownerUserId => 'Sahip kullanıcı ID';
 
   @override
-  String get ownerCommunityId => 'Sahip Topluluk ID';
+  String get ownerCommunityId => 'Sahip topluluk ID';
 
   @override
-  String get currentHolderUserId => 'Şu Anki Kullanıcı ID';
+  String get currentHolderUserId => 'Şu an elinde tutan kullanıcı ID';
 
   @override
-  String get reservedForUserIdLabel => 'Rezerve Edilen Kullanıcı ID';
+  String get loanStart => 'Ödünç başlangıcı';
 
   @override
-  String get reservedUntil => 'Rezervasyon Bitişi';
-
-  @override
-  String get loanStart => 'Ödünç Başlangıcı';
-
-  @override
-  String get dueAt => 'Son Tarih';
+  String get dueAt => 'Son teslim tarihi';
 
   @override
   String get whyActionsUnavailable => 'Bazı işlemler neden kullanılamıyor?';
 
   @override
-  String hintReserveUnavailable(String status) {
-    return 'Rezerve etme yalnızca kitap $status durumundayken mümkündür.';
-  }
-
-  @override
-  String hintLoanUnavailable(String availableStatus, String reservedStatus) {
-    return 'Ödünç verme yalnızca kitap $availableStatus veya $reservedStatus durumundayken mümkündür.';
+  String hintLoanUnavailable(String availableStatus) {
+    return 'Ödünç verme yalnızca kitap $availableStatus durumundayken mümkündür.';
   }
 
   @override
@@ -195,28 +169,23 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
-  String hintGiftUnavailable(String status, String ownership) {
-    return 'Devretme yalnızca $status durumundaki $ownership kitaplar için mümkündür.';
+  String hintGiftUnavailable(String ownership) {
+    return 'Devretme yalnızca $ownership kitaplar için mümkündür.';
   }
 
   @override
-  String hintDonateUnavailable(String status, String ownership) {
-    return 'Bağışlama yalnızca $status durumundaki $ownership kitaplar için mümkündür.';
-  }
-
-  @override
-  String hintReservedLoanRule(String reservedStatus) {
-    return '$reservedStatus durumundaki kitaplarda ödünç verme butonu açıktır, ancak backend sadece rezervasyonu olan kullanıcıya ödünç vermeye izin verir.';
+  String hintDonateUnavailable(String ownership) {
+    return 'Bağışlama yalnızca $ownership kitaplar için mümkündür.';
   }
 
   @override
   String get idLabel => 'ID';
 
   @override
-  String get fromUser => 'Gönderen Kullanıcı';
+  String get fromUser => 'Gönderen kullanıcı';
 
   @override
-  String get toUser => 'Alan Kullanıcı';
+  String get toUser => 'Alan kullanıcı';
 
   @override
   String get start => 'Başlangıç';
@@ -234,7 +203,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get unknownAuthor => 'Yazar bilinmiyor';
 
   @override
-  String get systemLanguage => 'Sistem Dili';
+  String get systemLanguage => 'Sistem dili';
 
   @override
   String get german => 'Deutsch';
@@ -249,9 +218,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get statusAvailable => 'Uygun';
 
   @override
-  String get statusReserved => 'Rezerve';
-
-  @override
   String get statusOnLoan => 'Ödünçte';
 
   @override
@@ -259,9 +225,6 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get ownershipCommunity => 'Topluluğa ait';
-
-  @override
-  String get transactionReservation => 'Rezervasyon';
 
   @override
   String get transactionLoan => 'Ödünç verme';

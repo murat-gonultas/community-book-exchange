@@ -23,11 +23,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
   String? _selectedStatus;
   String? _selectedOwnershipType;
 
-  static const List<String> _statusOptions = [
-    'AVAILABLE',
-    'RESERVED',
-    'ON_LOAN',
-  ];
+  static const List<String> _statusOptions = ['AVAILABLE', 'ON_LOAN'];
 
   static const List<String> _ownershipOptions = ['USER', 'COMMUNITY'];
 

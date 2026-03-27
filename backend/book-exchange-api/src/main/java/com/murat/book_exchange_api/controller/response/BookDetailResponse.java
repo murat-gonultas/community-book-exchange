@@ -1,12 +1,13 @@
 package com.murat.book_exchange_api.controller.response;
 
-import com.murat.book_exchange_api.domain.enums.BookStatus;
-import com.murat.book_exchange_api.domain.enums.OwnershipType;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.Instant;
 import java.util.List;
+
+import com.murat.book_exchange_api.domain.enums.BookStatus;
+import com.murat.book_exchange_api.domain.enums.OwnershipType;
+
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 @Builder
@@ -27,9 +28,7 @@ public class BookDetailResponse {
 
     private Long currentHolderUserId;
     private Long currentShelfId;
-    private Long reservedForUserId;
     private BookStatus status;
-    private Instant reservedUntil;
     private Instant loanStartAt;
     private Instant dueAt;
 

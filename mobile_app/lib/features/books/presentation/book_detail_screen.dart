@@ -277,47 +277,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     return result;
   }
 
-  Future<void> _reserveBook() async {
-    final l10n = AppLocalizations.of(context)!;
-
-    final values = await _showUserActionDialog(
-      title: l10n.reserveBook,
-      userFieldKey: 'reservedForUserId',
-      userFieldLabel: l10n.reservedForUserId,
-      extraFields: [
-        _DialogFieldConfig(
-          key: 'reservedDays',
-          label: l10n.reservedDays,
-          isNumber: true,
-        ),
-        _DialogFieldConfig(key: 'note', label: l10n.note),
-      ],
-    );
-
-    if (!mounted) return;
-    if (values == null) return;
-
-    final reservedForUserId = int.tryParse(values['reservedForUserId'] ?? '');
-    final reservedDays = int.tryParse(values['reservedDays'] ?? '');
-
-    if (reservedForUserId == null || reservedDays == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidNumbers)));
-      return;
-    }
-
-    await _runAction(
-      () => _apiService.reserveBook(
-        bookId: widget.bookId,
-        reservedForUserId: reservedForUserId,
-        reservedDays: reservedDays,
-        note: values['note'],
-      ),
-      l10n.bookReservedSuccessfully,
-    );
-  }
-
   Future<void> _loanBook() async {
     final l10n = AppLocalizations.of(context)!;
 
@@ -459,16 +418,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     final hints = <String>[];
 
     final availableStatus = BookUiLabels.status('AVAILABLE', l10n);
-    final reservedStatus = BookUiLabels.status('RESERVED', l10n);
     final onLoanStatus = BookUiLabels.status('ON_LOAN', l10n);
     final userOwnership = BookUiLabels.ownershipType('USER', l10n);
 
-    if (!BookActionRules.canReserve(book)) {
-      hints.add(l10n.hintReserveUnavailable(availableStatus));
-    }
-
     if (!BookActionRules.canLoan(book)) {
-      hints.add(l10n.hintLoanUnavailable(availableStatus, reservedStatus));
+      hints.add(l10n.hintLoanUnavailable(availableStatus));
     }
 
     if (!BookActionRules.canReturn(book)) {
@@ -476,15 +430,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     }
 
     if (!BookActionRules.canGift(book)) {
-      hints.add(l10n.hintGiftUnavailable(availableStatus, userOwnership));
+      hints.add(l10n.hintGiftUnavailable(userOwnership));
     }
 
     if (!BookActionRules.canDonate(book)) {
-      hints.add(l10n.hintDonateUnavailable(availableStatus, userOwnership));
-    }
-
-    if (book.status == 'RESERVED') {
-      hints.add(l10n.hintReservedLoanRule(reservedStatus));
+      hints.add(l10n.hintDonateUnavailable(userOwnership));
     }
 
     return hints;
@@ -637,11 +587,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             l10n.currentHolderUserId,
             book.currentHolderUserId?.toString() ?? l10n.notAvailable,
           ),
-          _infoRow(
-            l10n.reservedForUserIdLabel,
-            book.reservedForUserId?.toString() ?? l10n.notAvailable,
-          ),
-          _infoRow(l10n.reservedUntil, book.reservedUntil ?? l10n.notAvailable),
           _infoRow(l10n.loanStart, book.loanStartAt ?? l10n.notAvailable),
           _infoRow(l10n.dueAt, book.dueAt ?? l10n.notAvailable),
         ],
@@ -702,12 +647,6 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             spacing: 8,
             runSpacing: 8,
             children: [
-              _buildActionButton(
-                label: l10n.reserve,
-                enabled: BookActionRules.canReserve(book),
-                onPressed: _reserveBook,
-                icon: Icons.bookmark_add_outlined,
-              ),
               _buildActionButton(
                 label: l10n.loan,
                 enabled: BookActionRules.canLoan(book),
@@ -842,12 +781,8 @@ class _DialogFieldConfig {
 }
 
 class BookActionRules {
-  static bool canReserve(BookDetail book) {
-    return book.status == 'AVAILABLE';
-  }
-
   static bool canLoan(BookDetail book) {
-    return book.status == 'AVAILABLE' || book.status == 'RESERVED';
+    return book.status == 'AVAILABLE';
   }
 
   static bool canReturn(BookDetail book) {
@@ -855,10 +790,10 @@ class BookActionRules {
   }
 
   static bool canGift(BookDetail book) {
-    return book.status == 'AVAILABLE' && book.ownershipType == 'USER';
+    return book.ownershipType == 'USER';
   }
 
   static bool canDonate(BookDetail book) {
-    return book.status == 'AVAILABLE' && book.ownershipType == 'USER';
+    return book.ownershipType == 'USER';
   }
 }

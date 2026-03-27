@@ -10,7 +10,6 @@ import com.murat.book_exchange_api.controller.request.CreateBookRequest;
 import com.murat.book_exchange_api.controller.request.DonateBookRequest;
 import com.murat.book_exchange_api.controller.request.GiftBookRequest;
 import com.murat.book_exchange_api.controller.request.LoanBookRequest;
-import com.murat.book_exchange_api.controller.request.ReserveBookRequest;
 import com.murat.book_exchange_api.controller.request.ReturnBookRequest;
 import com.murat.book_exchange_api.controller.response.BookDetailResponse;
 import com.murat.book_exchange_api.controller.response.BookResponse;
@@ -66,9 +65,8 @@ public class BookService {
                                                 "ownerCommunityId is required when ownershipType is COMMUNITY");
                         }
                         ownerCommunity = communityRepository.findById(request.getOwnerCommunityId())
-                                        .orElseThrow(
-                                                        () -> new EntityNotFoundException("Community not found: "
-                                                                        + request.getOwnerCommunityId()));
+                                        .orElseThrow(() -> new EntityNotFoundException(
+                                                        "Community not found: " + request.getOwnerCommunityId()));
                 }
 
                 Book book = Book.builder()
@@ -91,17 +89,16 @@ public class BookService {
                                 .ownershipAcquiredAt(Instant.now())
                                 .build();
 
+                validateOwnershipConsistency(ownership);
                 bookOwnershipRepository.save(ownership);
 
                 BookHolding holding = BookHolding.builder()
                                 .book(savedBook)
                                 .currentHolderUser(ownerUser)
-                                .reservedForUser(null)
                                 .currentShelf(null)
                                 .status(BookStatus.AVAILABLE)
                                 .loanStartAt(null)
                                 .dueAt(null)
-                                .reservedUntil(null)
                                 .build();
 
                 bookHoldingRepository.save(holding);
@@ -115,16 +112,13 @@ public class BookService {
                                 .stream()
                                 .map(book -> {
                                         BookOwnership ownership = bookOwnershipRepository.findByBook(book)
-                                                        .orElseThrow(
-                                                                        () -> new EntityNotFoundException(
-                                                                                        "Ownership not found for book: "
-                                                                                                        + book.getId()));
+                                                        .orElseThrow(() -> new EntityNotFoundException(
+                                                                        "Ownership not found for book: "
+                                                                                        + book.getId()));
 
                                         BookHolding holding = bookHoldingRepository.findByBook(book)
-                                                        .orElseThrow(
-                                                                        () -> new EntityNotFoundException(
-                                                                                        "Holding not found for book: "
-                                                                                                        + book.getId()));
+                                                        .orElseThrow(() -> new EntityNotFoundException(
+                                                                        "Holding not found for book: " + book.getId()));
 
                                         return mapToBookResponse(book, ownership, holding);
                                 })
@@ -163,96 +157,16 @@ public class BookService {
                                 .ownerCommunityId(ownership.getOwnerCommunity() != null
                                                 ? ownership.getOwnerCommunity().getId()
                                                 : null)
-                                .currentHolderUserId(
-                                                holding.getCurrentHolderUser() != null
-                                                                ? holding.getCurrentHolderUser().getId()
-                                                                : null)
+                                .currentHolderUserId(holding.getCurrentHolderUser() != null
+                                                ? holding.getCurrentHolderUser().getId()
+                                                : null)
                                 .currentShelfId(holding.getCurrentShelf() != null ? holding.getCurrentShelf().getId()
                                                 : null)
-                                .reservedForUserId(holding.getReservedForUser() != null
-                                                ? holding.getReservedForUser().getId()
-                                                : null)
                                 .status(holding.getStatus())
-                                .reservedUntil(holding.getReservedUntil())
                                 .loanStartAt(holding.getLoanStartAt())
                                 .dueAt(holding.getDueAt())
                                 .transactions(transactions)
                                 .build();
-        }
-
-        private BookResponse mapToBookResponse(Book book, BookOwnership ownership, BookHolding holding) {
-                return BookResponse.builder()
-                                .bookId(book.getId())
-                                .title(book.getTitle())
-                                .author(book.getAuthor())
-                                .isbn(book.getIsbn())
-                                .ownershipType(ownership.getOwnershipType())
-                                .ownerUserId(ownership.getOwnerUser() != null ? ownership.getOwnerUser().getId() : null)
-                                .ownerCommunityId(ownership.getOwnerCommunity() != null
-                                                ? ownership.getOwnerCommunity().getId()
-                                                : null)
-                                .currentHolderUserId(
-                                                holding.getCurrentHolderUser() != null
-                                                                ? holding.getCurrentHolderUser().getId()
-                                                                : null)
-                                .currentShelfId(holding.getCurrentShelf() != null ? holding.getCurrentShelf().getId()
-                                                : null)
-                                .reservedForUserId(holding.getReservedForUser() != null
-                                                ? holding.getReservedForUser().getId()
-                                                : null)
-                                .status(holding.getStatus())
-                                .build();
-        }
-
-        private BookTransactionResponse mapToTransactionResponse(BookTransaction transaction) {
-                return BookTransactionResponse.builder()
-                                .id(transaction.getId())
-                                .type(transaction.getType())
-                                .fromUserId(transaction.getFromUser() != null ? transaction.getFromUser().getId()
-                                                : null)
-                                .toUserId(transaction.getToUser() != null ? transaction.getToUser().getId() : null)
-                                .startDate(transaction.getStartDate())
-                                .endDate(transaction.getEndDate())
-                                .note(transaction.getNote())
-                                .build();
-        }
-
-        @Transactional
-        public BookDetailResponse reserveBook(Long bookId, ReserveBookRequest request) {
-                Book book = bookRepository.findById(bookId)
-                                .orElseThrow(() -> new EntityNotFoundException("Book not found: " + bookId));
-
-                BookHolding holding = bookHoldingRepository.findByBook(book)
-                                .orElseThrow(() -> new EntityNotFoundException(
-                                                "Holding not found for book: " + book.getId()));
-
-                if (holding.getStatus() != BookStatus.AVAILABLE) {
-                        throw new IllegalStateException("Book is not available for reservation");
-                }
-
-                User reservedForUser = userRepository.findById(request.getReservedForUserId())
-                                .orElseThrow(() -> new EntityNotFoundException(
-                                                "User not found: " + request.getReservedForUserId()));
-
-                holding.setStatus(BookStatus.RESERVED);
-                holding.setReservedForUser(reservedForUser);
-                holding.setReservedUntil(Instant.now().plusSeconds(request.getReservedDays() * 24L * 60L * 60L));
-
-                bookHoldingRepository.save(holding);
-
-                BookTransaction transaction = BookTransaction.builder()
-                                .book(book)
-                                .type(TransactionType.RESERVATION)
-                                .fromUser(null)
-                                .toUser(reservedForUser)
-                                .startDate(Instant.now())
-                                .endDate(holding.getReservedUntil())
-                                .note(request.getNote())
-                                .build();
-
-                bookTransactionRepository.save(transaction);
-
-                return getBookById(bookId);
         }
 
         @Transactional
@@ -264,7 +178,7 @@ public class BookService {
                                 .orElseThrow(() -> new EntityNotFoundException(
                                                 "Holding not found for book: " + book.getId()));
 
-                if (holding.getStatus() != BookStatus.AVAILABLE && holding.getStatus() != BookStatus.RESERVED) {
+                if (holding.getStatus() != BookStatus.AVAILABLE) {
                         throw new IllegalStateException("Book is not available for loan");
                 }
 
@@ -272,19 +186,13 @@ public class BookService {
                                 .orElseThrow(() -> new EntityNotFoundException(
                                                 "User not found: " + request.getLoanedToUserId()));
 
-                if (holding.getStatus() == BookStatus.RESERVED
-                                && holding.getReservedForUser() != null
-                                && !holding.getReservedForUser().getId().equals(request.getLoanedToUserId())) {
-                        throw new IllegalStateException("Book is reserved for another user");
-                }
+                Instant now = Instant.now();
 
                 holding.setCurrentHolderUser(loanedToUser);
                 holding.setCurrentShelf(null);
                 holding.setStatus(BookStatus.ON_LOAN);
-                holding.setLoanStartAt(Instant.now());
-                holding.setDueAt(Instant.now().plusSeconds(request.getLoanDays() * 24L * 60L * 60L));
-                holding.setReservedForUser(null);
-                holding.setReservedUntil(null);
+                holding.setLoanStartAt(now);
+                holding.setDueAt(now.plusSeconds(request.getLoanDays() * 24L * 60L * 60L));
 
                 bookHoldingRepository.save(holding);
 
@@ -332,15 +240,21 @@ public class BookService {
                                 .orElseThrow(() -> new EntityNotFoundException(
                                                 "Ownership not found for book: " + book.getId()));
 
+                validateOwnershipConsistency(ownership);
+
                 User returnedByUser = holding.getCurrentHolderUser();
 
-                holding.setCurrentHolderUser(ownership.getOwnerUser());
-                holding.setCurrentShelf(null);
+                if (ownership.getOwnershipType() == OwnershipType.USER) {
+                        holding.setCurrentHolderUser(ownership.getOwnerUser());
+                        holding.setCurrentShelf(null);
+                } else {
+                        holding.setCurrentHolderUser(null);
+                        holding.setCurrentShelf(null);
+                }
+
                 holding.setStatus(BookStatus.AVAILABLE);
                 holding.setLoanStartAt(null);
                 holding.setDueAt(null);
-                holding.setReservedForUser(null);
-                holding.setReservedUntil(null);
 
                 bookHoldingRepository.save(holding);
 
@@ -372,10 +286,6 @@ public class BookService {
                                 .orElseThrow(() -> new EntityNotFoundException(
                                                 "Holding not found for book: " + book.getId()));
 
-                if (holding.getStatus() != BookStatus.AVAILABLE) {
-                        throw new IllegalStateException("Only available books can be gifted");
-                }
-
                 if (ownership.getOwnershipType() != OwnershipType.USER) {
                         throw new IllegalStateException("Only user-owned books can be gifted");
                 }
@@ -399,17 +309,10 @@ public class BookService {
                 ownership.setOwnershipType(OwnershipType.USER);
                 ownership.setOwnershipAcquiredAt(Instant.now());
 
+                validateOwnershipConsistency(ownership);
                 bookOwnershipRepository.save(ownership);
 
-                holding.setCurrentHolderUser(newOwnerUser);
-                holding.setCurrentShelf(null);
-                holding.setStatus(BookStatus.AVAILABLE);
-                holding.setReservedForUser(null);
-                holding.setReservedUntil(null);
-                holding.setLoanStartAt(null);
-                holding.setDueAt(null);
-
-                bookHoldingRepository.save(holding);
+                syncAvailableHoldingAfterOwnershipChange(holding, previousOwnerUser, newOwnerUser);
 
                 BookTransaction transaction = BookTransaction.builder()
                                 .book(book)
@@ -439,10 +342,6 @@ public class BookService {
                                 .orElseThrow(() -> new EntityNotFoundException(
                                                 "Holding not found for book: " + book.getId()));
 
-                if (holding.getStatus() != BookStatus.AVAILABLE) {
-                        throw new IllegalStateException("Only available books can be donated");
-                }
-
                 if (ownership.getOwnershipType() != OwnershipType.USER) {
                         throw new IllegalStateException("Only user-owned books can be donated");
                 }
@@ -462,17 +361,10 @@ public class BookService {
                 ownership.setOwnershipType(OwnershipType.COMMUNITY);
                 ownership.setOwnershipAcquiredAt(Instant.now());
 
+                validateOwnershipConsistency(ownership);
                 bookOwnershipRepository.save(ownership);
 
-                holding.setCurrentHolderUser(null);
-                holding.setCurrentShelf(null);
-                holding.setStatus(BookStatus.AVAILABLE);
-                holding.setReservedForUser(null);
-                holding.setReservedUntil(null);
-                holding.setLoanStartAt(null);
-                holding.setDueAt(null);
-
-                bookHoldingRepository.save(holding);
+                syncAvailableHoldingAfterOwnershipChange(holding, previousOwnerUser, null);
 
                 BookTransaction transaction = BookTransaction.builder()
                                 .book(book)
@@ -487,5 +379,77 @@ public class BookService {
                 bookTransactionRepository.save(transaction);
 
                 return getBookById(bookId);
+        }
+
+        private BookResponse mapToBookResponse(Book book, BookOwnership ownership, BookHolding holding) {
+                return BookResponse.builder()
+                                .bookId(book.getId())
+                                .title(book.getTitle())
+                                .author(book.getAuthor())
+                                .isbn(book.getIsbn())
+                                .ownershipType(ownership.getOwnershipType())
+                                .ownerUserId(ownership.getOwnerUser() != null ? ownership.getOwnerUser().getId() : null)
+                                .ownerCommunityId(ownership.getOwnerCommunity() != null
+                                                ? ownership.getOwnerCommunity().getId()
+                                                : null)
+                                .currentHolderUserId(holding.getCurrentHolderUser() != null
+                                                ? holding.getCurrentHolderUser().getId()
+                                                : null)
+                                .currentShelfId(holding.getCurrentShelf() != null ? holding.getCurrentShelf().getId()
+                                                : null)
+                                .status(holding.getStatus())
+                                .build();
+        }
+
+        private BookTransactionResponse mapToTransactionResponse(BookTransaction transaction) {
+                return BookTransactionResponse.builder()
+                                .id(transaction.getId())
+                                .type(transaction.getType())
+                                .fromUserId(transaction.getFromUser() != null ? transaction.getFromUser().getId()
+                                                : null)
+                                .toUserId(transaction.getToUser() != null ? transaction.getToUser().getId() : null)
+                                .startDate(transaction.getStartDate())
+                                .endDate(transaction.getEndDate())
+                                .note(transaction.getNote())
+                                .build();
+        }
+
+        private void validateOwnershipConsistency(BookOwnership ownership) {
+                if (ownership.getOwnershipType() == OwnershipType.USER) {
+                        if (ownership.getOwnerUser() == null) {
+                                throw new IllegalStateException("USER ownership requires ownerUser");
+                        }
+                        if (ownership.getOwnerCommunity() != null) {
+                                throw new IllegalStateException("USER ownership cannot have ownerCommunity");
+                        }
+                }
+
+                if (ownership.getOwnershipType() == OwnershipType.COMMUNITY) {
+                        if (ownership.getOwnerCommunity() == null) {
+                                throw new IllegalStateException("COMMUNITY ownership requires ownerCommunity");
+                        }
+                        if (ownership.getOwnerUser() != null) {
+                                throw new IllegalStateException("COMMUNITY ownership cannot have ownerUser");
+                        }
+                }
+        }
+
+        private void syncAvailableHoldingAfterOwnershipChange(BookHolding holding, User previousOwnerUser,
+                        User newOwnerUser) {
+                if (holding.getStatus() != BookStatus.AVAILABLE) {
+                        return;
+                }
+
+                if (holding.getCurrentHolderUser() == null || previousOwnerUser == null) {
+                        return;
+                }
+
+                if (!holding.getCurrentHolderUser().getId().equals(previousOwnerUser.getId())) {
+                        return;
+                }
+
+                holding.setCurrentHolderUser(newOwnerUser);
+                holding.setCurrentShelf(null);
+                bookHoldingRepository.save(holding);
         }
 }

@@ -13,7 +13,6 @@ import com.murat.book_exchange_api.controller.request.CreateBookRequest;
 import com.murat.book_exchange_api.controller.request.DonateBookRequest;
 import com.murat.book_exchange_api.controller.request.GiftBookRequest;
 import com.murat.book_exchange_api.controller.request.LoanBookRequest;
-import com.murat.book_exchange_api.controller.request.ReserveBookRequest;
 import com.murat.book_exchange_api.controller.request.ReturnBookRequest;
 import com.murat.book_exchange_api.controller.response.BookDetailResponse;
 import com.murat.book_exchange_api.controller.response.BookResponse;
@@ -32,11 +31,6 @@ public class BookController {
     @PostMapping
     public BookResponse createBook(@Valid @RequestBody CreateBookRequest request) {
         return bookService.createBook(request);
-    }
-
-    @PostMapping("/{id}/reserve")
-    public BookDetailResponse reserveBook(@PathVariable Long id, @Valid @RequestBody ReserveBookRequest request) {
-        return bookService.reserveBook(id, request);
     }
 
     @PostMapping("/{id}/loan")
