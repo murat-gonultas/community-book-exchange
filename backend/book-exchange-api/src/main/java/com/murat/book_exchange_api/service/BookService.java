@@ -1,6 +1,8 @@
 package com.murat.book_exchange_api.service;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.murat.book_exchange_api.controller.request.CreateBookRequest;
 import com.murat.book_exchange_api.controller.request.DonateBookRequest;
+import com.murat.book_exchange_api.controller.request.ExtendLoanRequest;
 import com.murat.book_exchange_api.controller.request.GiftBookRequest;
 import com.murat.book_exchange_api.controller.request.LoanBookRequest;
 import com.murat.book_exchange_api.controller.request.ReturnBookRequest;
@@ -43,6 +46,10 @@ public class BookService {
         private final BookTransactionRepository bookTransactionRepository;
         private final UserRepository userRepository;
         private final CommunityRepository communityRepository;
+
+        private static final int DEFAULT_LOAN_PERIOD_MONTHS = 1;
+        private static final int EXTENSION_PERIOD_MONTHS = 1;
+        private static final int MAX_LOAN_EXTENSIONS = 2;
 
         @Transactional
         public BookResponse createBook(CreateBookRequest request) {
@@ -99,6 +106,8 @@ public class BookService {
                                 .status(BookStatus.AVAILABLE)
                                 .loanStartAt(null)
                                 .dueAt(null)
+                                .loanExtendedCount(0)
+                                .lastExtendedAt(null)
                                 .build();
 
                 bookHoldingRepository.save(holding);
@@ -143,30 +152,7 @@ public class BookService {
                                 .map(this::mapToTransactionResponse)
                                 .toList();
 
-                return BookDetailResponse.builder()
-                                .bookId(book.getId())
-                                .title(book.getTitle())
-                                .author(book.getAuthor())
-                                .isbn(book.getIsbn())
-                                .language(book.getLanguage())
-                                .category(book.getCategory())
-                                .condition(book.getCondition())
-                                .notes(book.getNotes())
-                                .ownershipType(ownership.getOwnershipType())
-                                .ownerUserId(ownership.getOwnerUser() != null ? ownership.getOwnerUser().getId() : null)
-                                .ownerCommunityId(ownership.getOwnerCommunity() != null
-                                                ? ownership.getOwnerCommunity().getId()
-                                                : null)
-                                .currentHolderUserId(holding.getCurrentHolderUser() != null
-                                                ? holding.getCurrentHolderUser().getId()
-                                                : null)
-                                .currentShelfId(holding.getCurrentShelf() != null ? holding.getCurrentShelf().getId()
-                                                : null)
-                                .status(holding.getStatus())
-                                .loanStartAt(holding.getLoanStartAt())
-                                .dueAt(holding.getDueAt())
-                                .transactions(transactions)
-                                .build();
+                return mapToBookDetailResponse(book, ownership, holding, transactions);
         }
 
         @Transactional
@@ -187,12 +173,15 @@ public class BookService {
                                                 "User not found: " + request.getLoanedToUserId()));
 
                 Instant now = Instant.now();
+                Instant dueAt = addCalendarMonths(now, DEFAULT_LOAN_PERIOD_MONTHS);
 
                 holding.setCurrentHolderUser(loanedToUser);
                 holding.setCurrentShelf(null);
                 holding.setStatus(BookStatus.ON_LOAN);
                 holding.setLoanStartAt(now);
-                holding.setDueAt(now.plusSeconds(request.getLoanDays() * 24L * 60L * 60L));
+                holding.setDueAt(dueAt);
+                holding.setLoanExtendedCount(0);
+                holding.setLastExtendedAt(null);
 
                 bookHoldingRepository.save(holding);
 
@@ -255,6 +244,8 @@ public class BookService {
                 holding.setStatus(BookStatus.AVAILABLE);
                 holding.setLoanStartAt(null);
                 holding.setDueAt(null);
+                holding.setLoanExtendedCount(0);
+                holding.setLastExtendedAt(null);
 
                 bookHoldingRepository.save(holding);
 
@@ -266,6 +257,72 @@ public class BookService {
                                 .startDate(Instant.now())
                                 .endDate(null)
                                 .note(request.getNote())
+                                .build();
+
+                bookTransactionRepository.save(transaction);
+
+                return getBookById(bookId);
+        }
+
+        @Transactional
+        public BookDetailResponse extendLoan(Long bookId, ExtendLoanRequest request) {
+                if (request.getRequesterUserId() == null) {
+                        throw new IllegalArgumentException("requesterUserId is required");
+                }
+
+                Book book = bookRepository.findById(bookId)
+                                .orElseThrow(() -> new EntityNotFoundException("Book not found: " + bookId));
+
+                BookHolding holding = bookHoldingRepository.findByBook(book)
+                                .orElseThrow(() -> new EntityNotFoundException(
+                                                "Holding not found for book: " + book.getId()));
+
+                if (holding.getStatus() != BookStatus.ON_LOAN) {
+                        throw new IllegalStateException("Book is not currently on loan");
+                }
+
+                if (holding.getCurrentHolderUser() == null) {
+                        throw new IllegalStateException("Current holder is missing");
+                }
+
+                if (!holding.getCurrentHolderUser().getId().equals(request.getRequesterUserId())) {
+                        throw new IllegalStateException("Only the current holder can extend the loan");
+                }
+
+                if (holding.getDueAt() == null) {
+                        throw new IllegalStateException("Loan due date is missing");
+                }
+
+                Instant now = Instant.now();
+
+                if (holding.getDueAt().isBefore(now)) {
+                        throw new IllegalStateException("Overdue loans cannot be extended");
+                }
+
+                int currentExtensionCount = holding.getLoanExtendedCount() == null
+                                ? 0
+                                : holding.getLoanExtendedCount();
+
+                if (currentExtensionCount >= MAX_LOAN_EXTENSIONS) {
+                        throw new IllegalStateException("Maximum number of loan extensions reached");
+                }
+
+                Instant extendedDueAt = addCalendarMonths(holding.getDueAt(), EXTENSION_PERIOD_MONTHS);
+
+                holding.setDueAt(extendedDueAt);
+                holding.setLoanExtendedCount(currentExtensionCount + 1);
+                holding.setLastExtendedAt(now);
+
+                bookHoldingRepository.save(holding);
+
+                BookTransaction transaction = BookTransaction.builder()
+                                .book(book)
+                                .type(TransactionType.LOAN_EXTENSION)
+                                .fromUser(holding.getCurrentHolderUser())
+                                .toUser(holding.getCurrentHolderUser())
+                                .startDate(now)
+                                .endDate(extendedDueAt)
+                                .note("Loan extended by 1 month")
                                 .build();
 
                 bookTransactionRepository.save(transaction);
@@ -401,6 +458,44 @@ public class BookService {
                                 .build();
         }
 
+        private BookDetailResponse mapToBookDetailResponse(
+                        Book book,
+                        BookOwnership ownership,
+                        BookHolding holding,
+                        List<BookTransactionResponse> transactions) {
+                boolean overdue = isOverdue(holding);
+
+                return BookDetailResponse.builder()
+                                .bookId(book.getId())
+                                .title(book.getTitle())
+                                .author(book.getAuthor())
+                                .isbn(book.getIsbn())
+                                .language(book.getLanguage())
+                                .category(book.getCategory())
+                                .condition(book.getCondition())
+                                .notes(book.getNotes())
+                                .ownershipType(ownership.getOwnershipType())
+                                .ownerUserId(ownership.getOwnerUser() != null ? ownership.getOwnerUser().getId() : null)
+                                .ownerCommunityId(ownership.getOwnerCommunity() != null
+                                                ? ownership.getOwnerCommunity().getId()
+                                                : null)
+                                .currentHolderUserId(holding.getCurrentHolderUser() != null
+                                                ? holding.getCurrentHolderUser().getId()
+                                                : null)
+                                .currentShelfId(holding.getCurrentShelf() != null ? holding.getCurrentShelf().getId()
+                                                : null)
+                                .status(holding.getStatus())
+                                .loanStartAt(holding.getLoanStartAt())
+                                .dueAt(holding.getDueAt())
+                                .loanExtendedCount(
+                                                holding.getLoanExtendedCount() != null ? holding.getLoanExtendedCount()
+                                                                : 0)
+                                .overdue(overdue)
+                                .overdueDays(overdue ? calculateOverdueDays(holding) : 0L)
+                                .transactions(transactions)
+                                .build();
+        }
+
         private BookTransactionResponse mapToTransactionResponse(BookTransaction transaction) {
                 return BookTransactionResponse.builder()
                                 .id(transaction.getId())
@@ -434,7 +529,9 @@ public class BookService {
                 }
         }
 
-        private void syncAvailableHoldingAfterOwnershipChange(BookHolding holding, User previousOwnerUser,
+        private void syncAvailableHoldingAfterOwnershipChange(
+                        BookHolding holding,
+                        User previousOwnerUser,
                         User newOwnerUser) {
                 if (holding.getStatus() != BookStatus.AVAILABLE) {
                         return;
@@ -451,5 +548,56 @@ public class BookService {
                 holding.setCurrentHolderUser(newOwnerUser);
                 holding.setCurrentShelf(null);
                 bookHoldingRepository.save(holding);
+        }
+
+        private boolean isOverdue(BookHolding holding) {
+                return holding != null
+                                && holding.getStatus() == BookStatus.ON_LOAN
+                                && holding.getDueAt() != null
+                                && holding.getDueAt().isBefore(Instant.now());
+        }
+
+        private long calculateOverdueDays(BookHolding holding) {
+                if (!isOverdue(holding)) {
+                        return 0;
+                }
+
+                return ChronoUnit.DAYS.between(holding.getDueAt(), Instant.now());
+        }
+
+        private boolean canExtendLoan(BookHolding holding, Long requesterUserId) {
+                if (holding == null) {
+                        return false;
+                }
+
+                if (holding.getStatus() != BookStatus.ON_LOAN) {
+                        return false;
+                }
+
+                if (holding.getCurrentHolderUser() == null) {
+                        return false;
+                }
+
+                if (!holding.getCurrentHolderUser().getId().equals(requesterUserId)) {
+                        return false;
+                }
+
+                if (holding.getDueAt() == null) {
+                        return false;
+                }
+
+                if (holding.getDueAt().isBefore(Instant.now())) {
+                        return false;
+                }
+
+                Integer count = holding.getLoanExtendedCount() == null ? 0 : holding.getLoanExtendedCount();
+                return count < MAX_LOAN_EXTENSIONS;
+        }
+
+        private Instant addCalendarMonths(Instant baseInstant, int months) {
+                return baseInstant
+                                .atZone(ZoneId.systemDefault())
+                                .plusMonths(months)
+                                .toInstant();
         }
 }

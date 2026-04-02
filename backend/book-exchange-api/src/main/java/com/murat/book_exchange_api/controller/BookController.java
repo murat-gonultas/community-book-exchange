@@ -2,6 +2,7 @@ package com.murat.book_exchange_api.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.murat.book_exchange_api.controller.request.CreateBookRequest;
 import com.murat.book_exchange_api.controller.request.DonateBookRequest;
+import com.murat.book_exchange_api.controller.request.ExtendLoanRequest;
 import com.murat.book_exchange_api.controller.request.GiftBookRequest;
 import com.murat.book_exchange_api.controller.request.LoanBookRequest;
 import com.murat.book_exchange_api.controller.request.ReturnBookRequest;
@@ -51,6 +53,14 @@ public class BookController {
     @PostMapping("/{id}/donate")
     public BookDetailResponse donateBook(@PathVariable Long id, @Valid @RequestBody DonateBookRequest request) {
         return bookService.donateBook(id, request);
+    }
+
+    @PostMapping("/{bookId}/extend-loan")
+    public ResponseEntity<BookDetailResponse> extendLoan(
+            @PathVariable Long bookId,
+            @Valid @RequestBody ExtendLoanRequest request) {
+        BookDetailResponse response = bookService.extendLoan(bookId, request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

@@ -53,4 +53,9 @@ public class BookHolding {
     private Instant loanStartAt;
 
     private Instant dueAt;
+
+    @Column(nullable = false)
+    private Integer loanExtendedCount = 0;
+
+    private Instant lastExtendedAt;
 }

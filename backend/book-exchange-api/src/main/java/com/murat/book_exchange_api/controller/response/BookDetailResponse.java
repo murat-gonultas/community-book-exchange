@@ -8,8 +8,10 @@ import com.murat.book_exchange_api.domain.enums.OwnershipType;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 @Builder
 public class BookDetailResponse {
 
@@ -31,6 +33,10 @@ public class BookDetailResponse {
     private BookStatus status;
     private Instant loanStartAt;
     private Instant dueAt;
+
+    private Integer loanExtendedCount;
+    private Boolean overdue;
+    private Long overdueDays;
 
     private List<BookTransactionResponse> transactions;
 }
