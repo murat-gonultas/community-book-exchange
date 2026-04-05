@@ -1,15 +1,23 @@
 package com.murat.book_exchange_api.controller.request;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-
-@Getter
-@Setter
 public class LoanBookRequest {
 
-    @NotNull(message = "loanedToUserId is required")
     private Long loanedToUserId;
-
     private String note;
+
+    public Long getLoanedToUserId() {
+        return loanedToUserId;
+    }
+
+    public void setLoanedToUserId(Long loanedToUserId) {
+        this.loanedToUserId = loanedToUserId;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 }
