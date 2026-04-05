@@ -9,7 +9,6 @@
       }
     }
   },
-
   "actions": "İşlemler",
   "transactions": "İşlem geçmişi",
   "retry": "Tekrar dene",
@@ -17,7 +16,6 @@
   "submit": "Onayla",
   "noTransactions": "İşlem yok",
   "notAvailable": "-",
-
   "failedToLoadBookDetail": "Kitap detayı yüklenemedi.\n{error}",
   "@failedToLoadBookDetail": {
     "placeholders": {
@@ -26,7 +24,6 @@
       }
     }
   },
-
   "failedToLoadBooks": "Kitaplar yüklenemedi.\n{error}",
   "@failedToLoadBooks": {
     "placeholders": {
@@ -35,7 +32,6 @@
       }
     }
   },
-
   "actionFailed": "İşlem başarısız oldu: {error}",
   "@actionFailed": {
     "placeholders": {
@@ -44,33 +40,29 @@
       }
     }
   },
-
   "bookLoanedSuccessfully": "Kitap başarıyla ödünç verildi",
   "bookReturnedSuccessfully": "Kitap başarıyla iade alındı",
   "bookGiftedSuccessfully": "Kitap başarıyla devredildi",
   "bookDonatedSuccessfully": "Kitap başarıyla bağışlandı",
-
+  "bookExtendedSuccessfully": "Ödünç süresi başarıyla uzatıldı.",
   "pleaseEnterValidNumbers": "Lütfen geçerli sayılar girin",
   "pleaseEnterValidUserId": "Lütfen geçerli bir kullanıcı ID girin",
   "pleaseEnterValidCommunityId": "Lütfen geçerli bir topluluk ID girin",
-
   "loan": "Ödünç ver",
   "returnAction": "İade al",
   "gift": "Devret",
   "donate": "Bağışla",
-
+  "extendLoan": "Ödünç süresini uzat",
   "loanBook": "Kitabı ödünç ver",
   "returnBook": "Kitabı iade al",
   "giftBook": "Kitabı devret",
   "donateBook": "Kitabı bağışla",
-
   "note": "Not",
   "loanedToUserId": "Ödünç verilen kullanıcı ID",
-  "loanDays": "Ödünç gün sayısı",
   "returnedByUserId": "İade eden kullanıcı ID",
   "newOwnerUserId": "Yeni sahip kullanıcı ID",
+  "requesterUserId": "İşlemi yapan kullanıcı",
   "communityId": "Topluluk ID",
-
   "author": "Yazar",
   "isbn": "ISBN",
   "language": "Dil",
@@ -84,7 +76,9 @@
   "currentHolderUserId": "Şu an elinde tutan kullanıcı ID",
   "loanStart": "Ödünç başlangıcı",
   "dueAt": "Son teslim tarihi",
-
+  "loanExtendedCount": "Uzatma sayısı",
+  "overdueDaysLabel": "Gecikme günü",
+  "overdueBadge": "Gecikmiş",
   "whyActionsUnavailable": "Bazı işlemler neden kullanılamıyor?",
   "hintLoanUnavailable": "Ödünç verme yalnızca kitap {availableStatus} durumundayken mümkündür.",
   "@hintLoanUnavailable": {
@@ -94,7 +88,6 @@
       }
     }
   },
-
   "hintReturnUnavailable": "İade alma yalnızca kitap {status} durumundayken mümkündür.",
   "@hintReturnUnavailable": {
     "placeholders": {
@@ -103,7 +96,6 @@
       }
     }
   },
-
   "hintGiftUnavailable": "Devretme yalnızca {ownership} kitaplar için mümkündür.",
   "@hintGiftUnavailable": {
     "placeholders": {
@@ -112,7 +104,6 @@
       }
     }
   },
-
   "hintDonateUnavailable": "Bağışlama yalnızca {ownership} kitaplar için mümkündür.",
   "@hintDonateUnavailable": {
     "placeholders": {
@@ -121,38 +112,50 @@
       }
     }
   },
-
+  "hintExtendUnavailableNotOnLoan": "Süre uzatma sadece kitap durumu {status} olduğunda mümkündür.",
+  "@hintExtendUnavailableNotOnLoan": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "hintExtendUnavailableOverdue": "Gecikmiş ödünçler uzatılamaz.",
+  "hintExtendUnavailableMaxReached": "Maksimum uzatma sayısına ulaşıldı.",
   "idLabel": "ID",
   "fromUser": "Gönderen kullanıcı",
   "toUser": "Alan kullanıcı",
   "start": "Başlangıç",
   "end": "Bitiş",
-
   "books": "Kitaplar",
   "noBooksFound": "Mevcut filtrelere uygun kitap bulunamadı.",
   "unknownAuthor": "Yazar bilinmiyor",
-
   "systemLanguage": "Sistem dili",
   "german": "Deutsch",
   "english": "English",
   "turkish": "Türkçe",
-
   "statusAvailable": "Uygun",
   "statusOnLoan": "Ödünçte",
-
   "ownershipUser": "Kullanıcıya ait",
   "ownershipCommunity": "Topluluğa ait",
-
   "transactionLoan": "Ödünç verme",
   "transactionReturn": "İade",
   "transactionGift": "Devir",
   "transactionDonation": "Bağış",
-
+  "transactionLoanExtension": "Ödünç uzatma",
   "booksSearchHint": "Başlık veya yazara göre ara",
   "filterStatus": "Durum",
   "filterOwnership": "Sahiplik",
   "allStatuses": "Tüm durumlar",
   "allOwnershipTypes": "Tüm sahiplik türleri",
   "clearFilters": "Filtreleri temizle",
-  "bookListTitle": "Kitaplar"
+  "bookListTitle": "Kitaplar",
+  "bookOverdueMessage": "Bu kitap {days} gündür gecikmiş durumda.",
+  "@bookOverdueMessage": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }

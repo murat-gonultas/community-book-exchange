@@ -62,41 +62,15 @@ class BookApiService {
         .toList();
   }
 
-  Future<void> reserveBook({
-    required int bookId,
-    required int reservedForUserId,
-    required int reservedDays,
-    String? note,
-  }) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/api/books/$bookId/reserve'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'reservedForUserId': reservedForUserId,
-        'reservedDays': reservedDays,
-        'note': note,
-      }),
-    );
-
-    if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw Exception(_extractErrorMessage(response));
-    }
-  }
-
   Future<void> loanBook({
     required int bookId,
     required int loanedToUserId,
-    required int loanDays,
     String? note,
   }) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/books/$bookId/loan'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'loanedToUserId': loanedToUserId,
-        'loanDays': loanDays,
-        'note': note,
-      }),
+      body: jsonEncode({'loanedToUserId': loanedToUserId, 'note': note}),
     );
 
     if (response.statusCode < 200 || response.statusCode >= 300) {
@@ -150,6 +124,25 @@ class BookApiService {
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw Exception(_extractErrorMessage(response));
     }
+  }
+
+  Future<BookDetail> extendLoan({
+    required int bookId,
+    required int requesterUserId,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/books/$bookId/extend-loan'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'requesterUserId': requesterUserId}),
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return BookDetail.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      );
+    }
+
+    throw Exception(_extractErrorMessage(response));
   }
 
   String _extractErrorMessage(http.Response response) {

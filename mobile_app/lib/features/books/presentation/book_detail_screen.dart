@@ -86,6 +86,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     required String userFieldKey,
     required String userFieldLabel,
     required List<_DialogFieldConfig> extraFields,
+    int? initialUserId,
   }) async {
     final users = await _usersFuture;
 
@@ -95,7 +96,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       for (final field in extraFields) field.key: TextEditingController(),
     };
 
-    int? selectedUserId = users.isNotEmpty ? users.first.id : null;
+    int? selectedUserId =
+        initialUserId ?? (users.isNotEmpty ? users.first.id : null);
 
     final result = await showDialog<Map<String, String>>(
       context: context,
@@ -134,9 +136,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         padding: const EdgeInsets.only(bottom: 12),
                         child: TextField(
                           controller: controllers[field.key],
-                          keyboardType: field.isNumber
-                              ? TextInputType.number
-                              : TextInputType.text,
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             labelText: field.label,
                             border: const OutlineInputBorder(),
@@ -233,9 +233,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         padding: const EdgeInsets.only(bottom: 12),
                         child: TextField(
                           controller: controllers[field.key],
-                          keyboardType: field.isNumber
-                              ? TextInputType.number
-                              : TextInputType.text,
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             labelText: field.label,
                             border: const OutlineInputBorder(),
@@ -284,26 +282,18 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       title: l10n.loanBook,
       userFieldKey: 'loanedToUserId',
       userFieldLabel: l10n.loanedToUserId,
-      extraFields: [
-        _DialogFieldConfig(
-          key: 'loanDays',
-          label: l10n.loanDays,
-          isNumber: true,
-        ),
-        _DialogFieldConfig(key: 'note', label: l10n.note),
-      ],
+      extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
     if (!mounted) return;
     if (values == null) return;
 
     final loanedToUserId = int.tryParse(values['loanedToUserId'] ?? '');
-    final loanDays = int.tryParse(values['loanDays'] ?? '');
 
-    if (loanedToUserId == null || loanDays == null) {
+    if (loanedToUserId == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidNumbers)));
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidUserId)));
       return;
     }
 
@@ -311,11 +301,41 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       () => _apiService.loanBook(
         bookId: widget.bookId,
         loanedToUserId: loanedToUserId,
-        loanDays: loanDays,
         note: values['note'],
       ),
       l10n.bookLoanedSuccessfully,
     );
+  }
+
+  Future<void> _extendLoan(BookDetail book) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    final values = await _showUserActionDialog(
+      title: l10n.extendLoan,
+      userFieldKey: 'requesterUserId',
+      userFieldLabel: l10n.requesterUserId,
+      extraFields: const [],
+      initialUserId: book.currentHolderUserId,
+    );
+
+    if (!mounted) return;
+    if (values == null) return;
+
+    final requesterUserId = int.tryParse(values['requesterUserId'] ?? '');
+
+    if (requesterUserId == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidUserId)));
+      return;
+    }
+
+    await _runAction(() async {
+      await _apiService.extendLoan(
+        bookId: widget.bookId,
+        requesterUserId: requesterUserId,
+      );
+    }, l10n.bookExtendedSuccessfully);
   }
 
   Future<void> _returnBook() async {
@@ -437,6 +457,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       hints.add(l10n.hintDonateUnavailable(userOwnership));
     }
 
+    if (!BookActionRules.canExtend(book)) {
+      if (book.status != 'ON_LOAN') {
+        hints.add(l10n.hintExtendUnavailableNotOnLoan(onLoanStatus));
+      } else if (book.overdue) {
+        hints.add(l10n.hintExtendUnavailableOverdue);
+      } else if ((book.loanExtendedCount ?? 0) >= 2) {
+        hints.add(l10n.hintExtendUnavailableMaxReached);
+      }
+    }
+
     return hints;
   }
 
@@ -553,6 +583,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 icon: Icons.person_outline,
                 label: BookUiLabels.ownershipType(book.ownershipType, l10n),
               ),
+              if (book.overdue)
+                _buildBadge(
+                  context: context,
+                  icon: Icons.warning_amber_rounded,
+                  label: l10n.overdueBadge,
+                ),
             ],
           ),
         ],
@@ -589,6 +625,33 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           ),
           _infoRow(l10n.loanStart, book.loanStartAt ?? l10n.notAvailable),
           _infoRow(l10n.dueAt, book.dueAt ?? l10n.notAvailable),
+          _infoRow(l10n.loanExtendedCount, '${book.loanExtendedCount ?? 0}/2'),
+          if (book.overdue)
+            _infoRow(l10n.overdueDaysLabel, book.overdueDays.toString()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOverdueCard(BookDetail book, AppLocalizations l10n) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.orange.shade50,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.orange.shade300),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.warning_amber_rounded, color: Colors.orange.shade800),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              l10n.bookOverdueMessage(book.overdueDays),
+              style: TextStyle(color: Colors.orange.shade900),
+            ),
+          ),
         ],
       ),
     );
@@ -658,6 +721,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 enabled: BookActionRules.canReturn(book),
                 onPressed: _returnBook,
                 icon: Icons.assignment_return_outlined,
+              ),
+              _buildActionButton(
+                label: l10n.extendLoan,
+                enabled: BookActionRules.canExtend(book),
+                onPressed: () => _extendLoan(book),
+                icon: Icons.update,
               ),
               _buildActionButton(
                 label: l10n.gift,
@@ -755,6 +824,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                 _buildHeaderCard(book, l10n),
                 const SizedBox(height: 16),
                 _buildDetailsCard(book, l10n),
+                if (book.overdue) ...[
+                  const SizedBox(height: 16),
+                  _buildOverdueCard(book, l10n),
+                ],
                 const SizedBox(height: 16),
                 _buildActionsCard(book, l10n),
                 const SizedBox(height: 16),
@@ -771,13 +844,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 class _DialogFieldConfig {
   final String key;
   final String label;
-  final bool isNumber;
 
-  const _DialogFieldConfig({
-    required this.key,
-    required this.label,
-    this.isNumber = false,
-  });
+  const _DialogFieldConfig({required this.key, required this.label});
 }
 
 class BookActionRules {
@@ -795,5 +863,11 @@ class BookActionRules {
 
   static bool canDonate(BookDetail book) {
     return book.ownershipType == 'USER';
+  }
+
+  static bool canExtend(BookDetail book) {
+    return book.status == 'ON_LOAN' &&
+        !book.overdue &&
+        (book.loanExtendedCount ?? 0) < 2;
   }
 }

@@ -24,7 +24,6 @@ class _BooksListScreenState extends State<BooksListScreen> {
   String? _selectedOwnershipType;
 
   static const List<String> _statusOptions = ['AVAILABLE', 'ON_LOAN'];
-
   static const List<String> _ownershipOptions = ['USER', 'COMMUNITY'];
 
   @override
@@ -403,6 +402,11 @@ class _BookCard extends StatelessWidget {
                           ),
                           icon: Icons.person_outline,
                         ),
+                        if (book.overdue)
+                          _InfoChip(
+                            label: l10n.overdueBadge,
+                            icon: Icons.warning_amber_rounded,
+                          ),
                       ],
                     ),
                   ],

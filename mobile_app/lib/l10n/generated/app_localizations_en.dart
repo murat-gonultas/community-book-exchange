@@ -65,6 +65,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bookDonatedSuccessfully => 'Book donated successfully';
 
   @override
+  String get bookExtendedSuccessfully => 'Loan extended successfully.';
+
+  @override
   String get pleaseEnterValidNumbers => 'Please enter valid numbers';
 
   @override
@@ -86,6 +89,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get donate => 'Donate';
 
   @override
+  String get extendLoan => 'Extend loan';
+
+  @override
   String get loanBook => 'Loan Book';
 
   @override
@@ -104,13 +110,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loanedToUserId => 'Loaned To User ID';
 
   @override
-  String get loanDays => 'Loan Days';
-
-  @override
   String get returnedByUserId => 'Returned By User ID';
 
   @override
   String get newOwnerUserId => 'New Owner User ID';
+
+  @override
+  String get requesterUserId => 'Requester user';
 
   @override
   String get communityId => 'Community ID';
@@ -155,6 +161,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dueAt => 'Due At';
 
   @override
+  String get loanExtendedCount => 'Extensions';
+
+  @override
+  String get overdueDaysLabel => 'Overdue days';
+
+  @override
+  String get overdueBadge => 'Overdue';
+
+  @override
   String get whyActionsUnavailable => 'Why are some actions unavailable?';
 
   @override
@@ -176,6 +191,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String hintDonateUnavailable(String ownership) {
     return 'Donate is only available for $ownership books.';
   }
+
+  @override
+  String hintExtendUnavailableNotOnLoan(String status) {
+    return 'Extension is only available when the book status is $status.';
+  }
+
+  @override
+  String get hintExtendUnavailableOverdue =>
+      'Overdue loans cannot be extended.';
+
+  @override
+  String get hintExtendUnavailableMaxReached =>
+      'Maximum number of loan extensions reached.';
 
   @override
   String get idLabel => 'ID';
@@ -238,6 +266,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get transactionDonation => 'Donation';
 
   @override
+  String get transactionLoanExtension => 'Loan extension';
+
+  @override
   String get booksSearchHint => 'Search by title or author';
 
   @override
@@ -257,4 +288,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bookListTitle => 'Books';
+
+  @override
+  String bookOverdueMessage(int days) {
+    return 'This book is overdue by $days days.';
+  }
 }

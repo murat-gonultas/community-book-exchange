@@ -65,6 +65,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get bookDonatedSuccessfully => 'Buch erfolgreich gespendet';
 
   @override
+  String get bookExtendedSuccessfully => 'Leihfrist erfolgreich verlängert.';
+
+  @override
   String get pleaseEnterValidNumbers => 'Bitte gültige Zahlen eingeben';
 
   @override
@@ -88,6 +91,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get donate => 'Spenden';
 
   @override
+  String get extendLoan => 'Leihfrist verlängern';
+
+  @override
   String get loanBook => 'Buch verleihen';
 
   @override
@@ -106,13 +112,13 @@ class AppLocalizationsDe extends AppLocalizations {
   String get loanedToUserId => 'Verliehen an Benutzer-ID';
 
   @override
-  String get loanDays => 'Leihdauer in Tagen';
-
-  @override
   String get returnedByUserId => 'Zurückgegeben von Benutzer-ID';
 
   @override
   String get newOwnerUserId => 'Neue Eigentümer-Benutzer-ID';
+
+  @override
+  String get requesterUserId => 'Anfragende Person';
 
   @override
   String get communityId => 'Community-ID';
@@ -157,6 +163,15 @@ class AppLocalizationsDe extends AppLocalizations {
   String get dueAt => 'Fällig am';
 
   @override
+  String get loanExtendedCount => 'Verlängerungen';
+
+  @override
+  String get overdueDaysLabel => 'Tage überfällig';
+
+  @override
+  String get overdueBadge => 'Überfällig';
+
+  @override
   String get whyActionsUnavailable =>
       'Warum sind einige Aktionen nicht verfügbar?';
 
@@ -179,6 +194,19 @@ class AppLocalizationsDe extends AppLocalizations {
   String hintDonateUnavailable(String ownership) {
     return 'Spenden ist nur für $ownership Bücher möglich.';
   }
+
+  @override
+  String hintExtendUnavailableNotOnLoan(String status) {
+    return 'Eine Verlängerung ist nur möglich, wenn der Buchstatus $status ist.';
+  }
+
+  @override
+  String get hintExtendUnavailableOverdue =>
+      'Überfällige Ausleihen können nicht verlängert werden.';
+
+  @override
+  String get hintExtendUnavailableMaxReached =>
+      'Die maximale Anzahl an Verlängerungen wurde erreicht.';
 
   @override
   String get idLabel => 'ID';
@@ -241,6 +269,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get transactionDonation => 'Spende';
 
   @override
+  String get transactionLoanExtension => 'Leihfristverlängerung';
+
+  @override
   String get booksSearchHint => 'Nach Titel oder Autor suchen';
 
   @override
@@ -260,4 +291,9 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get bookListTitle => 'Bücher';
+
+  @override
+  String bookOverdueMessage(int days) {
+    return 'Dieses Buch ist seit $days Tagen überfällig.';
+  }
 }

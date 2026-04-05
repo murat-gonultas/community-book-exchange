@@ -4,6 +4,9 @@ class Book {
   final String? author;
   final String status;
   final String ownershipType;
+  final int? loanExtendedCount;
+  final bool overdue;
+  final int overdueDays;
 
   Book({
     required this.bookId,
@@ -11,6 +14,9 @@ class Book {
     required this.author,
     required this.status,
     required this.ownershipType,
+    this.loanExtendedCount,
+    this.overdue = false,
+    this.overdueDays = 0,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -20,6 +26,9 @@ class Book {
       author: json['author'] as String?,
       status: json['status'] as String,
       ownershipType: json['ownershipType'] as String,
+      loanExtendedCount: json['loanExtendedCount'] as int?,
+      overdue: json['overdue'] as bool? ?? false,
+      overdueDays: json['overdueDays'] as int? ?? 0,
     );
   }
 }
@@ -70,11 +79,12 @@ class BookDetail {
   final int? ownerCommunityId;
   final int? currentHolderUserId;
   final int? currentShelfId;
-  final int? reservedForUserId;
   final String status;
-  final String? reservedUntil;
   final String? loanStartAt;
   final String? dueAt;
+  final int? loanExtendedCount;
+  final bool overdue;
+  final int overdueDays;
   final List<BookTransaction> transactions;
 
   BookDetail({
@@ -91,11 +101,12 @@ class BookDetail {
     this.ownerCommunityId,
     this.currentHolderUserId,
     this.currentShelfId,
-    this.reservedForUserId,
     required this.status,
-    this.reservedUntil,
     this.loanStartAt,
     this.dueAt,
+    this.loanExtendedCount,
+    required this.overdue,
+    required this.overdueDays,
     required this.transactions,
   });
 
@@ -116,11 +127,12 @@ class BookDetail {
       ownerCommunityId: json['ownerCommunityId'] as int?,
       currentHolderUserId: json['currentHolderUserId'] as int?,
       currentShelfId: json['currentShelfId'] as int?,
-      reservedForUserId: json['reservedForUserId'] as int?,
       status: json['status'] as String,
-      reservedUntil: json['reservedUntil']?.toString(),
       loanStartAt: json['loanStartAt']?.toString(),
       dueAt: json['dueAt']?.toString(),
+      loanExtendedCount: json['loanExtendedCount'] as int?,
+      overdue: json['overdue'] as bool? ?? false,
+      overdueDays: json['overdueDays'] as int? ?? 0,
       transactions: transactionsJson
           .map((item) => BookTransaction.fromJson(item as Map<String, dynamic>))
           .toList(),

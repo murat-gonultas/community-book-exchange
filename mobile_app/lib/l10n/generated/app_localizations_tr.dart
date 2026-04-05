@@ -65,6 +65,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get bookDonatedSuccessfully => 'Kitap başarıyla bağışlandı';
 
   @override
+  String get bookExtendedSuccessfully => 'Ödünç süresi başarıyla uzatıldı.';
+
+  @override
   String get pleaseEnterValidNumbers => 'Lütfen geçerli sayılar girin';
 
   @override
@@ -87,6 +90,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get donate => 'Bağışla';
 
   @override
+  String get extendLoan => 'Ödünç süresini uzat';
+
+  @override
   String get loanBook => 'Kitabı ödünç ver';
 
   @override
@@ -105,13 +111,13 @@ class AppLocalizationsTr extends AppLocalizations {
   String get loanedToUserId => 'Ödünç verilen kullanıcı ID';
 
   @override
-  String get loanDays => 'Ödünç gün sayısı';
-
-  @override
   String get returnedByUserId => 'İade eden kullanıcı ID';
 
   @override
   String get newOwnerUserId => 'Yeni sahip kullanıcı ID';
+
+  @override
+  String get requesterUserId => 'İşlemi yapan kullanıcı';
 
   @override
   String get communityId => 'Topluluk ID';
@@ -156,6 +162,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get dueAt => 'Son teslim tarihi';
 
   @override
+  String get loanExtendedCount => 'Uzatma sayısı';
+
+  @override
+  String get overdueDaysLabel => 'Gecikme günü';
+
+  @override
+  String get overdueBadge => 'Gecikmiş';
+
+  @override
   String get whyActionsUnavailable => 'Bazı işlemler neden kullanılamıyor?';
 
   @override
@@ -177,6 +192,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String hintDonateUnavailable(String ownership) {
     return 'Bağışlama yalnızca $ownership kitaplar için mümkündür.';
   }
+
+  @override
+  String hintExtendUnavailableNotOnLoan(String status) {
+    return 'Süre uzatma sadece kitap durumu $status olduğunda mümkündür.';
+  }
+
+  @override
+  String get hintExtendUnavailableOverdue => 'Gecikmiş ödünçler uzatılamaz.';
+
+  @override
+  String get hintExtendUnavailableMaxReached =>
+      'Maksimum uzatma sayısına ulaşıldı.';
 
   @override
   String get idLabel => 'ID';
@@ -239,6 +266,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get transactionDonation => 'Bağış';
 
   @override
+  String get transactionLoanExtension => 'Ödünç uzatma';
+
+  @override
   String get booksSearchHint => 'Başlık veya yazara göre ara';
 
   @override
@@ -258,4 +288,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get bookListTitle => 'Kitaplar';
+
+  @override
+  String bookOverdueMessage(int days) {
+    return 'Bu kitap $days gündür gecikmiş durumda.';
+  }
 }

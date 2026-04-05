@@ -196,6 +196,12 @@ abstract class AppLocalizations {
   /// **'Book donated successfully'**
   String get bookDonatedSuccessfully;
 
+  /// No description provided for @bookExtendedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan extended successfully.'**
+  String get bookExtendedSuccessfully;
+
   /// No description provided for @pleaseEnterValidNumbers.
   ///
   /// In en, this message translates to:
@@ -238,6 +244,12 @@ abstract class AppLocalizations {
   /// **'Donate'**
   String get donate;
 
+  /// No description provided for @extendLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Extend loan'**
+  String get extendLoan;
+
   /// No description provided for @loanBook.
   ///
   /// In en, this message translates to:
@@ -274,12 +286,6 @@ abstract class AppLocalizations {
   /// **'Loaned To User ID'**
   String get loanedToUserId;
 
-  /// No description provided for @loanDays.
-  ///
-  /// In en, this message translates to:
-  /// **'Loan Days'**
-  String get loanDays;
-
   /// No description provided for @returnedByUserId.
   ///
   /// In en, this message translates to:
@@ -291,6 +297,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'New Owner User ID'**
   String get newOwnerUserId;
+
+  /// No description provided for @requesterUserId.
+  ///
+  /// In en, this message translates to:
+  /// **'Requester user'**
+  String get requesterUserId;
 
   /// No description provided for @communityId.
   ///
@@ -376,6 +388,24 @@ abstract class AppLocalizations {
   /// **'Due At'**
   String get dueAt;
 
+  /// No description provided for @loanExtendedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Extensions'**
+  String get loanExtendedCount;
+
+  /// No description provided for @overdueDaysLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue days'**
+  String get overdueDaysLabel;
+
+  /// No description provided for @overdueBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get overdueBadge;
+
   /// No description provided for @whyActionsUnavailable.
   ///
   /// In en, this message translates to:
@@ -405,6 +435,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Donate is only available for {ownership} books.'**
   String hintDonateUnavailable(String ownership);
+
+  /// No description provided for @hintExtendUnavailableNotOnLoan.
+  ///
+  /// In en, this message translates to:
+  /// **'Extension is only available when the book status is {status}.'**
+  String hintExtendUnavailableNotOnLoan(String status);
+
+  /// No description provided for @hintExtendUnavailableOverdue.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue loans cannot be extended.'**
+  String get hintExtendUnavailableOverdue;
+
+  /// No description provided for @hintExtendUnavailableMaxReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum number of loan extensions reached.'**
+  String get hintExtendUnavailableMaxReached;
 
   /// No description provided for @idLabel.
   ///
@@ -526,6 +574,12 @@ abstract class AppLocalizations {
   /// **'Donation'**
   String get transactionDonation;
 
+  /// No description provided for @transactionLoanExtension.
+  ///
+  /// In en, this message translates to:
+  /// **'Loan extension'**
+  String get transactionLoanExtension;
+
   /// No description provided for @booksSearchHint.
   ///
   /// In en, this message translates to:
@@ -567,6 +621,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Books'**
   String get bookListTitle;
+
+  /// No description provided for @bookOverdueMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This book is overdue by {days} days.'**
+  String bookOverdueMessage(int days);
 }
 
 class _AppLocalizationsDelegate

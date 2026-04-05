@@ -36,6 +36,8 @@ class BookUiLabels {
         return l10n.transactionGift;
       case 'DONATION':
         return l10n.transactionDonation;
+      case 'LOAN_EXTENSION':
+        return l10n.transactionLoanExtension;
       default:
         return rawTransactionType;
     }

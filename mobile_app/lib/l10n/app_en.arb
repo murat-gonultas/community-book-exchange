@@ -9,7 +9,6 @@
       }
     }
   },
-
   "actions": "Actions",
   "transactions": "Transactions",
   "retry": "Retry",
@@ -17,7 +16,6 @@
   "submit": "Submit",
   "noTransactions": "No transactions",
   "notAvailable": "-",
-
   "failedToLoadBookDetail": "Failed to load book detail.\n{error}",
   "@failedToLoadBookDetail": {
     "placeholders": {
@@ -26,7 +24,6 @@
       }
     }
   },
-
   "failedToLoadBooks": "Failed to load books.\n{error}",
   "@failedToLoadBooks": {
     "placeholders": {
@@ -35,7 +32,6 @@
       }
     }
   },
-
   "actionFailed": "Action failed: {error}",
   "@actionFailed": {
     "placeholders": {
@@ -44,33 +40,29 @@
       }
     }
   },
-
   "bookLoanedSuccessfully": "Book loaned successfully",
   "bookReturnedSuccessfully": "Book returned successfully",
   "bookGiftedSuccessfully": "Book gifted successfully",
   "bookDonatedSuccessfully": "Book donated successfully",
-
+  "bookExtendedSuccessfully": "Loan extended successfully.",
   "pleaseEnterValidNumbers": "Please enter valid numbers",
   "pleaseEnterValidUserId": "Please enter a valid user ID",
   "pleaseEnterValidCommunityId": "Please enter a valid community ID",
-
   "loan": "Loan",
   "returnAction": "Return",
   "gift": "Gift",
   "donate": "Donate",
-
+  "extendLoan": "Extend loan",
   "loanBook": "Loan Book",
   "returnBook": "Return Book",
   "giftBook": "Gift Book",
   "donateBook": "Donate Book",
-
   "note": "Note",
   "loanedToUserId": "Loaned To User ID",
-  "loanDays": "Loan Days",
   "returnedByUserId": "Returned By User ID",
   "newOwnerUserId": "New Owner User ID",
+  "requesterUserId": "Requester user",
   "communityId": "Community ID",
-
   "author": "Author",
   "isbn": "ISBN",
   "language": "Language",
@@ -84,7 +76,9 @@
   "currentHolderUserId": "Current Holder User ID",
   "loanStart": "Loan Start",
   "dueAt": "Due At",
-
+  "loanExtendedCount": "Extensions",
+  "overdueDaysLabel": "Overdue days",
+  "overdueBadge": "Overdue",
   "whyActionsUnavailable": "Why are some actions unavailable?",
   "hintLoanUnavailable": "Loan is only available when the book is {availableStatus}.",
   "@hintLoanUnavailable": {
@@ -94,7 +88,6 @@
       }
     }
   },
-
   "hintReturnUnavailable": "Return is only available when the book is {status}.",
   "@hintReturnUnavailable": {
     "placeholders": {
@@ -103,7 +96,6 @@
       }
     }
   },
-
   "hintGiftUnavailable": "Gift is only available for {ownership} books.",
   "@hintGiftUnavailable": {
     "placeholders": {
@@ -112,7 +104,6 @@
       }
     }
   },
-
   "hintDonateUnavailable": "Donate is only available for {ownership} books.",
   "@hintDonateUnavailable": {
     "placeholders": {
@@ -121,38 +112,50 @@
       }
     }
   },
-
+  "hintExtendUnavailableNotOnLoan": "Extension is only available when the book status is {status}.",
+  "@hintExtendUnavailableNotOnLoan": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "hintExtendUnavailableOverdue": "Overdue loans cannot be extended.",
+  "hintExtendUnavailableMaxReached": "Maximum number of loan extensions reached.",
   "idLabel": "ID",
   "fromUser": "From User",
   "toUser": "To User",
   "start": "Start",
   "end": "End",
-
   "books": "Books",
   "noBooksFound": "No books match your current filters.",
   "unknownAuthor": "Unknown author",
-
   "systemLanguage": "System language",
   "german": "Deutsch",
   "english": "English",
   "turkish": "Türkçe",
-
   "statusAvailable": "Available",
   "statusOnLoan": "On loan",
-
   "ownershipUser": "User-owned",
   "ownershipCommunity": "Community-owned",
-
   "transactionLoan": "Loan",
   "transactionReturn": "Return",
   "transactionGift": "Gift",
   "transactionDonation": "Donation",
-
+  "transactionLoanExtension": "Loan extension",
   "booksSearchHint": "Search by title or author",
   "filterStatus": "Status",
   "filterOwnership": "Ownership",
   "allStatuses": "All statuses",
   "allOwnershipTypes": "All ownership types",
   "clearFilters": "Clear filters",
-  "bookListTitle": "Books"
+  "bookListTitle": "Books",
+  "bookOverdueMessage": "This book is overdue by {days} days.",
+  "@bookOverdueMessage": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  }
 }
