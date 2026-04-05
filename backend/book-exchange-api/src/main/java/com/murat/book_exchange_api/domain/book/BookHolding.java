@@ -54,6 +54,7 @@ public class BookHolding {
 
     private Instant dueAt;
 
+    @Builder.Default
     @Column(nullable = false)
     private Integer loanExtendedCount = 0;
 

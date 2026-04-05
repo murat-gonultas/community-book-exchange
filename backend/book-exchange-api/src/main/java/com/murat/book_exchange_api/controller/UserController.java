@@ -1,7 +1,7 @@
 package com.murat.book_exchange_api.controller;
 
 import com.murat.book_exchange_api.domain.user.User;
-import com.murat.book_exchange_api.repository.UserRepository;
+import com.murat.book_exchange_api.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

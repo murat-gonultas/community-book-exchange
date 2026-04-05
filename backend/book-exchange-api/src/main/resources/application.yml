@@ -9,5 +9,12 @@ spring:
       ddl-auto: update
     show-sql: true
 
+app:
+  jwt:
+    secret: "change-this-to-a-very-long-random-secret-key-at-least-32-bytes"
+    expiration-ms: 3600000
+  auth:
+    expose-verification-token: true
+
 server:
   port: 8080

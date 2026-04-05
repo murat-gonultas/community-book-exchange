@@ -26,12 +26,12 @@ import com.murat.book_exchange_api.domain.enums.BookStatus;
 import com.murat.book_exchange_api.domain.enums.OwnershipType;
 import com.murat.book_exchange_api.domain.enums.TransactionType;
 import com.murat.book_exchange_api.domain.user.User;
+import com.murat.book_exchange_api.domain.user.UserRepository;
 import com.murat.book_exchange_api.repository.BookHoldingRepository;
 import com.murat.book_exchange_api.repository.BookOwnershipRepository;
 import com.murat.book_exchange_api.repository.BookRepository;
 import com.murat.book_exchange_api.repository.BookTransactionRepository;
 import com.murat.book_exchange_api.repository.CommunityRepository;
-import com.murat.book_exchange_api.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -563,35 +563,6 @@ public class BookService {
                 }
 
                 return ChronoUnit.DAYS.between(holding.getDueAt(), Instant.now());
-        }
-
-        private boolean canExtendLoan(BookHolding holding, Long requesterUserId) {
-                if (holding == null) {
-                        return false;
-                }
-
-                if (holding.getStatus() != BookStatus.ON_LOAN) {
-                        return false;
-                }
-
-                if (holding.getCurrentHolderUser() == null) {
-                        return false;
-                }
-
-                if (!holding.getCurrentHolderUser().getId().equals(requesterUserId)) {
-                        return false;
-                }
-
-                if (holding.getDueAt() == null) {
-                        return false;
-                }
-
-                if (holding.getDueAt().isBefore(Instant.now())) {
-                        return false;
-                }
-
-                Integer count = holding.getLoanExtendedCount() == null ? 0 : holding.getLoanExtendedCount();
-                return count < MAX_LOAN_EXTENSIONS;
         }
 
         private Instant addCalendarMonths(Instant baseInstant, int months) {

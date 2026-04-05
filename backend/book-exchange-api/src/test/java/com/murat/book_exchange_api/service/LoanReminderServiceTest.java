@@ -29,9 +29,9 @@ import com.murat.book_exchange_api.domain.enums.BookStatus;
 import com.murat.book_exchange_api.domain.enums.ReminderStatus;
 import com.murat.book_exchange_api.domain.enums.ReminderType;
 import com.murat.book_exchange_api.domain.user.User;
+import com.murat.book_exchange_api.domain.user.UserRepository;
 import com.murat.book_exchange_api.repository.BookHoldingRepository;
 import com.murat.book_exchange_api.repository.LoanReminderRepository;
-import com.murat.book_exchange_api.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 

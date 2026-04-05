@@ -28,12 +28,12 @@ import com.murat.book_exchange_api.domain.book.BookTransaction;
 import com.murat.book_exchange_api.domain.enums.BookStatus;
 import com.murat.book_exchange_api.domain.enums.OwnershipType;
 import com.murat.book_exchange_api.domain.user.User;
+import com.murat.book_exchange_api.domain.user.UserRepository;
 import com.murat.book_exchange_api.repository.BookHoldingRepository;
 import com.murat.book_exchange_api.repository.BookOwnershipRepository;
 import com.murat.book_exchange_api.repository.BookRepository;
 import com.murat.book_exchange_api.repository.BookTransactionRepository;
 import com.murat.book_exchange_api.repository.CommunityRepository;
-import com.murat.book_exchange_api.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class BookServiceTest {
