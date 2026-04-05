@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
+import '../../../core/active_user_store.dart';
 import '../../../main.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
@@ -19,6 +20,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
   final TextEditingController _searchController = TextEditingController();
 
   late Future<List<Book>> _booksFuture;
+  late Future<List<UserSummary>> _usersFuture;
 
   String? _selectedStatus;
   String? _selectedOwnershipType;
@@ -30,6 +32,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
   void initState() {
     super.initState();
     _booksFuture = _apiService.fetchBooks();
+    _usersFuture = _apiService.fetchUsers();
     _searchController.addListener(_onSearchChanged);
   }
 
@@ -73,6 +76,14 @@ class _BooksListScreenState extends State<BooksListScreen> {
     await _booksFuture;
   }
 
+  Future<void> _reloadUsers() async {
+    setState(() {
+      _usersFuture = _apiService.fetchUsers();
+    });
+
+    await _usersFuture;
+  }
+
   void _clearFilters() {
     setState(() {
       _searchController.clear();
@@ -100,6 +111,129 @@ class _BooksListScreenState extends State<BooksListScreen> {
 
       return matchesSearch && matchesStatus && matchesOwnership;
     }).toList();
+  }
+
+  Widget _buildActiveUserSelector() {
+    return FutureBuilder<List<UserSummary>>(
+      future: _usersFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(child: Text('Loading users...')),
+                ],
+              ),
+            ),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  const Expanded(
+                    child: Text('Active user could not be loaded.'),
+                  ),
+                  OutlinedButton(
+                    onPressed: _reloadUsers,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        final users = snapshot.data ?? [];
+
+        if (users.isEmpty) {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text('No users available.'),
+            ),
+          );
+        }
+
+        return ValueListenableBuilder<int?>(
+          valueListenable: ActiveUserStore.currentUserId,
+          builder: (context, activeUserId, _) {
+            final selectedValue = users.any((u) => u.id == activeUserId)
+                ? activeUserId
+                : null;
+
+            return Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Active user (temporary)',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'This is a temporary helper until login/user context is added.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    const SizedBox(height: 12),
+                    DropdownButtonFormField<int?>(
+                      key: ValueKey(selectedValue),
+                      initialValue: selectedValue,
+                      decoration: InputDecoration(
+                        labelText: 'Current app user',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      items: [
+                        const DropdownMenuItem<int?>(
+                          value: null,
+                          child: Text('No active user selected'),
+                        ),
+                        ...users.map(
+                          (user) => DropdownMenuItem<int?>(
+                            value: user.id,
+                            child: Text(user.displayLabel()),
+                          ),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        ActiveUserStore.setUserId(value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   Widget _buildSearchField(AppLocalizations l10n) {
@@ -263,6 +397,8 @@ class _BooksListScreenState extends State<BooksListScreen> {
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
       children: [
+        _buildActiveUserSelector(),
+        const SizedBox(height: 12),
         _buildSearchField(l10n),
         const SizedBox(height: 12),
         _buildFilters(l10n),

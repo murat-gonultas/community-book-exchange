@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
+import '../../../core/active_user_store.dart';
 import '../../../main.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
@@ -307,21 +308,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
-  Future<void> _extendLoan(BookDetail book) async {
+  Future<void> _extendLoan() async {
     final l10n = AppLocalizations.of(context)!;
-
-    final values = await _showUserActionDialog(
-      title: l10n.extendLoan,
-      userFieldKey: 'requesterUserId',
-      userFieldLabel: l10n.requesterUserId,
-      extraFields: const [],
-      initialUserId: book.currentHolderUserId,
-    );
-
-    if (!mounted) return;
-    if (values == null) return;
-
-    final requesterUserId = int.tryParse(values['requesterUserId'] ?? '');
+    final requesterUserId = ActiveUserStore.currentUserId.value;
 
     if (requesterUserId == null) {
       ScaffoldMessenger.of(
@@ -434,7 +423,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
-  List<String> _getActionHints(BookDetail book, AppLocalizations l10n) {
+  List<String> _getActionHints(
+    BookDetail book,
+    AppLocalizations l10n,
+    int? activeUserId,
+  ) {
     final hints = <String>[];
 
     final availableStatus = BookUiLabels.status('AVAILABLE', l10n);
@@ -457,7 +450,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       hints.add(l10n.hintDonateUnavailable(userOwnership));
     }
 
-    if (!BookActionRules.canExtend(book)) {
+    if (!BookActionRules.canExtend(book, activeUserId)) {
       if (book.status != 'ON_LOAN') {
         hints.add(l10n.hintExtendUnavailableNotOnLoan(onLoanStatus));
       } else if (book.overdue) {
@@ -470,8 +463,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     return hints;
   }
 
-  Widget _buildActionHints(BookDetail book, AppLocalizations l10n) {
-    final hints = _getActionHints(book, l10n);
+  Widget _buildActionHints(
+    BookDetail book,
+    AppLocalizations l10n,
+    int? activeUserId,
+  ) {
+    final hints = _getActionHints(book, l10n, activeUserId);
 
     if (hints.isEmpty) {
       return const SizedBox.shrink();
@@ -699,7 +696,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
-  Widget _buildActionsCard(BookDetail book, AppLocalizations l10n) {
+  Widget _buildActionsCard(
+    BookDetail book,
+    AppLocalizations l10n,
+    int? activeUserId,
+  ) {
     return _buildSectionCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -724,8 +725,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               ),
               _buildActionButton(
                 label: l10n.extendLoan,
-                enabled: BookActionRules.canExtend(book),
-                onPressed: () => _extendLoan(book),
+                enabled: BookActionRules.canExtend(book, activeUserId),
+                onPressed: _extendLoan,
                 icon: Icons.update,
               ),
               _buildActionButton(
@@ -742,7 +743,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               ),
             ],
           ),
-          _buildActionHints(book, l10n),
+          _buildActionHints(book, l10n, activeUserId),
         ],
       ),
     );
@@ -771,72 +772,85 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.bookTitleWithId(widget.bookId)),
-        actions: [
-          PopupMenuButton<String>(
-            tooltip: l10n.language,
-            onSelected: _changeLanguage,
-            itemBuilder: (context) => [
-              PopupMenuItem(value: 'system', child: Text(l10n.systemLanguage)),
-              PopupMenuItem(value: 'de', child: Text(l10n.german)),
-              PopupMenuItem(value: 'en', child: Text(l10n.english)),
-              PopupMenuItem(value: 'tr', child: Text(l10n.turkish)),
+    return ValueListenableBuilder<int?>(
+      valueListenable: ActiveUserStore.currentUserId,
+      builder: (context, activeUserId, _) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(l10n.bookTitleWithId(widget.bookId)),
+            actions: [
+              PopupMenuButton<String>(
+                tooltip: l10n.language,
+                onSelected: _changeLanguage,
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 'system',
+                    child: Text(l10n.systemLanguage),
+                  ),
+                  PopupMenuItem(value: 'de', child: Text(l10n.german)),
+                  PopupMenuItem(value: 'en', child: Text(l10n.english)),
+                  PopupMenuItem(value: 'tr', child: Text(l10n.turkish)),
+                ],
+                icon: const Icon(Icons.language),
+              ),
             ],
-            icon: const Icon(Icons.language),
           ),
-        ],
-      ),
-      body: FutureBuilder<BookDetail>(
-        future: _bookDetailFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+          body: FutureBuilder<BookDetail>(
+            future: _bookDetailFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-          if (snapshot.hasError) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      l10n.failedToLoadBookDetail(snapshot.error.toString()),
-                      textAlign: TextAlign.center,
+              if (snapshot.hasError) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          l10n.failedToLoadBookDetail(
+                            snapshot.error.toString(),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        ElevatedButton(
+                          onPressed: _reload,
+                          child: Text(l10n.retry),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 12),
-                    ElevatedButton(onPressed: _reload, child: Text(l10n.retry)),
+                  ),
+                );
+              }
+
+              final book = snapshot.data!;
+
+              return RefreshIndicator(
+                onRefresh: _reload,
+                child: ListView(
+                  padding: const EdgeInsets.all(16),
+                  children: [
+                    _buildHeaderCard(book, l10n),
+                    const SizedBox(height: 16),
+                    _buildDetailsCard(book, l10n),
+                    if (book.overdue) ...[
+                      const SizedBox(height: 16),
+                      _buildOverdueCard(book, l10n),
+                    ],
+                    const SizedBox(height: 16),
+                    _buildActionsCard(book, l10n, activeUserId),
+                    const SizedBox(height: 16),
+                    _buildTransactionsSection(book, l10n),
                   ],
                 ),
-              ),
-            );
-          }
-
-          final book = snapshot.data!;
-
-          return RefreshIndicator(
-            onRefresh: _reload,
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                _buildHeaderCard(book, l10n),
-                const SizedBox(height: 16),
-                _buildDetailsCard(book, l10n),
-                if (book.overdue) ...[
-                  const SizedBox(height: 16),
-                  _buildOverdueCard(book, l10n),
-                ],
-                const SizedBox(height: 16),
-                _buildActionsCard(book, l10n),
-                const SizedBox(height: 16),
-                _buildTransactionsSection(book, l10n),
-              ],
-            ),
-          );
-        },
-      ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
@@ -865,8 +879,10 @@ class BookActionRules {
     return book.ownershipType == 'USER';
   }
 
-  static bool canExtend(BookDetail book) {
-    return book.status == 'ON_LOAN' &&
+  static bool canExtend(BookDetail book, int? activeUserId) {
+    return activeUserId != null &&
+        book.status == 'ON_LOAN' &&
+        book.currentHolderUserId == activeUserId &&
         !book.overdue &&
         (book.loanExtendedCount ?? 0) < 2;
   }
