@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
-import '../../../core/active_user_store.dart';
 import '../../../main.dart';
+import '../../auth/data/auth_models.dart';
+import '../../borrow_requests/data/borrow_request_api_service.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
 import 'book_ui_labels.dart';
@@ -17,29 +18,45 @@ class BookDetailScreen extends StatefulWidget {
 }
 
 class _BookDetailScreenState extends State<BookDetailScreen> {
-  final BookApiService _apiService = BookApiService();
-  late Future<BookDetail> _bookDetailFuture;
-  late Future<List<UserSummary>> _usersFuture;
-  late Future<List<CommunitySummary>> _communitiesFuture;
+  late BookApiService _apiService;
+  late BorrowRequestApiService _borrowRequestApiService;
+
+  Future<BookDetail>? _bookDetailFuture;
+  Future<List<UserSummary>>? _usersFuture;
+  Future<List<CommunitySummary>>? _communitiesFuture;
+
+  bool _didLoad = false;
 
   @override
-  void initState() {
-    super.initState();
-    _bookDetailFuture = _apiService.fetchBookDetail(widget.bookId);
-    _usersFuture = _apiService.fetchUsers();
-    _communitiesFuture = _apiService.fetchCommunities();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final token = CommunityBookExchangeApp.of(context)?.currentSession?.token;
+    _apiService = BookApiService(bearerToken: token);
+    _borrowRequestApiService = BorrowRequestApiService(bearerToken: token);
+
+    if (!_didLoad) {
+      _bookDetailFuture = _apiService.fetchBookDetail(widget.bookId);
+      _usersFuture = _apiService.fetchUsers();
+      _communitiesFuture = _apiService.fetchCommunities();
+      _didLoad = true;
+    }
   }
 
   Future<void> _reload() async {
     setState(() {
       _bookDetailFuture = _apiService.fetchBookDetail(widget.bookId);
     });
+
+    await _bookDetailFuture;
   }
 
   void _changeLanguage(String value) {
     final appState = CommunityBookExchangeApp.of(context);
 
-    if (appState == null) return;
+    if (appState == null) {
+      return;
+    }
 
     switch (value) {
       case 'system':
@@ -66,7 +83,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     try {
       await action();
 
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       ScaffoldMessenger.of(
         context,
@@ -74,12 +93,53 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
       await _reload();
     } catch (e) {
-      if (!mounted) return;
+      if (!mounted) {
+        return;
+      }
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.actionFailed(e.toString()))));
     }
+  }
+
+  Future<String?> _showTextInputDialog({
+    required String title,
+    required String label,
+    String? submitLabel,
+  }) async {
+    final controller = TextEditingController();
+
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              labelText: label,
+              border: const OutlineInputBorder(),
+            ),
+            maxLines: 3,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () =>
+                  Navigator.of(context).pop(controller.text.trim()),
+              child: Text(submitLabel ?? 'Submit'),
+            ),
+          ],
+        );
+      },
+    );
+
+    controller.dispose();
+    return result;
   }
 
   Future<Map<String, String>?> _showUserActionDialog({
@@ -89,9 +149,24 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     required List<_DialogFieldConfig> extraFields,
     int? initialUserId,
   }) async {
-    final users = await _usersFuture;
+    final l10n = AppLocalizations.of(context)!;
 
-    if (!mounted) return null;
+    List<UserSummary> users;
+
+    try {
+      users = await _usersFuture!;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.actionFailed(e.toString()))),
+        );
+      }
+      return null;
+    }
+
+    if (!mounted) {
+      return null;
+    }
 
     final controllers = {
       for (final field in extraFields) field.key: TextEditingController(),
@@ -185,9 +260,24 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     required String communityFieldLabel,
     required List<_DialogFieldConfig> extraFields,
   }) async {
-    final communities = await _communitiesFuture;
+    final l10n = AppLocalizations.of(context)!;
 
-    if (!mounted) return null;
+    List<CommunitySummary> communities;
+
+    try {
+      communities = await _communitiesFuture!;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.actionFailed(e.toString()))),
+        );
+      }
+      return null;
+    }
+
+    if (!mounted) {
+      return null;
+    }
 
     final controllers = {
       for (final field in extraFields) field.key: TextEditingController(),
@@ -276,6 +366,26 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     return result;
   }
 
+  Future<void> _createBorrowRequest(BookDetail book) async {
+    final message = await _showTextInputDialog(
+      title: 'Create borrow request',
+      label: 'Message (optional)',
+      submitLabel: 'Send request',
+    );
+
+    if (message == null) {
+      return;
+    }
+
+    await _runAction(
+      () => _borrowRequestApiService.createBorrowRequest(
+        bookId: book.bookId,
+        message: message,
+      ),
+      'Borrow request created successfully.',
+    );
+  }
+
   Future<void> _loanBook() async {
     final l10n = AppLocalizations.of(context)!;
 
@@ -286,8 +396,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
-    if (!mounted) return;
-    if (values == null) return;
+    if (!mounted || values == null) {
+      return;
+    }
 
     final loanedToUserId = int.tryParse(values['loanedToUserId'] ?? '');
 
@@ -309,20 +420,23 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   }
 
   Future<void> _extendLoan() async {
-    final l10n = AppLocalizations.of(context)!;
-    final requesterUserId = ActiveUserStore.currentUserId.value;
+    final currentUserId = _currentUserId;
 
-    if (requesterUserId == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.pleaseEnterValidUserId)));
+    if (currentUserId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You must be signed in to extend a loan.'),
+        ),
+      );
       return;
     }
+
+    final l10n = AppLocalizations.of(context)!;
 
     await _runAction(() async {
       await _apiService.extendLoan(
         bookId: widget.bookId,
-        requesterUserId: requesterUserId,
+        requesterUserId: currentUserId,
       );
     }, l10n.bookExtendedSuccessfully);
   }
@@ -337,8 +451,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
-    if (!mounted) return;
-    if (values == null) return;
+    if (!mounted || values == null) {
+      return;
+    }
 
     final returnedByUserId = int.tryParse(values['returnedByUserId'] ?? '');
 
@@ -369,8 +484,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
-    if (!mounted) return;
-    if (values == null) return;
+    if (!mounted || values == null) {
+      return;
+    }
 
     final newOwnerUserId = int.tryParse(values['newOwnerUserId'] ?? '');
 
@@ -401,8 +517,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       extraFields: [_DialogFieldConfig(key: 'note', label: l10n.note)],
     );
 
-    if (!mounted) return;
-    if (values == null) return;
+    if (!mounted || values == null) {
+      return;
+    }
 
     final communityId = int.tryParse(values['communityId'] ?? '');
 
@@ -423,16 +540,35 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
+  int? get _currentUserId {
+    return CommunityBookExchangeApp.of(context)?.currentUserId;
+  }
+
+  AuthSession? get _currentSession {
+    return CommunityBookExchangeApp.of(context)?.currentSession;
+  }
+
   List<String> _getActionHints(
     BookDetail book,
     AppLocalizations l10n,
-    int? activeUserId,
+    int? currentUserId,
   ) {
     final hints = <String>[];
 
     final availableStatus = BookUiLabels.status('AVAILABLE', l10n);
     final onLoanStatus = BookUiLabels.status('ON_LOAN', l10n);
     final userOwnership = BookUiLabels.ownershipType('USER', l10n);
+
+    if (!BookActionRules.canCreateBorrowRequest(book, currentUserId)) {
+      if (currentUserId == null) {
+        hints.add('You must be signed in to create a borrow request.');
+      } else if (book.status != 'AVAILABLE') {
+        hints.add('Borrow requests can only be created for available books.');
+      } else if (book.ownerUserId != null &&
+          book.ownerUserId == currentUserId) {
+        hints.add('You cannot create a borrow request for your own book.');
+      }
+    }
 
     if (!BookActionRules.canLoan(book)) {
       hints.add(l10n.hintLoanUnavailable(availableStatus));
@@ -450,13 +586,17 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
       hints.add(l10n.hintDonateUnavailable(userOwnership));
     }
 
-    if (!BookActionRules.canExtend(book, activeUserId)) {
-      if (book.status != 'ON_LOAN') {
+    if (!BookActionRules.canExtend(book, currentUserId)) {
+      if (currentUserId == null) {
+        hints.add('Loan extension needs a signed-in user context.');
+      } else if (book.status != 'ON_LOAN') {
         hints.add(l10n.hintExtendUnavailableNotOnLoan(onLoanStatus));
       } else if (book.overdue) {
         hints.add(l10n.hintExtendUnavailableOverdue);
       } else if ((book.loanExtendedCount ?? 0) >= 2) {
         hints.add(l10n.hintExtendUnavailableMaxReached);
+      } else if (book.currentHolderUserId != currentUserId) {
+        hints.add('Only the current holder can extend this loan.');
       }
     }
 
@@ -466,9 +606,9 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Widget _buildActionHints(
     BookDetail book,
     AppLocalizations l10n,
-    int? activeUserId,
+    int? currentUserId,
   ) {
-    final hints = _getActionHints(book, l10n, activeUserId);
+    final hints = _getActionHints(book, l10n, currentUserId);
 
     if (hints.isEmpty) {
       return const SizedBox.shrink();
@@ -593,6 +733,48 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     );
   }
 
+  Widget _buildSessionInfoCard() {
+    final session = _currentSession;
+
+    if (session == null) {
+      return const SizedBox.shrink();
+    }
+
+    return _buildSectionCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Signed in as', style: Theme.of(context).textTheme.titleMedium),
+          const SizedBox(height: 8),
+          Text(session.displayName),
+          if (session.email != null && session.email!.trim().isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Text(session.email!),
+          ],
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              if (session.userId != null)
+                _buildBadge(
+                  context: context,
+                  icon: Icons.badge_outlined,
+                  label: 'User #${session.userId}',
+                ),
+              if (session.role != null && session.role!.trim().isNotEmpty)
+                _buildBadge(
+                  context: context,
+                  icon: Icons.verified_user_outlined,
+                  label: session.role!,
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDetailsCard(BookDetail book, AppLocalizations l10n) {
     return _buildSectionCard(
       child: Column(
@@ -699,7 +881,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Widget _buildActionsCard(
     BookDetail book,
     AppLocalizations l10n,
-    int? activeUserId,
+    int? currentUserId,
   ) {
     return _buildSectionCard(
       child: Column(
@@ -711,6 +893,15 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             spacing: 8,
             runSpacing: 8,
             children: [
+              _buildActionButton(
+                label: 'Borrow request',
+                enabled: BookActionRules.canCreateBorrowRequest(
+                  book,
+                  currentUserId,
+                ),
+                onPressed: () => _createBorrowRequest(book),
+                icon: Icons.send_outlined,
+              ),
               _buildActionButton(
                 label: l10n.loan,
                 enabled: BookActionRules.canLoan(book),
@@ -725,7 +916,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               ),
               _buildActionButton(
                 label: l10n.extendLoan,
-                enabled: BookActionRules.canExtend(book, activeUserId),
+                enabled: BookActionRules.canExtend(book, currentUserId),
                 onPressed: _extendLoan,
                 icon: Icons.update,
               ),
@@ -743,7 +934,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               ),
             ],
           ),
-          _buildActionHints(book, l10n, activeUserId),
+          _buildActionHints(book, l10n, currentUserId),
         ],
       ),
     );
@@ -772,85 +963,80 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
-    return ValueListenableBuilder<int?>(
-      valueListenable: ActiveUserStore.currentUserId,
-      builder: (context, activeUserId, _) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(l10n.bookTitleWithId(widget.bookId)),
-            actions: [
-              PopupMenuButton<String>(
-                tooltip: l10n.language,
-                onSelected: _changeLanguage,
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'system',
-                    child: Text(l10n.systemLanguage),
-                  ),
-                  PopupMenuItem(value: 'de', child: Text(l10n.german)),
-                  PopupMenuItem(value: 'en', child: Text(l10n.english)),
-                  PopupMenuItem(value: 'tr', child: Text(l10n.turkish)),
-                ],
-                icon: const Icon(Icons.language),
-              ),
+    if (_bookDetailFuture == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final currentUserId = _currentUserId;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.bookTitleWithId(widget.bookId)),
+        actions: [
+          PopupMenuButton<String>(
+            tooltip: l10n.language,
+            onSelected: _changeLanguage,
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'system', child: Text(l10n.systemLanguage)),
+              PopupMenuItem(value: 'de', child: Text(l10n.german)),
+              PopupMenuItem(value: 'en', child: Text(l10n.english)),
+              PopupMenuItem(value: 'tr', child: Text(l10n.turkish)),
             ],
+            icon: const Icon(Icons.language),
           ),
-          body: FutureBuilder<BookDetail>(
-            future: _bookDetailFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+        ],
+      ),
+      body: FutureBuilder<BookDetail>(
+        future: _bookDetailFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-              if (snapshot.hasError) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          l10n.failedToLoadBookDetail(
-                            snapshot.error.toString(),
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
-                          onPressed: _reload,
-                          child: Text(l10n.retry),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-
-              final book = snapshot.data!;
-
-              return RefreshIndicator(
-                onRefresh: _reload,
-                child: ListView(
-                  padding: const EdgeInsets.all(16),
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildHeaderCard(book, l10n),
-                    const SizedBox(height: 16),
-                    _buildDetailsCard(book, l10n),
-                    if (book.overdue) ...[
-                      const SizedBox(height: 16),
-                      _buildOverdueCard(book, l10n),
-                    ],
-                    const SizedBox(height: 16),
-                    _buildActionsCard(book, l10n, activeUserId),
-                    const SizedBox(height: 16),
-                    _buildTransactionsSection(book, l10n),
+                    Text(
+                      l10n.failedToLoadBookDetail(snapshot.error.toString()),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(onPressed: _reload, child: Text(l10n.retry)),
                   ],
                 ),
-              );
-            },
-          ),
-        );
-      },
+              ),
+            );
+          }
+
+          final book = snapshot.data!;
+
+          return RefreshIndicator(
+            onRefresh: _reload,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                _buildHeaderCard(book, l10n),
+                const SizedBox(height: 16),
+                _buildSessionInfoCard(),
+                const SizedBox(height: 16),
+                _buildDetailsCard(book, l10n),
+                if (book.overdue) ...[
+                  const SizedBox(height: 16),
+                  _buildOverdueCard(book, l10n),
+                ],
+                const SizedBox(height: 16),
+                _buildActionsCard(book, l10n, currentUserId),
+                const SizedBox(height: 16),
+                _buildTransactionsSection(book, l10n),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
@@ -863,6 +1049,12 @@ class _DialogFieldConfig {
 }
 
 class BookActionRules {
+  static bool canCreateBorrowRequest(BookDetail book, int? currentUserId) {
+    return currentUserId != null &&
+        book.status == 'AVAILABLE' &&
+        book.ownerUserId != currentUserId;
+  }
+
   static bool canLoan(BookDetail book) {
     return book.status == 'AVAILABLE';
   }
@@ -879,10 +1071,10 @@ class BookActionRules {
     return book.ownershipType == 'USER';
   }
 
-  static bool canExtend(BookDetail book, int? activeUserId) {
-    return activeUserId != null &&
+  static bool canExtend(BookDetail book, int? currentUserId) {
+    return currentUserId != null &&
         book.status == 'ON_LOAN' &&
-        book.currentHolderUserId == activeUserId &&
+        book.currentHolderUserId == currentUserId &&
         !book.overdue &&
         (book.loanExtendedCount ?? 0) < 2;
   }

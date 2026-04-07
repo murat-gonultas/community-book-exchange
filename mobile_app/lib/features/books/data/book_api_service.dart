@@ -7,8 +7,15 @@ import 'book_models.dart';
 class BookApiService {
   static const String _baseUrl = 'http://localhost:8080';
 
+  final String? bearerToken;
+
+  BookApiService({this.bearerToken});
+
   Future<List<Book>> fetchBooks() async {
-    final response = await http.get(Uri.parse('$_baseUrl/api/books'));
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/books'),
+      headers: _headers(),
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to load books');
@@ -22,7 +29,10 @@ class BookApiService {
   }
 
   Future<BookDetail> fetchBookDetail(int bookId) async {
-    final response = await http.get(Uri.parse('$_baseUrl/api/books/$bookId'));
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/books/$bookId'),
+      headers: _headers(),
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to load book detail');
@@ -35,7 +45,10 @@ class BookApiService {
   }
 
   Future<List<UserSummary>> fetchUsers() async {
-    final response = await http.get(Uri.parse('$_baseUrl/api/users'));
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/users'),
+      headers: _headers(),
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to load users');
@@ -49,7 +62,10 @@ class BookApiService {
   }
 
   Future<List<CommunitySummary>> fetchCommunities() async {
-    final response = await http.get(Uri.parse('$_baseUrl/api/communities'));
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/communities'),
+      headers: _headers(),
+    );
 
     if (response.statusCode != 200) {
       throw Exception('Failed to load communities');
@@ -69,7 +85,7 @@ class BookApiService {
   }) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/books/$bookId/loan'),
-      headers: {'Content-Type': 'application/json'},
+      headers: _headers(includeJson: true),
       body: jsonEncode({'loanedToUserId': loanedToUserId, 'note': note}),
     );
 
@@ -85,7 +101,7 @@ class BookApiService {
   }) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/books/$bookId/return'),
-      headers: {'Content-Type': 'application/json'},
+      headers: _headers(includeJson: true),
       body: jsonEncode({'returnedByUserId': returnedByUserId, 'note': note}),
     );
 
@@ -101,7 +117,7 @@ class BookApiService {
   }) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/books/$bookId/gift'),
-      headers: {'Content-Type': 'application/json'},
+      headers: _headers(includeJson: true),
       body: jsonEncode({'newOwnerUserId': newOwnerUserId, 'note': note}),
     );
 
@@ -117,7 +133,7 @@ class BookApiService {
   }) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/books/$bookId/donate'),
-      headers: {'Content-Type': 'application/json'},
+      headers: _headers(includeJson: true),
       body: jsonEncode({'communityId': communityId, 'note': note}),
     );
 
@@ -132,7 +148,7 @@ class BookApiService {
   }) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/books/$bookId/extend-loan'),
-      headers: {'Content-Type': 'application/json'},
+      headers: _headers(includeJson: true),
       body: jsonEncode({'requesterUserId': requesterUserId}),
     );
 
@@ -143,6 +159,20 @@ class BookApiService {
     }
 
     throw Exception(_extractErrorMessage(response));
+  }
+
+  Map<String, String> _headers({bool includeJson = false}) {
+    final headers = <String, String>{};
+
+    if (includeJson) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    if (bearerToken != null && bearerToken!.trim().isNotEmpty) {
+      headers['Authorization'] = 'Bearer $bearerToken';
+    }
+
+    return headers;
   }
 
   String _extractErrorMessage(http.Response response) {

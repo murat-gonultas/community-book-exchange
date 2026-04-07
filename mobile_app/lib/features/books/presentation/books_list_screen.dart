@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
-import '../../../core/active_user_store.dart';
 import '../../../main.dart';
+import '../../auth/data/auth_models.dart';
+import '../../borrow_requests/presentation/incoming_borrow_requests_screen.dart';
+import '../../borrow_requests/presentation/my_borrow_requests_screen.dart';
 import '../data/book_api_service.dart';
 import '../data/book_models.dart';
 import 'book_detail_screen.dart';
@@ -16,14 +18,14 @@ class BooksListScreen extends StatefulWidget {
 }
 
 class _BooksListScreenState extends State<BooksListScreen> {
-  final BookApiService _apiService = BookApiService();
   final TextEditingController _searchController = TextEditingController();
 
-  late Future<List<Book>> _booksFuture;
-  late Future<List<UserSummary>> _usersFuture;
+  late BookApiService _apiService;
+  Future<List<Book>>? _booksFuture;
 
   String? _selectedStatus;
   String? _selectedOwnershipType;
+  bool _didLoad = false;
 
   static const List<String> _statusOptions = ['AVAILABLE', 'ON_LOAN'];
   static const List<String> _ownershipOptions = ['USER', 'COMMUNITY'];
@@ -31,9 +33,20 @@ class _BooksListScreenState extends State<BooksListScreen> {
   @override
   void initState() {
     super.initState();
-    _booksFuture = _apiService.fetchBooks();
-    _usersFuture = _apiService.fetchUsers();
     _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final token = CommunityBookExchangeApp.of(context)?.currentSession?.token;
+    _apiService = BookApiService(bearerToken: token);
+
+    if (!_didLoad) {
+      _booksFuture = _apiService.fetchBooks();
+      _didLoad = true;
+    }
   }
 
   @override
@@ -50,7 +63,9 @@ class _BooksListScreenState extends State<BooksListScreen> {
   void _changeLanguage(String value) {
     final appState = CommunityBookExchangeApp.of(context);
 
-    if (appState == null) return;
+    if (appState == null) {
+      return;
+    }
 
     switch (value) {
       case 'system':
@@ -68,20 +83,17 @@ class _BooksListScreenState extends State<BooksListScreen> {
     }
   }
 
+  Future<void> _logout() async {
+    final appState = CommunityBookExchangeApp.of(context);
+    await appState?.logout();
+  }
+
   Future<void> _reloadBooks() async {
     setState(() {
       _booksFuture = _apiService.fetchBooks();
     });
 
     await _booksFuture;
-  }
-
-  Future<void> _reloadUsers() async {
-    setState(() {
-      _usersFuture = _apiService.fetchUsers();
-    });
-
-    await _usersFuture;
   }
 
   void _clearFilters() {
@@ -113,126 +125,73 @@ class _BooksListScreenState extends State<BooksListScreen> {
     }).toList();
   }
 
-  Widget _buildActiveUserSelector() {
-    return FutureBuilder<List<UserSummary>>(
-      future: _usersFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(child: Text('Loading users...')),
-                ],
-              ),
-            ),
-          );
-        }
+  Future<void> _openMyRequests() async {
+    await Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const MyBorrowRequestsScreen()));
+  }
 
-        if (snapshot.hasError) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  const Expanded(
-                    child: Text('Active user could not be loaded.'),
-                  ),
-                  OutlinedButton(
-                    onPressed: _reloadUsers,
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
+  Future<void> _openIncomingRequests() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const IncomingBorrowRequestsScreen()),
+    );
+  }
 
-        final users = snapshot.data ?? [];
+  Widget _buildSessionCard(AuthSession? session) {
+    final name = session?.displayName ?? 'Authenticated user';
+    final email = session?.email;
+    final userId = session?.userId;
+    final role = session?.role;
 
-        if (users.isEmpty) {
-          return Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('No users available.'),
-            ),
-          );
-        }
-
-        return ValueListenableBuilder<int?>(
-          valueListenable: ActiveUserStore.currentUserId,
-          builder: (context, activeUserId, _) {
-            final selectedValue = users.any((u) => u.id == activeUserId)
-                ? activeUserId
-                : null;
-
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Active user (temporary)',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'This is a temporary helper until login/user context is added.',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    const SizedBox(height: 12),
-                    DropdownButtonFormField<int?>(
-                      key: ValueKey(selectedValue),
-                      initialValue: selectedValue,
-                      decoration: InputDecoration(
-                        labelText: 'Current app user',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      items: [
-                        const DropdownMenuItem<int?>(
-                          value: null,
-                          child: Text('No active user selected'),
-                        ),
-                        ...users.map(
-                          (user) => DropdownMenuItem<int?>(
-                            value: user.id,
-                            child: Text(user.displayLabel()),
-                          ),
-                        ),
-                      ],
-                      onChanged: (value) {
-                        ActiveUserStore.setUserId(value);
-                      },
-                    ),
-                  ],
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Signed in', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
+            Text(name, style: Theme.of(context).textTheme.bodyLarge),
+            if (email != null && email.trim().isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(email),
+            ],
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                if (userId != null)
+                  _InfoChip(label: 'User #$userId', icon: Icons.badge_outlined),
+                if (role != null && role.trim().isNotEmpty)
+                  _InfoChip(label: role, icon: Icons.verified_user_outlined),
+                const _InfoChip(
+                  label: 'Session restored from local storage',
+                  icon: Icons.lock_outline,
                 ),
-              ),
-            );
-          },
-        );
-      },
+              ],
+            ),
+            const SizedBox(height: 14),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: _openMyRequests,
+                  icon: const Icon(Icons.outgoing_mail),
+                  label: const Text('My Requests'),
+                ),
+                OutlinedButton.icon(
+                  onPressed: _openIncomingRequests,
+                  icon: const Icon(Icons.inbox_outlined),
+                  label: const Text('Incoming Requests'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -392,12 +351,13 @@ class _BooksListScreenState extends State<BooksListScreen> {
 
   Widget _buildContent(List<Book> books, AppLocalizations l10n) {
     final filteredBooks = _applyFilters(books);
+    final session = CommunityBookExchangeApp.of(context)?.currentSession;
 
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
       children: [
-        _buildActiveUserSelector(),
+        _buildSessionCard(session),
         const SizedBox(height: 12),
         _buildSearchField(l10n),
         const SizedBox(height: 12),
@@ -418,7 +378,10 @@ class _BooksListScreenState extends State<BooksListScreen> {
                     ),
                   );
 
-                  if (!mounted) return;
+                  if (!mounted) {
+                    return;
+                  }
+
                   await _reloadBooks();
                 },
               ),
@@ -432,10 +395,19 @@ class _BooksListScreenState extends State<BooksListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
+    if (_booksFuture == null) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.bookListTitle),
         actions: [
+          IconButton(
+            tooltip: 'Logout',
+            onPressed: _logout,
+            icon: const Icon(Icons.logout),
+          ),
           PopupMenuButton<String>(
             tooltip: l10n.language,
             onSelected: _changeLanguage,
