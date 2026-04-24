@@ -157,5 +157,42 @@
         "type": "int"
       }
     }
-  }
+  },
+  "login": "Login",
+  "register": "Register",
+  "authNoAccountYetRegister": "No account yet? Register",
+  "authAlreadyHaveAccountLogin": "Already have an account? Login",
+  "authVerificationRequiredNote": "Note: if your backend requires email verification, register first and then verify before logging in.",
+  "navMyRequests": "My Requests",
+  "navIncomingRequests": "Incoming Requests",
+  "borrowRequestAction": "Borrow request",
+  "borrowRequestCreateTitle": "Create borrow request",
+  "borrowRequestCreatedSuccess": "Borrow request created successfully.",
+  "borrowRequestHintSignInRequired": "You must be signed in to create a borrow request.",
+  "borrowRequestHintAvailableOnly": "Borrow requests can only be created for available books.",
+  "borrowRequestHintOwnBook": "You cannot create a borrow request for your own book.",
+  "myBorrowRequestsTitle": "My Borrow Requests",
+  "myBorrowRequestsEmpty": "You do not have any borrow requests yet.",
+  "myBorrowRequestsLoadError": "Failed to load your borrow requests.\n\n{error}",
+  "@myBorrowRequestsLoadError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "borrowRequestCancelTitle": "Cancel borrow request",
+  "borrowRequestCancelledSuccess": "Borrow request cancelled successfully.",
+  "incomingBorrowRequestsTitle": "Incoming Borrow Requests",
+  "incomingBorrowRequestsEmpty": "There are no incoming borrow requests right now.",
+  "incomingBorrowRequestsLoadError": "Failed to load incoming borrow requests.\n\n{error}",
+  "@incomingBorrowRequestsLoadError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "borrowRequestRejectTitle": "Reject borrow request",
+  "borrowRequestApproveTitle": "Approve borrow request",
+  "borrowRequestApprovedSuccess": "Borrow request approved successfully.",
+  "borrowRequestRejectedSuccess": "Borrow request rejected successfully.",
+  "borrowRequestFulfillTitle": "Fulfill borrow request",
+  "borrowRequestFulfilledSuccess": "Borrow request fulfilled and converted to loan."
 }

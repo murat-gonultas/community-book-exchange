@@ -39,11 +39,13 @@ class _MyBorrowRequestsScreenState extends State<MyBorrowRequestsScreen> {
   }
 
   Future<bool> _confirmCancel(BorrowRequestItem item) async {
+    final l10n = AppLocalizations.of(context)!;
+
     final result = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Cancel borrow request'),
+          title: Text(l10n.borrowRequestCancelTitle),
           content: Text(
             'Do you really want to cancel the request for "${item.titleOrFallback}"?',
           ),
@@ -65,6 +67,7 @@ class _MyBorrowRequestsScreenState extends State<MyBorrowRequestsScreen> {
   }
 
   Future<void> _cancelRequest(BorrowRequestItem item) async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await _confirmCancel(item);
 
     if (!mounted) {
@@ -83,7 +86,7 @@ class _MyBorrowRequestsScreenState extends State<MyBorrowRequestsScreen> {
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Borrow request cancelled successfully.')),
+        SnackBar(content: Text(l10n.borrowRequestCancelledSuccess)),
       );
 
       await _reload();
@@ -237,18 +240,17 @@ class _MyBorrowRequestsScreenState extends State<MyBorrowRequestsScreen> {
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
+
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
-      children: const [
-        SizedBox(height: 60),
-        Icon(Icons.inbox_outlined, size: 56),
-        SizedBox(height: 16),
+      children: [
+        const SizedBox(height: 60),
+        const Icon(Icons.inbox_outlined, size: 56),
+        const SizedBox(height: 16),
         Center(
-          child: Text(
-            'You do not have any borrow requests yet.',
-            textAlign: TextAlign.center,
-          ),
+          child: Text(l10n.myBorrowRequestsEmpty, textAlign: TextAlign.center),
         ),
       ],
     );
@@ -269,7 +271,7 @@ class _MyBorrowRequestsScreenState extends State<MyBorrowRequestsScreen> {
         ),
         const SizedBox(height: 16),
         Text(
-          'Failed to load your borrow requests.\n\n$error',
+          l10n.myBorrowRequestsLoadError(error.toString()),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
@@ -286,12 +288,14 @@ class _MyBorrowRequestsScreenState extends State<MyBorrowRequestsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_requestsFuture == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('My Borrow Requests')),
+      appBar: AppBar(title: Text(l10n.myBorrowRequestsTitle)),
       body: FutureBuilder<List<BorrowRequestItem>>(
         future: _requestsFuture,
         builder: (context, snapshot) {

@@ -63,12 +63,12 @@ class _IncomingBorrowRequestsScreenState
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             FilledButton(
               onPressed: () =>
                   Navigator.of(context).pop(controller.text.trim()),
-              child: Text(submitLabel ?? 'Submit'),
+              child: Text(submitLabel ?? AppLocalizations.of(context)!.submit),
             ),
           ],
         );
@@ -80,6 +80,7 @@ class _IncomingBorrowRequestsScreenState
   }
 
   Future<Map<String, String>?> _showRejectDialog() async {
+    final l10n = AppLocalizations.of(context)!;
     final reasonController = TextEditingController();
     final noteController = TextEditingController();
 
@@ -87,7 +88,7 @@ class _IncomingBorrowRequestsScreenState
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Reject borrow request'),
+          title: Text(l10n.borrowRequestRejectTitle),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -115,7 +116,7 @@ class _IncomingBorrowRequestsScreenState
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             FilledButton(
               onPressed: () {
@@ -137,8 +138,10 @@ class _IncomingBorrowRequestsScreenState
   }
 
   Future<void> _approveRequest(BorrowRequestItem item) async {
+    final l10n = AppLocalizations.of(context)!;
+
     final decisionNote = await _showSingleTextDialog(
-      title: 'Approve borrow request',
+      title: l10n.borrowRequestApproveTitle,
       label: 'Decision note (optional)',
       submitLabel: 'Approve',
     );
@@ -162,7 +165,7 @@ class _IncomingBorrowRequestsScreenState
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Borrow request approved successfully.')),
+        SnackBar(content: Text(l10n.borrowRequestApprovedSuccess)),
       );
 
       await _reload();
@@ -178,6 +181,7 @@ class _IncomingBorrowRequestsScreenState
   }
 
   Future<void> _rejectRequest(BorrowRequestItem item) async {
+    final l10n = AppLocalizations.of(context)!;
     final values = await _showRejectDialog();
 
     if (!mounted) {
@@ -210,7 +214,7 @@ class _IncomingBorrowRequestsScreenState
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Borrow request rejected successfully.')),
+        SnackBar(content: Text(l10n.borrowRequestRejectedSuccess)),
       );
 
       await _reload();
@@ -226,8 +230,10 @@ class _IncomingBorrowRequestsScreenState
   }
 
   Future<void> _fulfillRequest(BorrowRequestItem item) async {
+    final l10n = AppLocalizations.of(context)!;
+
     final note = await _showSingleTextDialog(
-      title: 'Fulfill borrow request',
+      title: l10n.borrowRequestFulfillTitle,
       label: 'Loan note (optional)',
       submitLabel: 'Fulfill',
     );
@@ -251,9 +257,7 @@ class _IncomingBorrowRequestsScreenState
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Borrow request fulfilled and converted to loan.'),
-        ),
+        SnackBar(content: Text(l10n.borrowRequestFulfilledSuccess)),
       );
 
       await _reload();
@@ -425,16 +429,18 @@ class _IncomingBorrowRequestsScreenState
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
+
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
-      children: const [
-        SizedBox(height: 60),
-        Icon(Icons.move_to_inbox_outlined, size: 56),
-        SizedBox(height: 16),
+      children: [
+        const SizedBox(height: 60),
+        const Icon(Icons.move_to_inbox_outlined, size: 56),
+        const SizedBox(height: 16),
         Center(
           child: Text(
-            'There are no incoming borrow requests right now.',
+            l10n.incomingBorrowRequestsEmpty,
             textAlign: TextAlign.center,
           ),
         ),
@@ -457,7 +463,7 @@ class _IncomingBorrowRequestsScreenState
         ),
         const SizedBox(height: 16),
         Text(
-          'Failed to load incoming borrow requests.\n\n$error',
+          l10n.incomingBorrowRequestsLoadError(error.toString()),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 16),
@@ -474,12 +480,14 @@ class _IncomingBorrowRequestsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     if (_requestsFuture == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Incoming Borrow Requests')),
+      appBar: AppBar(title: Text(l10n.incomingBorrowRequestsTitle)),
       body: FutureBuilder<List<BorrowRequestItem>>(
         future: _requestsFuture,
         builder: (context, snapshot) {

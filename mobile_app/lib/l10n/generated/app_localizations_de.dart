@@ -296,4 +296,101 @@ class AppLocalizationsDe extends AppLocalizations {
   String bookOverdueMessage(int days) {
     return 'Dieses Buch ist seit $days Tagen überfällig.';
   }
+
+  @override
+  String get login => 'Anmelden';
+
+  @override
+  String get register => 'Registrieren';
+
+  @override
+  String get authNoAccountYetRegister => 'Noch kein Konto? Registrieren';
+
+  @override
+  String get authAlreadyHaveAccountLogin =>
+      'Hast du bereits ein Konto? Anmelden';
+
+  @override
+  String get authVerificationRequiredNote =>
+      'Hinweis: Wenn dein Backend eine E-Mail-Bestätigung verlangt, registriere dich zuerst und bestätige dann deine E-Mail, bevor du dich anmeldest.';
+
+  @override
+  String get navMyRequests => 'Meine Anfragen';
+
+  @override
+  String get navIncomingRequests => 'Eingehende Anfragen';
+
+  @override
+  String get borrowRequestAction => 'Ausleihanfrage';
+
+  @override
+  String get borrowRequestCreateTitle => 'Ausleihanfrage erstellen';
+
+  @override
+  String get borrowRequestCreatedSuccess =>
+      'Ausleihanfrage erfolgreich erstellt.';
+
+  @override
+  String get borrowRequestHintSignInRequired =>
+      'Du musst angemeldet sein, um eine Ausleihanfrage zu erstellen.';
+
+  @override
+  String get borrowRequestHintAvailableOnly =>
+      'Ausleihanfragen können nur für verfügbare Bücher erstellt werden.';
+
+  @override
+  String get borrowRequestHintOwnBook =>
+      'Du kannst keine Ausleihanfrage für dein eigenes Buch erstellen.';
+
+  @override
+  String get myBorrowRequestsTitle => 'Meine Ausleihanfragen';
+
+  @override
+  String get myBorrowRequestsEmpty => 'Du hast noch keine Ausleihanfragen.';
+
+  @override
+  String myBorrowRequestsLoadError(Object error) {
+    return 'Deine Ausleihanfragen konnten nicht geladen werden.\n\n$error';
+  }
+
+  @override
+  String get borrowRequestCancelTitle => 'Ausleihanfrage stornieren';
+
+  @override
+  String get borrowRequestCancelledSuccess =>
+      'Ausleihanfrage erfolgreich storniert.';
+
+  @override
+  String get incomingBorrowRequestsTitle => 'Eingehende Ausleihanfragen';
+
+  @override
+  String get incomingBorrowRequestsEmpty =>
+      'Derzeit gibt es keine eingehenden Ausleihanfragen.';
+
+  @override
+  String incomingBorrowRequestsLoadError(Object error) {
+    return 'Eingehende Ausleihanfragen konnten nicht geladen werden.\n\n$error';
+  }
+
+  @override
+  String get borrowRequestRejectTitle => 'Ausleihanfrage ablehnen';
+
+  @override
+  String get borrowRequestApproveTitle => 'Ausleihanfrage genehmigen';
+
+  @override
+  String get borrowRequestApprovedSuccess =>
+      'Ausleihanfrage erfolgreich genehmigt.';
+
+  @override
+  String get borrowRequestRejectedSuccess =>
+      'Ausleihanfrage erfolgreich abgelehnt.';
+
+  @override
+  String get borrowRequestFulfillTitle =>
+      'Ausleihanfrage in Ausleihe umwandeln';
+
+  @override
+  String get borrowRequestFulfilledSuccess =>
+      'Ausleihanfrage wurde erfolgreich in eine Ausleihe umgewandelt.';
 }

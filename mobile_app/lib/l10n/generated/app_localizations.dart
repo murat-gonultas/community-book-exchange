@@ -627,6 +627,168 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This book is overdue by {days} days.'**
   String bookOverdueMessage(int days);
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @register.
+  ///
+  /// In en, this message translates to:
+  /// **'Register'**
+  String get register;
+
+  /// No description provided for @authNoAccountYetRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'No account yet? Register'**
+  String get authNoAccountYetRegister;
+
+  /// No description provided for @authAlreadyHaveAccountLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Login'**
+  String get authAlreadyHaveAccountLogin;
+
+  /// No description provided for @authVerificationRequiredNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: if your backend requires email verification, register first and then verify before logging in.'**
+  String get authVerificationRequiredNote;
+
+  /// No description provided for @navMyRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'My Requests'**
+  String get navMyRequests;
+
+  /// No description provided for @navIncomingRequests.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming Requests'**
+  String get navIncomingRequests;
+
+  /// No description provided for @borrowRequestAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow request'**
+  String get borrowRequestAction;
+
+  /// No description provided for @borrowRequestCreateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create borrow request'**
+  String get borrowRequestCreateTitle;
+
+  /// No description provided for @borrowRequestCreatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow request created successfully.'**
+  String get borrowRequestCreatedSuccess;
+
+  /// No description provided for @borrowRequestHintSignInRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be signed in to create a borrow request.'**
+  String get borrowRequestHintSignInRequired;
+
+  /// No description provided for @borrowRequestHintAvailableOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow requests can only be created for available books.'**
+  String get borrowRequestHintAvailableOnly;
+
+  /// No description provided for @borrowRequestHintOwnBook.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot create a borrow request for your own book.'**
+  String get borrowRequestHintOwnBook;
+
+  /// No description provided for @myBorrowRequestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Borrow Requests'**
+  String get myBorrowRequestsTitle;
+
+  /// No description provided for @myBorrowRequestsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You do not have any borrow requests yet.'**
+  String get myBorrowRequestsEmpty;
+
+  /// No description provided for @myBorrowRequestsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load your borrow requests.\n\n{error}'**
+  String myBorrowRequestsLoadError(Object error);
+
+  /// No description provided for @borrowRequestCancelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel borrow request'**
+  String get borrowRequestCancelTitle;
+
+  /// No description provided for @borrowRequestCancelledSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow request cancelled successfully.'**
+  String get borrowRequestCancelledSuccess;
+
+  /// No description provided for @incomingBorrowRequestsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Incoming Borrow Requests'**
+  String get incomingBorrowRequestsTitle;
+
+  /// No description provided for @incomingBorrowRequestsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no incoming borrow requests right now.'**
+  String get incomingBorrowRequestsEmpty;
+
+  /// No description provided for @incomingBorrowRequestsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load incoming borrow requests.\n\n{error}'**
+  String incomingBorrowRequestsLoadError(Object error);
+
+  /// No description provided for @borrowRequestRejectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject borrow request'**
+  String get borrowRequestRejectTitle;
+
+  /// No description provided for @borrowRequestApproveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve borrow request'**
+  String get borrowRequestApproveTitle;
+
+  /// No description provided for @borrowRequestApprovedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow request approved successfully.'**
+  String get borrowRequestApprovedSuccess;
+
+  /// No description provided for @borrowRequestRejectedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow request rejected successfully.'**
+  String get borrowRequestRejectedSuccess;
+
+  /// No description provided for @borrowRequestFulfillTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fulfill borrow request'**
+  String get borrowRequestFulfillTitle;
+
+  /// No description provided for @borrowRequestFulfilledSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Borrow request fulfilled and converted to loan.'**
+  String get borrowRequestFulfilledSuccess;
 }
 
 class _AppLocalizationsDelegate

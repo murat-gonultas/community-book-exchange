@@ -293,4 +293,100 @@ class AppLocalizationsEn extends AppLocalizations {
   String bookOverdueMessage(int days) {
     return 'This book is overdue by $days days.';
   }
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get register => 'Register';
+
+  @override
+  String get authNoAccountYetRegister => 'No account yet? Register';
+
+  @override
+  String get authAlreadyHaveAccountLogin => 'Already have an account? Login';
+
+  @override
+  String get authVerificationRequiredNote =>
+      'Note: if your backend requires email verification, register first and then verify before logging in.';
+
+  @override
+  String get navMyRequests => 'My Requests';
+
+  @override
+  String get navIncomingRequests => 'Incoming Requests';
+
+  @override
+  String get borrowRequestAction => 'Borrow request';
+
+  @override
+  String get borrowRequestCreateTitle => 'Create borrow request';
+
+  @override
+  String get borrowRequestCreatedSuccess =>
+      'Borrow request created successfully.';
+
+  @override
+  String get borrowRequestHintSignInRequired =>
+      'You must be signed in to create a borrow request.';
+
+  @override
+  String get borrowRequestHintAvailableOnly =>
+      'Borrow requests can only be created for available books.';
+
+  @override
+  String get borrowRequestHintOwnBook =>
+      'You cannot create a borrow request for your own book.';
+
+  @override
+  String get myBorrowRequestsTitle => 'My Borrow Requests';
+
+  @override
+  String get myBorrowRequestsEmpty =>
+      'You do not have any borrow requests yet.';
+
+  @override
+  String myBorrowRequestsLoadError(Object error) {
+    return 'Failed to load your borrow requests.\n\n$error';
+  }
+
+  @override
+  String get borrowRequestCancelTitle => 'Cancel borrow request';
+
+  @override
+  String get borrowRequestCancelledSuccess =>
+      'Borrow request cancelled successfully.';
+
+  @override
+  String get incomingBorrowRequestsTitle => 'Incoming Borrow Requests';
+
+  @override
+  String get incomingBorrowRequestsEmpty =>
+      'There are no incoming borrow requests right now.';
+
+  @override
+  String incomingBorrowRequestsLoadError(Object error) {
+    return 'Failed to load incoming borrow requests.\n\n$error';
+  }
+
+  @override
+  String get borrowRequestRejectTitle => 'Reject borrow request';
+
+  @override
+  String get borrowRequestApproveTitle => 'Approve borrow request';
+
+  @override
+  String get borrowRequestApprovedSuccess =>
+      'Borrow request approved successfully.';
+
+  @override
+  String get borrowRequestRejectedSuccess =>
+      'Borrow request rejected successfully.';
+
+  @override
+  String get borrowRequestFulfillTitle => 'Fulfill borrow request';
+
+  @override
+  String get borrowRequestFulfilledSuccess =>
+      'Borrow request fulfilled and converted to loan.';
 }

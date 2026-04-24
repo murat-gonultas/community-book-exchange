@@ -293,4 +293,99 @@ class AppLocalizationsTr extends AppLocalizations {
   String bookOverdueMessage(int days) {
     return 'Bu kitap $days gündür gecikmiş durumda.';
   }
+
+  @override
+  String get login => 'Giriş yap';
+
+  @override
+  String get register => 'Kayıt ol';
+
+  @override
+  String get authNoAccountYetRegister => 'Henüz hesabın yok mu? Kayıt ol';
+
+  @override
+  String get authAlreadyHaveAccountLogin => 'Zaten hesabın var mı? Giriş yap';
+
+  @override
+  String get authVerificationRequiredNote =>
+      'Not: Eğer backend e-posta doğrulaması istiyorsa, önce kayıt olmalı ve giriş yapmadan önce e-postanı doğrulamalısın.';
+
+  @override
+  String get navMyRequests => 'Taleplerim';
+
+  @override
+  String get navIncomingRequests => 'Gelen Talepler';
+
+  @override
+  String get borrowRequestAction => 'Ödünç alma talebi';
+
+  @override
+  String get borrowRequestCreateTitle => 'Ödünç alma talebi oluştur';
+
+  @override
+  String get borrowRequestCreatedSuccess =>
+      'Ödünç alma talebi başarıyla oluşturuldu.';
+
+  @override
+  String get borrowRequestHintSignInRequired =>
+      'Ödünç alma talebi oluşturmak için giriş yapmalısın.';
+
+  @override
+  String get borrowRequestHintAvailableOnly =>
+      'Ödünç alma talepleri yalnızca uygun durumdaki kitaplar için oluşturulabilir.';
+
+  @override
+  String get borrowRequestHintOwnBook =>
+      'Kendi kitabın için ödünç alma talebi oluşturamazsın.';
+
+  @override
+  String get myBorrowRequestsTitle => 'Ödünç Alma Taleplerim';
+
+  @override
+  String get myBorrowRequestsEmpty => 'Henüz hiç ödünç alma talebin yok.';
+
+  @override
+  String myBorrowRequestsLoadError(Object error) {
+    return 'Ödünç alma taleplerin yüklenemedi.\n\n$error';
+  }
+
+  @override
+  String get borrowRequestCancelTitle => 'Ödünç alma talebini iptal et';
+
+  @override
+  String get borrowRequestCancelledSuccess =>
+      'Ödünç alma talebi başarıyla iptal edildi.';
+
+  @override
+  String get incomingBorrowRequestsTitle => 'Gelen Ödünç Alma Talepleri';
+
+  @override
+  String get incomingBorrowRequestsEmpty =>
+      'Şu anda gelen bir ödünç alma talebi yok.';
+
+  @override
+  String incomingBorrowRequestsLoadError(Object error) {
+    return 'Gelen ödünç alma talepleri yüklenemedi.\n\n$error';
+  }
+
+  @override
+  String get borrowRequestRejectTitle => 'Ödünç alma talebini reddet';
+
+  @override
+  String get borrowRequestApproveTitle => 'Ödünç alma talebini onayla';
+
+  @override
+  String get borrowRequestApprovedSuccess =>
+      'Ödünç alma talebi başarıyla onaylandı.';
+
+  @override
+  String get borrowRequestRejectedSuccess =>
+      'Ödünç alma talebi başarıyla reddedildi.';
+
+  @override
+  String get borrowRequestFulfillTitle => 'Ödünç alma talebini ödünce dönüştür';
+
+  @override
+  String get borrowRequestFulfilledSuccess =>
+      'Ödünç alma talebi başarıyla ödünce dönüştürüldü.';
 }

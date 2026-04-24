@@ -157,5 +157,42 @@
         "type": "int"
       }
     }
-  }
+  },
+  "login": "Anmelden",
+  "register": "Registrieren",
+  "authNoAccountYetRegister": "Noch kein Konto? Registrieren",
+  "authAlreadyHaveAccountLogin": "Hast du bereits ein Konto? Anmelden",
+  "authVerificationRequiredNote": "Hinweis: Wenn dein Backend eine E-Mail-Bestätigung verlangt, registriere dich zuerst und bestätige dann deine E-Mail, bevor du dich anmeldest.",
+  "navMyRequests": "Meine Anfragen",
+  "navIncomingRequests": "Eingehende Anfragen",
+  "borrowRequestAction": "Ausleihanfrage",
+  "borrowRequestCreateTitle": "Ausleihanfrage erstellen",
+  "borrowRequestCreatedSuccess": "Ausleihanfrage erfolgreich erstellt.",
+  "borrowRequestHintSignInRequired": "Du musst angemeldet sein, um eine Ausleihanfrage zu erstellen.",
+  "borrowRequestHintAvailableOnly": "Ausleihanfragen können nur für verfügbare Bücher erstellt werden.",
+  "borrowRequestHintOwnBook": "Du kannst keine Ausleihanfrage für dein eigenes Buch erstellen.",
+  "myBorrowRequestsTitle": "Meine Ausleihanfragen",
+  "myBorrowRequestsEmpty": "Du hast noch keine Ausleihanfragen.",
+  "myBorrowRequestsLoadError": "Deine Ausleihanfragen konnten nicht geladen werden.\n\n{error}",
+  "@myBorrowRequestsLoadError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "borrowRequestCancelTitle": "Ausleihanfrage stornieren",
+  "borrowRequestCancelledSuccess": "Ausleihanfrage erfolgreich storniert.",
+  "incomingBorrowRequestsTitle": "Eingehende Ausleihanfragen",
+  "incomingBorrowRequestsEmpty": "Derzeit gibt es keine eingehenden Ausleihanfragen.",
+  "incomingBorrowRequestsLoadError": "Eingehende Ausleihanfragen konnten nicht geladen werden.\n\n{error}",
+  "@incomingBorrowRequestsLoadError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "borrowRequestRejectTitle": "Ausleihanfrage ablehnen",
+  "borrowRequestApproveTitle": "Ausleihanfrage genehmigen",
+  "borrowRequestApprovedSuccess": "Ausleihanfrage erfolgreich genehmigt.",
+  "borrowRequestRejectedSuccess": "Ausleihanfrage erfolgreich abgelehnt.",
+  "borrowRequestFulfillTitle": "Ausleihanfrage in Ausleihe umwandeln",
+  "borrowRequestFulfilledSuccess": "Ausleihanfrage wurde erfolgreich in eine Ausleihe umgewandelt."
 }

@@ -138,6 +138,7 @@ class _BooksListScreenState extends State<BooksListScreen> {
   }
 
   Widget _buildSessionCard(AuthSession? session) {
+    final l10n = AppLocalizations.of(context)!;
     final name = session?.displayName ?? 'Authenticated user';
     final email = session?.email;
     final userId = session?.userId;
@@ -180,12 +181,12 @@ class _BooksListScreenState extends State<BooksListScreen> {
                 OutlinedButton.icon(
                   onPressed: _openMyRequests,
                   icon: const Icon(Icons.outgoing_mail),
-                  label: const Text('My Requests'),
+                  label: Text(l10n.navMyRequests),
                 ),
                 OutlinedButton.icon(
                   onPressed: _openIncomingRequests,
                   icon: const Icon(Icons.inbox_outlined),
-                  label: const Text('Incoming Requests'),
+                  label: Text(l10n.navIncomingRequests),
                 ),
               ],
             ),

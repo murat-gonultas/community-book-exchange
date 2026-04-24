@@ -126,12 +126,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             FilledButton(
               onPressed: () =>
                   Navigator.of(context).pop(controller.text.trim()),
-              child: Text(submitLabel ?? 'Submit'),
+              child: Text(submitLabel ?? AppLocalizations.of(context)!.submit),
             ),
           ],
         );
@@ -367,8 +367,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   }
 
   Future<void> _createBorrowRequest(BookDetail book) async {
+    final l10n = AppLocalizations.of(context)!;
+
     final message = await _showTextInputDialog(
-      title: 'Create borrow request',
+      title: l10n.borrowRequestCreateTitle,
       label: 'Message (optional)',
       submitLabel: 'Send request',
     );
@@ -382,7 +384,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         bookId: book.bookId,
         message: message,
       ),
-      'Borrow request created successfully.',
+      l10n.borrowRequestCreatedSuccess,
     );
   }
 
@@ -561,12 +563,12 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
     if (!BookActionRules.canCreateBorrowRequest(book, currentUserId)) {
       if (currentUserId == null) {
-        hints.add('You must be signed in to create a borrow request.');
+        hints.add(l10n.borrowRequestHintSignInRequired);
       } else if (book.status != 'AVAILABLE') {
-        hints.add('Borrow requests can only be created for available books.');
+        hints.add(l10n.borrowRequestHintAvailableOnly);
       } else if (book.ownerUserId != null &&
           book.ownerUserId == currentUserId) {
-        hints.add('You cannot create a borrow request for your own book.');
+        hints.add(l10n.borrowRequestHintOwnBook);
       }
     }
 
@@ -894,7 +896,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             runSpacing: 8,
             children: [
               _buildActionButton(
-                label: 'Borrow request',
+                label: l10n.borrowRequestAction,
                 enabled: BookActionRules.canCreateBorrowRequest(
                   book,
                   currentUserId,

@@ -157,5 +157,42 @@
         "type": "int"
       }
     }
-  }
+  },
+  "login": "Giriş yap",
+  "register": "Kayıt ol",
+  "authNoAccountYetRegister": "Henüz hesabın yok mu? Kayıt ol",
+  "authAlreadyHaveAccountLogin": "Zaten hesabın var mı? Giriş yap",
+  "authVerificationRequiredNote": "Not: Eğer backend e-posta doğrulaması istiyorsa, önce kayıt olmalı ve giriş yapmadan önce e-postanı doğrulamalısın.",
+  "navMyRequests": "Taleplerim",
+  "navIncomingRequests": "Gelen Talepler",
+  "borrowRequestAction": "Ödünç alma talebi",
+  "borrowRequestCreateTitle": "Ödünç alma talebi oluştur",
+  "borrowRequestCreatedSuccess": "Ödünç alma talebi başarıyla oluşturuldu.",
+  "borrowRequestHintSignInRequired": "Ödünç alma talebi oluşturmak için giriş yapmalısın.",
+  "borrowRequestHintAvailableOnly": "Ödünç alma talepleri yalnızca uygun durumdaki kitaplar için oluşturulabilir.",
+  "borrowRequestHintOwnBook": "Kendi kitabın için ödünç alma talebi oluşturamazsın.",
+  "myBorrowRequestsTitle": "Ödünç Alma Taleplerim",
+  "myBorrowRequestsEmpty": "Henüz hiç ödünç alma talebin yok.",
+  "myBorrowRequestsLoadError": "Ödünç alma taleplerin yüklenemedi.\n\n{error}",
+  "@myBorrowRequestsLoadError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "borrowRequestCancelTitle": "Ödünç alma talebini iptal et",
+  "borrowRequestCancelledSuccess": "Ödünç alma talebi başarıyla iptal edildi.",
+  "incomingBorrowRequestsTitle": "Gelen Ödünç Alma Talepleri",
+  "incomingBorrowRequestsEmpty": "Şu anda gelen bir ödünç alma talebi yok.",
+  "incomingBorrowRequestsLoadError": "Gelen ödünç alma talepleri yüklenemedi.\n\n{error}",
+  "@incomingBorrowRequestsLoadError": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "borrowRequestRejectTitle": "Ödünç alma talebini reddet",
+  "borrowRequestApproveTitle": "Ödünç alma talebini onayla",
+  "borrowRequestApprovedSuccess": "Ödünç alma talebi başarıyla onaylandı.",
+  "borrowRequestRejectedSuccess": "Ödünç alma talebi başarıyla reddedildi.",
+  "borrowRequestFulfillTitle": "Ödünç alma talebini ödünce dönüştür",
+  "borrowRequestFulfilledSuccess": "Ödünç alma talebi başarıyla ödünce dönüştürüldü."
 }

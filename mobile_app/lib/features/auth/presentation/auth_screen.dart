@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_app/l10n/generated/app_localizations.dart';
 
 import '../data/auth_api_service.dart';
 import '../data/auth_models.dart';
@@ -151,6 +152,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isLogin = _mode == _AuthMode.login;
 
     return Scaffold(
@@ -172,7 +174,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'Community Book Exchange',
+                          l10n.appTitle,
                           style: Theme.of(context).textTheme.headlineSmall,
                           textAlign: TextAlign.center,
                         ),
@@ -232,21 +234,21 @@ class _AuthScreenState extends State<AuthScreen> {
                                     strokeWidth: 2,
                                   ),
                                 )
-                              : Text(isLogin ? 'Login' : 'Register'),
+                              : Text(isLogin ? l10n.login : l10n.register),
                         ),
                         const SizedBox(height: 12),
                         TextButton(
                           onPressed: _isSubmitting ? null : _switchMode,
                           child: Text(
                             isLogin
-                                ? 'No account yet? Register'
-                                : 'Already have an account? Login',
+                                ? l10n.authNoAccountYetRegister
+                                : l10n.authAlreadyHaveAccountLogin,
                           ),
                         ),
                         if (!isLogin) ...[
                           const SizedBox(height: 12),
                           Text(
-                            'Note: if your backend requires email verification, register first and then verify before logging in.',
+                            l10n.authVerificationRequiredNote,
                             style: Theme.of(context).textTheme.bodySmall,
                             textAlign: TextAlign.center,
                           ),
